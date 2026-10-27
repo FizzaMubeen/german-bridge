@@ -23,7 +23,9 @@ html = html.replace('<script src="assets/js/app.js" defer></script>', inline)
 html = html.replace('<link rel="stylesheet" href="assets/css/app.css">', f"<style>{css}</style>")
 html = re.sub(r'<meta http-equiv="Content-Security-Policy"[^>]*>\n', "", html)
 html = re.sub(r'<link rel="(manifest|icon|apple-touch-icon)"[^>]*>\n', "", html)
-html = html.replace('<img src="assets/icons/icon-192.png" alt="" width="30" height="30">', '<span style="display:inline-grid;place-items:center;width:30px;height:30px;border-radius:8px;background:var(--ink);color:var(--accent);font:600 12px var(--f-mono)">DE</span>')
+import base64 as _b64
+_icon = "data:image/png;base64," + _b64.b64encode((root/"assets/icons/icon-192.png").read_bytes()).decode()
+html = html.replace('<img src="assets/icons/icon-192.png"', '<img src="' + _icon + '"')
 if mode == "preview":
     html = html.replace('<link rel="stylesheet" href="assets/css/fonts.css">',
       '<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Noto+Nastaliq+Urdu&family=Noto+Sans+Devanagari:wght@400;600&family=Young+Serif&family=JetBrains+Mono:wght@400;600&display=swap">')
