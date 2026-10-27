@@ -1,3 +1,4 @@
+/* © 2026 Fizza Mubeen. All rights reserved. See LICENSE. */
 /* Wortzi offline support.
    After you change any file, raise VERSION so phones fetch the new files. */
 const VERSION = "wortzi-1.9.0";

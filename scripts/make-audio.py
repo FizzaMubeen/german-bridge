@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# © 2026 Fizza Mubeen. All rights reserved. See LICENSE.
 """Makes natural German audio for every card, story line and grammar example.
 
 Runs on GitHub (workflow "Make audio") with the free Piper voice de_DE-thorsten-medium.

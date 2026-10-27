@@ -1,21 +1,27 @@
-MIT License
+Copyright (c) 2026 Fizza Mubeen. All rights reserved.
 
-Copyright (c) 2026 Fizza Mubeen
+Wortzi is proprietary software. This applies to everything in this repository and on
+wortzi.fizzamubeen.com, including the source code, the learning content (flashcards,
+translations, stories, grammar lessons, tricks, facts and jokes), the audio recordings,
+the design, and the name "Wortzi" and its mascot.
 
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
+You may use the Wortzi app at https://wortzi.fizzamubeen.com for your own personal learning.
 
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
+Without prior written permission from Fizza Mubeen you may NOT:
+  - copy, download, mirror or reproduce any part of it, in whole or in part;
+  - modify it or create derivative works, apps, websites or courses from it;
+  - publish, distribute, sublicense, sell or rent it, or include it in another product;
+  - use its content to train or build other learning tools or AI models;
+  - use the name "Wortzi" or the mascot.
 
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
+Being able to view this repository on GitHub does not grant any licence. To ask for
+permission, contact Fizza Mubeen through https://github.com/FizzaMubeen.
+
+Third-party components keep their own licences and are not covered by this notice:
+  - Fonts: SIL Open Font License 1.1 (Noto Nastaliq Urdu, Noto Sans Devanagari,
+    Atkinson Hyperlegible, Young Serif, JetBrains Mono)
+  - Offline listening: vosk-browser and the Vosk German model, Apache License 2.0
+  - Voice used to make the audio: Piper with the "thorsten" German voice (see its own licence)
+
+THE APP IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND. IN NO EVENT SHALL THE AUTHOR
+BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY ARISING FROM ITS USE.

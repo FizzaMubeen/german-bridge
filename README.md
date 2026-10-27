@@ -133,4 +133,6 @@ scripts/                fonts, WordPress zip, single-file build
 
 ## License
 
-Code: MIT. Fonts: SIL Open Font License 1.1 (Noto Nastaliq Urdu, Noto Sans Devanagari, Atkinson Hyperlegible, Young Serif, JetBrains Mono).
+**© 2026 Fizza Mubeen. All rights reserved.** Wortzi is proprietary: the code, the learning content, the audio, the design, the name and the mascot. You may use the app at [wortzi.fizzamubeen.com](https://wortzi.fizzamubeen.com) for your own learning, but you may not copy, modify, publish or reuse any part of it without written permission. See [LICENSE](LICENSE).
+
+Third-party parts keep their own licences: fonts (SIL Open Font License 1.1), offline listening (Vosk, Apache 2.0), voice (Piper "thorsten").

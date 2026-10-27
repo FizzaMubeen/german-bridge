@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# © 2026 Fizza Mubeen. All rights reserved. See LICENSE.
 """Builds dist/wortzi-standalone.html: the whole app in ONE file.
 You can open it by double-click, send it on WhatsApp, or upload it anywhere.
 (Progress is saved in whatever browser opens it.)"""

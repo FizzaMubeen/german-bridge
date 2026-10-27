@@ -7,7 +7,7 @@
  * Requires at least: 5.8
  * Requires PHP:      7.4
  * Author:            Fizza Mubeen
- * License:           MIT
+ * License:           Proprietary. © 2026 Fizza Mubeen. All rights reserved.
  * Text Domain:       wortzi
  *
  * Privacy: the app runs completely in the visitor's browser. It stores nothing on your server,

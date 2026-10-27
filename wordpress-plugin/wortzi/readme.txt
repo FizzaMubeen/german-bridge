@@ -4,7 +4,7 @@ Tags: german, language learning, flashcards, urdu, hindi
 Requires at least: 5.8
 Tested up to: 6.6
 Stable tag: 1.0.0
-License: MIT
+License: Proprietary. © 2026 Fizza Mubeen. All rights reserved.
 
 Learn everyday German from Urdu, Hindi or English, right on your website.
 

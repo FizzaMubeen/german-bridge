@@ -1,5 +1,6 @@
 /*!
  * Wortzi — learn everyday German from Urdu, Hindi or English.
+ * © 2026 Fizza Mubeen. All rights reserved. Proprietary: no copying, modification or reuse without written permission (see LICENSE).
  * Plain JavaScript, no build step, no tracking. All personal data stays in the browser (localStorage).
  * Content lives in data/deck.txt (flashcards) and data/guide.html (grammar lessons).
  */
@@ -1359,7 +1360,7 @@ function viewMe(){
         ? `<span>Delete all progress, lists, own words and badges on this device?</span><button class="btn bad" id="r-yes">Yes, delete everything</button><button class="btn" id="r-no">Keep it</button>`
         : `<button class="btn ghost" id="r-ask">${ic("trash")}Delete all my data</button>`}</div>
     </div>
-    <p class="small muted" style="margin-top:20px">Wortzi ${APP_VERSION} · open source · works offline once loaded.</p>`;
+    <p class="small muted" style="margin-top:20px">Wortzi ${APP_VERSION} · © 2026 Fizza Mubeen · All rights reserved · works offline once loaded.</p>`;
 
   $$("[data-rep]").forEach(a => a.addEventListener("click", () => { reportOpts.type = a.dataset.rep; }));
   $("#s-name").addEventListener("change", e => { S.settings.name = clip(e.target.value,60); save(); toast("Saved"); });
