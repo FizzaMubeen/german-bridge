@@ -3,6 +3,13 @@
 The version shown in the app (Me → bottom of the page) matches the tags in this repository.
 Phones that installed the app update themselves; learners keep all their progress.
 
+## 1.4.0 — 2026-10-27
+- **New name: Wortzi** (was German Bridge) with a new mascot icon: a smiling speech bubble
+- New address: wortzi.fizzamubeen.com; WordPress shortcode is now `[wortzi]` (`[german_bridge]` still works)
+- Greeting follows the real clock: Guten Morgen (5–11), Guten Tag (11–18), Guten Abend (18–22), Gute Nacht (22–5), and changes by itself while the app is open
+- Old backups from German Bridge can still be restored
+- Shorts videos show the Wortzi mascot
+
 ## 1.3.0 — 2026-10-27
 - **Listen & understand (phase 2 prototype):** tap the mic and see German speech as text, live
 - Every word coloured: green = you know it, yellow = learning, grey = new; % understood per sentence and per session

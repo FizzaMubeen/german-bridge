@@ -1,4 +1,4 @@
-# German Bridge — flashcard content
+# Wortzi — flashcard content
 # ------------------------------------------------------------
 # Edit this file to add or change cards. No coding needed.
 #

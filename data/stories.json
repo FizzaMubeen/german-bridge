@@ -1,5 +1,5 @@
 {
-  "_help": "Stories for German Bridge. Each panel has a picture (emoji), one German line and its translations. 'words' maps words or phrases in the German text to a flashcard id from deck.txt (unit:German) or to a small dictionary entry {de, ur, hi, en}. Mapped words are highlighted in the story and count toward 'you know X%'.",
+  "_help": "Stories for Wortzi. Each panel has a picture (emoji), one German line and its translations. 'words' maps words or phrases in the German text to a flashcard id from deck.txt (unit:German) or to a small dictionary entry {de, ur, hi, en}. Mapped words are highlighted in the story and count toward 'you know X%'.",
   "stories": [
     {
       "id": "baker", "level": "A1", "cover": "🥐",

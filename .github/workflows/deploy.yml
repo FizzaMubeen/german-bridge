@@ -29,8 +29,8 @@ jobs:
       - name: Keep the WordPress zip as a download
         uses: actions/upload-artifact@v4
         with:
-          name: german-bridge-wp
-          path: dist/german-bridge-wp.zip
+          name: wortzi-wp
+          path: dist/wortzi-wp.zip
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
         with:

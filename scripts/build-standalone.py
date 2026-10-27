@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Builds dist/german-bridge-standalone.html: the whole app in ONE file.
+"""Builds dist/wortzi-standalone.html: the whole app in ONE file.
 You can open it by double-click, send it on WhatsApp, or upload it anywhere.
 (Progress is saved in whatever browser opens it.)"""
 import pathlib, re, sys
@@ -35,7 +35,7 @@ if mode == "preview":
 else:
     html = html.replace('<link rel="stylesheet" href="assets/css/fonts.css">', "")
     out = html
-    target = root/"dist/german-bridge-standalone.html"
+    target = root/"dist/wortzi-standalone.html"
 target.parent.mkdir(exist_ok=True)
 target.write_text(out, encoding="utf-8")
 print("✓", target.relative_to(root))

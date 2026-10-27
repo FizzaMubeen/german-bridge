@@ -1,4 +1,4 @@
-/* German Bridge — styles
+/* Wortzi — styles
    Layout: mobile-first app shell. Phones: top bar + bottom tab bar. Desktop (≥ 860px): tabs move into the top bar.
    Gender colors (der blue, die red, das green, plural purple) are used everywhere a German noun appears. */
 :root{

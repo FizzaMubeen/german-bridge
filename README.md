@@ -1,6 +1,6 @@
-# German Bridge
+# Wortzi
 
-**Live:** https://germanbridge.fizzamubeen.com · **Version:** 1.3.0 · [Changelog](CHANGELOG.md)
+**Live:** https://wortzi.fizzamubeen.com · **Version:** 1.4.0 · [Changelog](CHANGELOG.md)
 
 **Learn everyday German from Urdu, Hindi or English.** Picture flashcards, your own word lists, daily practice that adapts to you, and printable PDFs of everything you learn. Private by design: no account, no tracking, all data stays on the learner's phone.
 
@@ -35,22 +35,22 @@ Built for people who just moved to Germany and need German for real life: the ba
 
 ### 1. GitHub Pages (free, recommended)
 
-1. Create a new repository on GitHub, e.g. `german-bridge`, and upload all files from this folder (keep the folder structure, including `.github/`).
+1. Create a new repository on GitHub, e.g. `wortzi`, and upload all files from this folder (keep the folder structure, including `.github/`).
 2. In the repository go to **Settings → Pages → Build and deployment → Source: GitHub Actions**.
 3. Push to `main` (or run the workflow from the **Actions** tab). The workflow downloads the fonts and publishes the site.
-4. Your app is live at `https://FizzaMubeen.github.io/german-bridge/`.
+4. Your app is live at `https://FizzaMubeen.github.io/wortzi/`.
 
 Every push to `main` updates the site automatically.
 
 ### 2. Your WordPress site (as a plugin)
 
 1. Get the plugin zip, the version **with fonts** is best:
-   - after the GitHub workflow has run: **Actions → latest run → Artifacts → german-bridge-wp**, or
-   - on your computer: `bash scripts/build-wp-plugin.sh` → `dist/german-bridge-wp.zip`, or
+   - after the GitHub workflow has run: **Actions → latest run → Artifacts → wortzi-wp**, or
+   - on your computer: `bash scripts/build-wp-plugin.sh` → `dist/wortzi-wp.zip`, or
    - the zip that came with this project (works, but uses the phone's own fonts for Urdu and Hindi).
 2. WordPress → **Plugins → Add New → Upload Plugin** → choose the zip → **Activate**.
-3. Add the shortcode to any page: `[german_bridge]`
-   Options: `[german_bridge height="900" link="no"]`. Works in the block editor and in Elementor's *Shortcode* widget.
+3. Add the shortcode to any page: `[wortzi]`
+   Options: `[wortzi height="900" link="no"]`. Works in the block editor and in Elementor's *Shortcode* widget.
 
 The app runs inside an iframe, so your theme's CSS cannot break it and it cannot affect your theme. It stores nothing on your server.
 
@@ -60,7 +60,7 @@ Upload the folder to any HTTPS web space (e.g. `yoursite.com/german/`). Run `bas
 
 ### 4. One single file
 
-`python3 scripts/build-standalone.py` → `dist/german-bridge-standalone.html`. Open it with a double-click or send it to someone. (No offline install or encrypted backup from a local file; everything else works.)
+`python3 scripts/build-standalone.py` → `dist/wortzi-standalone.html`. Open it with a double-click or send it to someone. (No offline install or encrypted backup from a local file; everything else works.)
 
 > Opening `index.html` directly from your computer does **not** work, because browsers block loading `data/deck.txt` from disk. Use one of the options above, or for testing run `python3 -m http.server` in this folder and open `http://localhost:8000`.
 
@@ -87,7 +87,7 @@ Each lesson is a `<section data-id="…" data-title="…" data-level="A1" data-s
 
 ### After changing files
 
-Raise `VERSION` at the top of `sw.js` (e.g. `gb-1.0.1`) so phones that installed the app download the new files. On GitHub Pages, just commit and push.
+Raise `VERSION` at the top of `sw.js` (e.g. `wortzi-1.4.1`) so phones that installed the app download the new files. On GitHub Pages, just commit and push.
 
 ---
 

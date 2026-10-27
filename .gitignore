@@ -1,5 +1,5 @@
 dist/
 node_modules/
 .DS_Store
-wordpress-plugin/german-bridge/app/
+wordpress-plugin/wortzi/app/
 out/

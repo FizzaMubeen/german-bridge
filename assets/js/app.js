@@ -1,11 +1,11 @@
 /*!
- * German Bridge — learn everyday German from Urdu, Hindi or English.
+ * Wortzi — learn everyday German from Urdu, Hindi or English.
  * Plain JavaScript, no build step, no tracking. All personal data stays in the browser (localStorage).
  * Content lives in data/deck.txt (flashcards) and data/guide.html (grammar lessons).
  */
 (() => {
 "use strict";
-const APP_VERSION = "1.3.0";
+const APP_VERSION = "1.4.0";
 const KEY = "gb-v1";
 
 /* =====================================================================
@@ -368,13 +368,28 @@ function refresh(){ if(session) drawSession(); else { const y = window.scrollY; 
 /* =====================================================================
    TODAY
    ===================================================================== */
-function greeting(){
-  const h = new Date().getHours();
-  const g = h<11 ? ["Guten Morgen","صبح بخیر","सुप्रभात","Good morning"] : h<18 ? ["Guten Tag","السلام علیکم","नमस्ते","Hello"] : ["Guten Abend","شام بخیر","शुभ संध्या","Good evening"];
-  const b = S.settings.base, name = S.settings.name ? ", "+esc(S.settings.name) : "";
-  const tr = b==="ur" ? `<span class="ur" style="font-size:16px">${g[1]}</span>` : b==="hi" ? `<span class="hi">${g[2]}</span>` : g[3];
-  return `<div class="hello"><h1>${g[0]}${name}!</h1><div class="muted">${tr}</div></div>`;
+function greetWords(d){
+  const h = (d||new Date()).getHours();
+  if (h>=5 && h<11)  return ["Guten Morgen","صبح بخیر","सुप्रभात","Good morning","morning"];
+  if (h>=11 && h<18) return ["Guten Tag","السلام علیکم","नमस्ते","Good day","day"];
+  if (h>=18 && h<22) return ["Guten Abend","شام بخیر","शुभ संध्या","Good evening","evening"];
+  return ["Gute Nacht","شب بخیر","शुभ रात्रि","Good night","night"];
 }
+function greetingInner(){
+  const g = greetWords(), b = S.settings.base, name = S.settings.name ? ", "+esc(S.settings.name) : "";
+  const tr = b==="ur" ? `<span class="ur" style="font-size:16px">${g[1]}</span>` : b==="hi" ? `<span class="hi">${g[2]}</span>` : g[3];
+  return `<h1>${g[0]}${name}!</h1><div class="muted">${tr}</div>`;
+}
+function greeting(){
+  return `<div class="hello" id="hello" data-band="${greetWords()[4]}">${greetingInner()}</div>`;
+}
+// Keep the greeting in step with the real clock (morning → day → evening → night)
+setInterval(()=>{
+  const el = document.getElementById("hello");
+  if (!el) return;
+  const band = greetWords()[4];
+  if (el.dataset.band !== band){ el.dataset.band = band; el.innerHTML = greetingInner(); }
+}, 60000);
 function todayPlan(){
   const due = allCards().filter(isDue).sort((a,b)=>(rec(a).due||0)-(rec(b).due||0));
   const want = wantList().filter(c => !isDue(c));
@@ -392,7 +407,7 @@ function installCard(){
     : isIOS() ? `<span class="small">In Safari tap <b>Share</b> <span aria-hidden="true">⬆︎</span> then <b>Add to Home Screen</b>.</span>`
     : `<span class="small">Open your browser menu <b>⋮</b> and choose <b>Add to Home screen</b> or <b>Install app</b>.</span>`;
   return `<div class="panel installcard" role="note">
-    <div class="stack" style="gap:6px"><b>📲 Put German Bridge on your home screen</b>
+    <div class="stack" style="gap:6px"><b>📲 Put Wortzi on your home screen</b>
     <span class="small muted">It opens like an app, works offline${isIOS()?", and iPhone keeps your progress safe (Safari can delete website data after a week without visits)":", and keeps your progress safe"}.</span>
     <div class="row">${how}<button class="btn ghost sm" type="button" id="hideInstall">Not now</button></div></div></div>`;
 }
@@ -806,7 +821,7 @@ function confetti(){
 let confirmReset = false, backupMsg = "", importState = {text:"", needPw:false, err:""};
 let installEvt = null;
 addEventListener("beforeinstallprompt", e => { e.preventDefault(); installEvt = e; if(!session && (location.hash==="" || location.hash==="#today")) route(); });
-addEventListener("appinstalled", () => { installEvt = null; askPersist(); toast("✓ Installed. Find German Bridge on your home screen."); });
+addEventListener("appinstalled", () => { installEvt = null; askPersist(); toast("✓ Installed. Find Wortzi on your home screen."); });
 function viewMe(){
   const L = levelInfo(), st = S.settings;
   const days = []; const d = new Date(); d.setDate(d.getDate()-13);
@@ -886,7 +901,7 @@ function viewMe(){
         ? `<span>Delete all progress, lists, own words and badges on this device?</span><button class="btn bad" id="r-yes">Yes, delete everything</button><button class="btn" id="r-no">Keep it</button>`
         : `<button class="btn ghost" id="r-ask">🗑️ Delete all my data</button>`}</div>
     </div>
-    <p class="small muted" style="margin-top:20px">German Bridge ${APP_VERSION} · open source · works offline once loaded.</p>`;
+    <p class="small muted" style="margin-top:20px">Wortzi ${APP_VERSION} · open source · works offline once loaded.</p>`;
 
   $$("[data-rep]").forEach(a => a.addEventListener("click", () => { reportOpts.type = a.dataset.rep; }));
   $("#s-name").addEventListener("change", e => { S.settings.name = clip(e.target.value,60); save(); toast("Saved"); });
@@ -909,13 +924,13 @@ async function deriveKey(pw, salt){
   return crypto.subtle.deriveKey({name:"PBKDF2", salt, iterations:250000, hash:"SHA-256"}, base, {name:"AES-GCM", length:256}, false, ["encrypt","decrypt"]);
 }
 async function makeBackup(pw){
-  const payload = JSON.stringify({app:"german-bridge", format:1, exported:new Date().toISOString(), data:S});
+  const payload = JSON.stringify({app:"wortzi", format:1, exported:new Date().toISOString(), data:S});
   if(!pw) return payload;
   if(!crypto?.subtle) throw new Error("Encryption needs a secure (https) page.");
   const salt = crypto.getRandomValues(new Uint8Array(16)), iv = crypto.getRandomValues(new Uint8Array(12));
   const key = await deriveKey(pw, salt);
   const ct = await crypto.subtle.encrypt({name:"AES-GCM", iv}, key, new TextEncoder().encode(payload));
-  return JSON.stringify({app:"german-bridge", format:1, encrypted:true, kdf:"PBKDF2-SHA256-250000", salt:b64(salt), iv:b64(iv), data:b64(ct)});
+  return JSON.stringify({app:"wortzi", format:1, encrypted:true, kdf:"PBKDF2-SHA256-250000", salt:b64(salt), iv:b64(iv), data:b64(ct)});
 }
 async function doExport(asText){
   const pw = $("#b-pw").value;
@@ -927,15 +942,15 @@ async function doExport(asText){
     return route();
   }
   const blob = new Blob([text], {type:"application/json"});
-  const a = document.createElement("a"); a.href = URL.createObjectURL(blob); a.download = `german-bridge-backup-${today()}.json`;
+  const a = document.createElement("a"); a.href = URL.createObjectURL(blob); a.download = `wortzi-backup-${today()}.json`;
   document.body.appendChild(a); a.click(); setTimeout(()=>{ URL.revokeObjectURL(a.href); a.remove(); }, 1000);
   backupMsg = `✓ Backup downloaded${pw?" and encrypted":""}. Keep it somewhere safe.`; route();
 }
 async function doImport(text, pw){
   importState = {text, needPw:false, err:""};
   let obj;
-  try{ obj = JSON.parse(text); }catch(e){ importState.err = "This does not look like a German Bridge backup."; return route(); }
-  if(!obj || obj.app!=="german-bridge"){ importState.err = "This does not look like a German Bridge backup."; return route(); }
+  try{ obj = JSON.parse(text); }catch(e){ importState.err = "This does not look like a Wortzi backup."; return route(); }
+  if(!obj || !["wortzi","german-bridge"].includes(obj.app)){ importState.err = "This does not look like a Wortzi backup."; return route(); }
   if(obj.encrypted){
     if(!pw){ importState.err = "This backup is protected. Enter its password."; return route(); }
     try{
@@ -971,11 +986,11 @@ function viewReport(){
   const fit = () => { const pw = $("#paper"); if(!pw) return; const w = pw.parentElement.clientWidth, full = 210*96/25.4; pw.style.zoom = w < full ? (w/full).toFixed(3) : ""; };
   fit(); addEventListener("resize", fit, {once:true});
   const p = $("#doPrint");
-  if(p) p.onclick = () => { S.reports++; save(); checkBadges(); const old = document.title; document.title = `German Bridge – ${({progress:"Progress report",wordbook:"My word book",cards:"Flashcards",unitbook:"Course book"})[o.type]} – ${today()}`; window.print(); setTimeout(()=>{ document.title = old; }, 500); };
+  if(p) p.onclick = () => { S.reports++; save(); checkBadges(); const old = document.title; document.title = `Wortzi – ${({progress:"Progress report",wordbook:"My word book",cards:"Flashcards",unitbook:"Course book"})[o.type]} – ${today()}`; window.print(); setTimeout(()=>{ document.title = old; }, 500); };
 }
 function rHead(title, sub){
   const name = S.settings.name;
-  return `<div class="rhead"><div><div class="label" style="color:#5b6561">German Bridge</div><h1>${esc(title)}</h1>${sub?`<div style="font-size:12px;color:#5b6561">${sub}</div>`:""}</div>
+  return `<div class="rhead"><div><div class="label" style="color:#5b6561">Wortzi</div><h1>${esc(title)}</h1>${sub?`<div style="font-size:12px;color:#5b6561">${sub}</div>`:""}</div>
     <div class="meta">${name?`<b style="font-size:13px;color:#1c2220">${esc(name)}</b><br>`:""}${fmtDate(Date.now())}</div></div>`;
 }
 function rLangCols(){ const b = S.settings.base, cols = [b]; ["ur","hi","en"].forEach(l => { if(l!==b && shown(l)) cols.push(l); }); return cols; }
@@ -1457,7 +1472,7 @@ function viewListen(){
   const consent = !st.listenOk ? `<div class="panel stack listenok">
       <b>Before you start</b>
       <ul class="small" style="margin:0;padding-left:18px;display:grid;gap:4px">
-        <li>German Bridge does <b>not record or save audio</b>. Only your score and the words you choose are kept on this phone.</li>
+        <li>Wortzi does <b>not record or save audio</b>. Only your score and the words you choose are kept on this phone.</li>
         <li>Your browser turns speech into text. In Chrome and Edge this is done by Google's or Microsoft's speech service, in Safari by Apple.</li>
         <li>Use it for TV, videos, podcasts, announcements and conversations you're part of. Recording other people's private conversations is not allowed in Germany.</li>
       </ul>
@@ -1640,7 +1655,7 @@ function showUpdateBar(){
   if($(".updatebar")) return;
   const b = document.createElement("div");
   b.className = "updatebar"; b.setAttribute("role","status");
-  b.innerHTML = `<span>✨ A new version of German Bridge is ready. Your progress stays as it is.</span><button class="btn primary sm" type="button">Update now</button>`;
+  b.innerHTML = `<span>✨ A new version of Wortzi is ready. Your progress stays as it is.</span><button class="btn primary sm" type="button">Update now</button>`;
   b.querySelector("button").onclick = () => { if(session) finishSession(true); location.reload(); };
   document.body.appendChild(b);
 }

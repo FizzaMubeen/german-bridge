@@ -1,4 +1,4 @@
-=== German Bridge ===
+=== Wortzi ===
 Contributors: fizzamubeen
 Tags: german, language learning, flashcards, urdu, hindi
 Requires at least: 5.8
@@ -16,9 +16,9 @@ Learn everyday German from Urdu, Hindi or English, right on your website.
 * Private by design: everything stays in the learner's browser. No accounts, cookies or tracking.
 
 == Installation ==
-1. Plugins → Add New → Upload Plugin → choose german-bridge-wp.zip → Activate.
-2. Put the shortcode [german_bridge] on any page (also works in Elementor's Shortcode widget).
-3. Optional: [german_bridge height="900" link="no"]
+1. Plugins → Add New → Upload Plugin → choose wortzi-wp.zip → Activate.
+2. Put the shortcode [wortzi] on any page (also works in Elementor's Shortcode widget).
+3. Optional: [wortzi height="900" link="no"]
 
 == Updating the lessons ==
 Edit app/data/deck.txt inside the plugin folder (or rebuild the zip from GitHub) and raise VERSION in app/sw.js.

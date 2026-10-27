@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-German Bridge — 30-day shorts maker.
+Wortzi — 30-day shorts maker.
 
 Turns the flashcards in data/deck.txt into vertical 1080x1920 videos
 (Instagram Reels, TikTok, YouTube Shorts), plus captions and a posting calendar.
@@ -21,8 +21,8 @@ import argparse, csv, datetime as dt, html, json, os, pathlib, random, shutil, s
 ROOT = pathlib.Path(__file__).resolve().parents[2]
 OUT = ROOT / "out" / "shorts"
 WORK = ROOT / "out" / "shorts-work"
-APP_NAME = os.environ.get("APP_NAME", "German Bridge")
-SITE = os.environ.get("SITE", "germanbridge.fizzamubeen.com")
+APP_NAME = os.environ.get("APP_NAME", "Wortzi")
+SITE = os.environ.get("SITE", "wortzi.fizzamubeen.com")
 SPEED = float(os.environ.get("VOICE_SPEED", "0.82"))   # 1.0 = normal, lower = slower and clearer
 VOICE_DE = os.environ.get("VOICE_DE", "de_DE-thorsten-medium")
 VOICE_EN = os.environ.get("VOICE_EN", "en_US-lessac-medium")
@@ -79,7 +79,7 @@ def plan(units, days, start):
 
 def caption(p):
     words = ", ".join(c["de"] for c in p["cards"])
-    tags = "#learngerman #deutschlernen #germanforbeginners #urdu #pakistanisingermany #berlin #languagelearning #germanbridge"
+    tags = "#learngerman #deutschlernen #germanforbeginners #urdu #pakistanisingermany #berlin #languagelearning #wortzi"
     return (f"{p['hook']} 🇩🇪\n\n{words}\n\n"
             f"Practise these and 1,000 more for free (works offline, no sign-up): {SITE}\n"
             f"Which word should be next? Comment below 👇\n\n{tags}")
@@ -125,9 +125,18 @@ body{width:1080px;height:1920px;background:#f5f6f2;color:#1c2220;font-family:'At
 .turn{margin-top:20px;font-size:50px;font-weight:700;color:#a17306;background:#f5ecd6;padding:18px 34px;border-radius:999px}
 """
 
+_MASCOT = None
+def mascot_uri():
+    global _MASCOT
+    if _MASCOT is None:
+        import base64
+        f = ROOT / "assets" / "icons" / "icon-192.png"
+        _MASCOT = "data:image/png;base64," + base64.b64encode(f.read_bytes()).decode() if f.exists() else ""
+    return _MASCOT
+
 def brand():
-    return ('<div class="brand"><div class="bars"><i style="height:20px;background:#7fa6ee"></i>'
-            '<i style="height:32px;background:#f08598"></i><i style="height:44px;background:#6fd09c"></i></div>' + html.escape(APP_NAME) + '</div>')
+    img = f'<img src="{mascot_uri()}" alt="" style="width:72px;height:72px;border-radius:18px">' if mascot_uri() else ""
+    return '<div class="brand">' + img + html.escape(APP_NAME) + '</div>'
 
 def de_html(de):
     first = de.split(" ")[0]
