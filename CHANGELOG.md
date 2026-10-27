@@ -3,6 +3,11 @@
 The version shown in the app (Me → bottom of the page) matches the tags in this repository.
 Phones that installed the app update themselves; learners keep all their progress.
 
+## 1.7.1 — 2026-10-27
+- **Fixed: Listen did not play.** The recording now starts in the same moment as the tap, which iPhone and Safari require; before, they blocked the sound and the fallback voice too
+- Recordings play offline on iPhone as well (the app answers the audio range requests Safari sends)
+- After an update, phones load the newest app straight away instead of one reload later
+
 ## 1.7.0 — 2026-10-27
 - **Natural recorded voice:** every card, story line and grammar example now plays a real recording (free Piper voice, made automatically on GitHub by *Make audio*). The phone's own voice is only a fallback. Tap 🔊 twice for slow
 - Recordings are saved on the device as you play them; *Me → Settings → Save all audio for offline* stores all of them at once

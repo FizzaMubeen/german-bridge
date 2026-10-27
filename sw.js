@@ -1,6 +1,6 @@
 /* Wortzi offline support.
    After you change any file, raise VERSION so phones fetch the new files. */
-const VERSION = "wortzi-1.7.0";
+const VERSION = "wortzi-1.7.1";
 const AUDIO_CACHE = "wortzi-audio"; // recordings: kept across updates, filled as words are played
 const CORE = [
   "./", "index.html", "manifest.webmanifest",
@@ -9,23 +9,41 @@ const CORE = [
   "assets/icons/icon-192.png", "assets/icons/icon-512.png", "assets/icons/favicon-32.png"
 ];
 self.addEventListener("install", e => {
-  e.waitUntil(caches.open(VERSION).then(c => Promise.all(CORE.map(u => c.add(u).catch(() => null)))).then(() => self.skipWaiting()));
+  e.waitUntil(caches.open(VERSION).then(c => Promise.all(CORE.map(u => c.add(new Request(u, {cache: "reload"})).catch(() => null)))).then(() => self.skipWaiting()));
 });
 self.addEventListener("activate", e => {
   e.waitUntil(caches.keys().then(keys => Promise.all(keys.filter(k => k !== VERSION && k !== AUDIO_CACHE).map(k => caches.delete(k)))).then(() => self.clients.claim()));
 });
+// A recording never changes: keep it, and answer the "Range" requests that iPhones send for audio
+async function audioResponse(req){
+  const url = new URL(req.url), key = url.origin + url.pathname;
+  const c = await caches.open(AUDIO_CACHE);
+  let full = await c.match(key);
+  if (!full) {
+    const r = await fetch(key);
+    if (!r.ok) return r;
+    await c.put(key, r.clone());
+    full = r;
+  }
+  const range = req.headers.get("range");
+  if (!range) return full;
+  const buf = await full.arrayBuffer(), size = buf.byteLength;
+  const m = /bytes=(\d*)-(\d*)/.exec(range) || [];
+  let start = m[1] ? +m[1] : 0, end = m[2] ? Math.min(+m[2], size - 1) : size - 1;
+  if (!m[1] && m[2]) { start = Math.max(0, size - +m[2]); end = size - 1; }
+  return new Response(buf.slice(start, end + 1), {status: 206, headers: {"Content-Type": "audio/mpeg", "Content-Range": `bytes ${start}-${end}/${size}`, "Content-Length": String(end - start + 1), "Accept-Ranges": "bytes"}});
+}
 self.addEventListener("fetch", e => {
   const url = new URL(e.request.url);
-  if (e.request.method !== "GET" || url.origin !== location.origin || e.request.headers.has("range")) return;
-  if (url.pathname.includes("/audio/") && url.pathname.endsWith(".mp3")) { // a recording never changes: cache first, keep it
-    e.respondWith(caches.open(AUDIO_CACHE).then(c => c.match(e.request).then(hit => hit || fetch(e.request).then(r => { if (r.ok) c.put(e.request, r.clone()); return r; }))));
-    return;
-  }
-  const fresh = url.pathname.endsWith(".txt") || url.pathname.endsWith(".json") || url.pathname.endsWith(".html") || url.pathname.endsWith("/");
-  if (fresh) { // lessons and pages: try the network first so content updates show up
-    e.respondWith(fetch(e.request).then(r => { const copy = r.clone(); caches.open(VERSION).then(c => c.put(e.request, copy)); return r; })
+  if (e.request.method !== "GET" || url.origin !== location.origin) return;
+  if (url.pathname.includes("/audio/") && url.pathname.endsWith(".mp3")) { e.respondWith(audioResponse(e.request)); return; }
+  if (e.request.headers.has("range")) return;
+  // pages, code and lessons: newest from the network when online, the saved copy when offline
+  const fresh = /\.(txt|json|html|js|css|webmanifest)$/.test(url.pathname) || url.pathname.endsWith("/");
+  if (fresh) {
+    e.respondWith(fetch(e.request, {cache: "no-cache"}).then(r => { if (r.ok) { const copy = r.clone(); caches.open(VERSION).then(c => c.put(e.request, copy)); } return r; })
       .catch(() => caches.match(e.request, {ignoreSearch: true})));
-  } else {     // css, js, fonts, icons: cache first
+  } else {     // fonts and icons: cache first
     e.respondWith(caches.match(e.request).then(hit => hit || fetch(e.request).then(r => { const copy = r.clone(); caches.open(VERSION).then(c => c.put(e.request, copy)); return r; })));
   }
 });

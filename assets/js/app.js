@@ -5,7 +5,7 @@
  */
 (() => {
 "use strict";
-const APP_VERSION = "1.7.0";
+const APP_VERSION = "1.7.1";
 const KEY = "gb-v1";
 
 /* =====================================================================
@@ -81,7 +81,6 @@ function pickVoice(){
 }
 if(canTTS){ try{ pickVoice(); speechSynthesis.addEventListener("voiceschanged", pickVoice); }catch(e){} }
 const player = typeof Audio !== "undefined" ? new Audio() : null;
-const blobCache = new Map();
 let lastSaid = {t:"", at:0};
 function ttsText(t){ return normTxt(t).replace(/\s*\([^)]*\)/g,"").replace(/\.\.\.|…/g,"").split(" / ").join(", ").replace(/\s+([,.!?])/g,"$1").replace(/^[ ,]+|[ ,]+$/g,""); }
 function speakTTS(text, slow){
@@ -90,25 +89,28 @@ function speakTTS(text, slow){
     speechSynthesis.cancel();
     const u = new SpeechSynthesisUtterance(ttsText(text));
     u.lang = "de-DE"; if(voice) u.voice = voice; u.rate = slow ? .68 : .88;
-    // Chrome sometimes drops an utterance spoken straight after cancel(); a short pause fixes it
-    setTimeout(() => { try{ speechSynthesis.resume(); speechSynthesis.speak(u); }catch(e){} }, 60);
+    speechSynthesis.resume(); speechSynthesis.speak(u);
+    // Chrome sometimes drops an utterance spoken straight after cancel(): try once more if it never started
+    setTimeout(() => { try{ if(!speechSynthesis.speaking && !speechSynthesis.pending) speechSynthesis.speak(u); }catch(e){} }, 250);
   }catch(e){}
 }
-async function playRecording(k, slow){
-  let url = blobCache.get(k);
-  if(!url){ const r = await fetch("audio/"+k+".mp3"); if(!r.ok) throw new Error("missing"); url = URL.createObjectURL(await r.blob()); blobCache.set(k, url); }
-  player.pause(); player.src = url; player.playbackRate = slow ? .75 : 1;
+function playRecording(k, slow, text){
+  // play() must run straight from the tap (iPhone/Safari block sound that starts later), so no awaiting before it
+  player.pause();
+  player.src = "audio/"+k+".mp3";
+  player.playbackRate = slow ? .75 : 1;
   try{ player.preservesPitch = true; player.webkitPreservesPitch = true; }catch(e){}
-  await player.play();
+  const pr = player.play();
+  if(pr && pr.catch) pr.catch(err => { if(err && err.name !== "AbortError") speakTTS(text, slow); });
 }
 function say(text, cardId){
   const t = normTxt(text), now = Date.now();
   const slow = lastSaid.t === t && now - lastSaid.at < 5000;     // tap again = slower
   lastSaid = {t, at: now};
   const k = audioKey(t);
-  if(player && AUDIO && AUDIO.has(k)) playRecording(k, slow).catch(() => speakTTS(t, slow));
+  if(player && AUDIO && AUDIO.has(k)) playRecording(k, slow, t);
   else speakTTS(t, slow);
-  if(slow) toast("🐢 Slower");
+  if(slow) toast("Slower", {kind:"info"});
   if(cardId && S){ const r = S.cards[cardId] || (S.cards[cardId] = {b:-1}); r.l = (r.l||0) + 1; S.listens = (S.listens||0) + 1; save(); }
 }
 async function saveAllAudio(btn){
