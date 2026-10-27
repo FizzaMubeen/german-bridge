@@ -1,0 +1,168 @@
+{
+  "_help": "Stories for German Bridge. Each panel has a picture (emoji), one German line and its translations. 'words' maps words or phrases in the German text to a flashcard id from deck.txt (unit:German) or to a small dictionary entry {de, ur, hi, en}. Mapped words are highlighted in the story and count toward 'you know X%'.",
+  "stories": [
+    {
+      "id": "baker", "level": "A1", "cover": "🥐",
+      "title": "Beim Bäcker", "t": {"ur": "بیکری میں", "hi": "बेकरी में", "en": "At the bakery"},
+      "panels": [
+        {"v": "🏪🥐", "de": "Guten Morgen! Ich hätte gern ein Brot.", "ur": "صبح بخیر! مجھے ایک ڈبل روٹی چاہیے۔", "hi": "सुप्रभात! मुझे एक ब्रेड चाहिए।", "en": "Good morning! I'd like a loaf of bread."},
+        {"v": "💶❓", "de": "Wie viel kostet das? Drei Euro, bitte.", "ur": "یہ کتنے کا ہے؟ تین یورو، پلیز۔", "hi": "यह कितने का है? तीन यूरो, प्लीज़।", "en": "How much is it? Three euros, please."},
+        {"v": "💳🙂", "de": "Kann ich mit Karte zahlen? Ja, natürlich.", "ur": "کیا میں کارڈ سے ادائیگی کر سکتی ہوں؟ ہاں، ضرور۔", "hi": "क्या मैं कार्ड से पेमेंट कर सकती हूँ? हाँ, ज़रूर।", "en": "Can I pay by card? Yes, of course."},
+        {"v": "🙏☀️", "de": "Danke! Schönen Tag noch. Danke, Ihnen auch!", "ur": "شکریہ! آپ کا دن اچھا گزرے۔ شکریہ، آپ کا بھی!", "hi": "धन्यवाद! आपका दिन अच्छा हो। धन्यवाद, आपका भी!", "en": "Thank you! Have a nice day. Thanks, you too!"}
+      ],
+      "words": {
+        "Guten Morgen": "greet:Guten Morgen", "Ich hätte gern": {"de": "Ich hätte gern …", "ur": "مجھے … چاہیے", "hi": "मुझे … चाहिए", "en": "I would like …"},
+        "Brot": "food:das Brot", "Wie viel kostet das": "shop:Wie viel kostet das?", "Drei": "numbers:drei", "bitte": "greet:Bitte",
+        "Kann ich mit Karte zahlen": "shop:Kann ich mit Karte zahlen?", "Ja": "greet:Ja", "natürlich": {"de": "natürlich", "ur": "ضرور", "hi": "ज़रूर", "en": "of course"},
+        "Danke": "greet:Danke", "Schönen Tag noch": {"de": "Schönen Tag noch!", "ur": "آپ کا دن اچھا گزرے", "hi": "आपका दिन अच्छा हो", "en": "Have a nice day"},
+        "Ihnen auch": {"de": "Ihnen auch", "ur": "آپ کا بھی", "hi": "आपका भी", "en": "you too"}
+      }
+    },
+    {
+      "id": "ubahn", "level": "A1", "cover": "🚇",
+      "title": "In der U-Bahn", "t": {"ur": "یو باہن میں", "hi": "मेट्रो में", "en": "On the underground"},
+      "panels": [
+        {"v": "🙋🚇", "de": "Entschuldigung, wo ist die U-Bahn?", "ur": "معاف کیجیے، یو باہن کہاں ہے؟", "hi": "माफ़ कीजिए, U-Bahn कहाँ है?", "en": "Excuse me, where is the underground?"},
+        {"v": "⬆️👈", "de": "Geradeaus und dann links.", "ur": "سیدھا جائیں اور پھر بائیں۔", "hi": "सीधे जाइए और फिर बाएँ।", "en": "Straight ahead and then left."},
+        {"v": "🎫🙂", "de": "Ich brauche eine Fahrkarte.", "ur": "مجھے ٹکٹ چاہیے۔", "hi": "मुझे टिकट चाहिए।", "en": "I need a ticket."},
+        {"v": "🚆⏰", "de": "Der Zug kommt um zehn Uhr.", "ur": "ٹرین دس بجے آتی ہے۔", "hi": "ट्रेन दस बजे आती है।", "en": "The train comes at ten o'clock."}
+      ],
+      "words": {
+        "Entschuldigung": "greet:Entschuldigung", "wo ist die U-Bahn": "city:Wo ist die U-Bahn?",
+        "Geradeaus": "city:geradeaus", "und": "connect:und", "dann": "connect:dann", "links": "city:links",
+        "brauche": {"de": "brauchen", "ur": "ضرورت ہونا", "hi": "ज़रूरत होना", "en": "to need"}, "Fahrkarte": "city:die Fahrkarte",
+        "Zug": "city:der Zug", "kommt": "verbs:kommen", "zehn": "numbers:zehn", "Uhr": "time:die Uhr"
+      }
+    },
+    {
+      "id": "cafe", "level": "A1", "cover": "☕",
+      "title": "Im Café", "t": {"ur": "کیفے میں", "hi": "कैफ़े में", "en": "At the café"},
+      "panels": [
+        {"v": "☕🥛", "de": "Ich möchte einen Kaffee mit Milch.", "ur": "مجھے دودھ والی ایک کافی چاہیے۔", "hi": "मुझे दूध वाली एक कॉफ़ी चाहिए।", "en": "I'd like a coffee with milk."},
+        {"v": "🍬❌", "de": "Mit Zucker? Nein, ohne Zucker, bitte.", "ur": "چینی کے ساتھ؟ نہیں، چینی کے بغیر، پلیز۔", "hi": "चीनी के साथ? नहीं, चीनी के बिना, प्लीज़।", "en": "With sugar? No, without sugar, please."},
+        {"v": "🥡🪑", "de": "Zum Hier-Essen oder zum Mitnehmen?", "ur": "یہیں کھانا ہے یا ساتھ لے جانا ہے؟", "hi": "यहीं खाना है या साथ ले जाना है?", "en": "For here or to take away?"},
+        {"v": "🧾🙏", "de": "Die Rechnung, bitte! Vielen Dank.", "ur": "بل، پلیز! بہت شکریہ۔", "hi": "बिल, प्लीज़! बहुत धन्यवाद।", "en": "The bill, please! Thank you very much."}
+      ],
+      "words": {
+        "möchte": {"de": "möchten", "ur": "چاہنا", "hi": "चाहना", "en": "would like"}, "Kaffee": "food:der Kaffee", "Milch": "food:die Milch",
+        "Mit": {"de": "mit", "ur": "کے ساتھ", "hi": "के साथ", "en": "with"}, "Zucker": "food:der Zucker", "Nein": "greet:Nein",
+        "ohne": {"de": "ohne", "ur": "کے بغیر", "hi": "के बिना", "en": "without"}, "bitte": "greet:Bitte",
+        "Zum Hier-Essen oder zum Mitnehmen": "shop:Zum Hier-Essen oder zum Mitnehmen?", "Die Rechnung": "shop:Die Rechnung, bitte",
+        "Vielen Dank": "greet:Vielen Dank"
+      }
+    },
+    {
+      "id": "neighbour", "level": "A1", "cover": "🏘️",
+      "title": "Die neue Nachbarin", "t": {"ur": "نئی پڑوسن", "hi": "नई पड़ोसन", "en": "The new neighbour"},
+      "panels": [
+        {"v": "👋🚪", "de": "Hallo! Ich bin Ihre neue Nachbarin.", "ur": "ہیلو! میں آپ کی نئی پڑوسن ہوں۔", "hi": "हैलो! मैं आपकी नई पड़ोसन हूँ।", "en": "Hello! I'm your new neighbour."},
+        {"v": "📛❓", "de": "Ich heiße Amna. Wie heißen Sie?", "ur": "میرا نام آمنہ ہے۔ آپ کا نام کیا ہے؟", "hi": "मेरा नाम आमना है। आपका नाम क्या है?", "en": "My name is Amna. What's your name?"},
+        {"v": "✈️🏠", "de": "Ich komme aus Pakistan und wohne jetzt in Berlin.", "ur": "میں پاکستان سے ہوں اور اب برلن میں رہتی ہوں۔", "hi": "मैं पाकिस्तान से हूँ और अब बर्लिन में रहती हूँ।", "en": "I'm from Pakistan and I live in Berlin now."},
+        {"v": "😃🤝", "de": "Freut mich! Willkommen im Haus.", "ur": "آپ سے مل کر خوشی ہوئی! گھر میں خوش آمدید۔", "hi": "आपसे मिलकर ख़ुशी हुई! घर में स्वागत है।", "en": "Nice to meet you! Welcome to the building."}
+      ],
+      "words": {
+        "Hallo": {"de": "Hallo", "ur": "ہیلو", "hi": "हैलो", "en": "hello"}, "neue": "adj:neu",
+        "Nachbarin": {"de": "die Nachbarin", "ur": "پڑوسن", "hi": "पड़ोसन", "en": "the neighbour (woman)"},
+        "Ich heiße": "greet:Ich heiße ...", "Wie heißen Sie": "greet:Wie heißen Sie?", "Ich komme aus Pakistan": "greet:Ich komme aus Pakistan",
+        "und": "connect:und", "wohne": "verbs:wohnen", "jetzt": "time:jetzt", "Freut mich": "greet:Freut mich",
+        "Willkommen": {"de": "Willkommen", "ur": "خوش آمدید", "hi": "स्वागत है", "en": "welcome"}, "Haus": "home:das Haus"
+      }
+    },
+    {
+      "id": "market", "level": "A1", "cover": "🛒",
+      "title": "Im Supermarkt", "t": {"ur": "سپر مارکیٹ میں", "hi": "सुपरमार्केट में", "en": "At the supermarket"},
+      "panels": [
+        {"v": "🛒🍅", "de": "Ich kaufe Reis, Eier und Tomaten.", "ur": "میں چاول، انڈے اور ٹماٹر خریدتی ہوں۔", "hi": "मैं चावल, अंडे और टमाटर ख़रीदती हूँ।", "en": "I'm buying rice, eggs and tomatoes."},
+        {"v": "🐖❓", "de": "Ist da Schweinefleisch drin?", "ur": "کیا اس میں سور کا گوشت ہے؟", "hi": "क्या इसमें सूअर का मांस है?", "en": "Does this contain pork?"},
+        {"v": "🍗✅", "de": "Nein, das ist Hähnchen. Es ist halal.", "ur": "نہیں، یہ چکن ہے۔ یہ حلال ہے۔", "hi": "नहीं, यह चिकन है। यह हलाल है।", "en": "No, that's chicken. It's halal."},
+        {"v": "🛍️🙂", "de": "Brauchen Sie eine Tüte? Nein, danke.", "ur": "کیا آپ کو تھیلی چاہیے؟ نہیں، شکریہ۔", "hi": "क्या आपको थैली चाहिए? नहीं, धन्यवाद।", "en": "Do you need a bag? No, thank you."}
+      ],
+      "words": {
+        "kaufe": "verbs:kaufen", "Reis": "food:der Reis", "Eier": "food:das Ei", "und": "connect:und", "Tomaten": "food:die Tomate",
+        "Ist da Schweinefleisch drin": "shop:Ist da Schweinefleisch drin?", "Nein": "greet:Nein", "Hähnchen": "food:das Hähnchen",
+        "halal": {"de": "halal", "ur": "حلال", "hi": "हलाल", "en": "halal"}, "Brauchen Sie eine Tüte": "shop:Brauchen Sie eine Tüte?", "danke": "greet:Danke"
+      }
+    },
+    {
+      "id": "rain", "level": "A2", "cover": "🌧️",
+      "title": "Regen in Berlin", "t": {"ur": "برلن میں بارش", "hi": "बर्लिन में बारिश", "en": "Rain in Berlin"},
+      "panels": [
+        {"v": "🌧️🏙️", "de": "Heute regnet es den ganzen Tag.", "ur": "آج سارا دن بارش ہو رہی ہے۔", "hi": "आज पूरा दिन बारिश हो रही है।", "en": "Today it's raining all day."},
+        {"v": "☂️🚪", "de": "Ich nehme meinen Regenschirm mit.", "ur": "میں اپنی چھتری ساتھ لے جاتی ہوں۔", "hi": "मैं अपनी छतरी साथ ले जाती हूँ।", "en": "I take my umbrella with me."},
+        {"v": "🥶🚇", "de": "Es ist sehr kalt, aber die U-Bahn ist warm.", "ur": "بہت ٹھنڈ ہے، لیکن یو باہن گرم ہے۔", "hi": "बहुत ठंड है, लेकिन मेट्रो गरम है।", "en": "It's very cold, but the underground is warm."},
+        {"v": "☀️😄", "de": "Morgen scheint die Sonne.", "ur": "کل دھوپ نکلے گی۔", "hi": "कल धूप निकलेगी।", "en": "Tomorrow the sun will shine."}
+      ],
+      "words": {
+        "Heute": "time:heute", "regnet": {"de": "regnen", "ur": "بارش ہونا", "hi": "बारिश होना", "en": "to rain"},
+        "den ganzen Tag": {"de": "den ganzen Tag", "ur": "سارا دن", "hi": "पूरा दिन", "en": "all day"},
+        "nehme": {"de": "mitnehmen", "ur": "ساتھ لے جانا", "hi": "साथ ले जाना", "en": "to take along"}, "Regenschirm": "weather:der Regenschirm",
+        "kalt": "adj:kalt", "aber": "connect:aber", "U-Bahn": {"de": "die U-Bahn", "ur": "زیرِ زمین ٹرین", "hi": "मेट्रो", "en": "the underground"},
+        "warm": "adj:warm", "Morgen": "time:morgen", "Sonne": {"de": "die Sonne", "ur": "سورج", "hi": "सूरज", "en": "the sun"}
+      }
+    },
+    {
+      "id": "doctor", "level": "A2", "cover": "🩺",
+      "title": "Beim Arzt", "t": {"ur": "ڈاکٹر کے پاس", "hi": "डॉक्टर के पास", "en": "At the doctor's"},
+      "panels": [
+        {"v": "🤒🛋️", "de": "Mir geht es nicht gut.", "ur": "میری طبیعت ٹھیک نہیں۔", "hi": "मेरी तबीयत ठीक नहीं।", "en": "I don't feel well."},
+        {"v": "🤕🌡️", "de": "Ich habe Kopfschmerzen und Fieber.", "ur": "میرے سر میں درد ہے اور بخار ہے۔", "hi": "मेरे सिर में दर्द है और बुख़ार है।", "en": "I have a headache and a fever."},
+        {"v": "👩‍⚕️📃", "de": "Hier ist ein Rezept für das Medikament.", "ur": "یہ دوائی کا نسخہ ہے۔", "hi": "यह दवाई का पर्चा है।", "en": "Here is a prescription for the medicine."},
+        {"v": "🛌🍵", "de": "Sie sollten sich ausruhen.", "ur": "آپ کو آرام کرنا چاہیے۔", "hi": "आपको आराम करना चाहिए।", "en": "You should rest."}
+      ],
+      "words": {
+        "Mir geht es nicht gut": "health:Mir geht es nicht gut",
+        "Kopfschmerzen": {"de": "die Kopfschmerzen", "ur": "سر درد", "hi": "सिरदर्द", "en": "headache"}, "und": "connect:und",
+        "Fieber": {"de": "das Fieber", "ur": "بخار", "hi": "बुख़ार", "en": "fever"}, "Hier": "city:hier / dort",
+        "Rezept": "health:das Rezept", "für": {"de": "für", "ur": "کے لیے", "hi": "के लिए", "en": "for"}, "Medikament": "health:das Medikament",
+        "Sie sollten sich ausruhen": "modal:Sie sollten sich ausruhen"
+      }
+    },
+    {
+      "id": "office", "level": "A2", "cover": "🏛️",
+      "title": "Beim Bürgeramt", "t": {"ur": "سرکاری دفتر میں", "hi": "सरकारी दफ़्तर में", "en": "At the citizens' office"},
+      "panels": [
+        {"v": "🏛️📅", "de": "Ich habe einen Termin um neun Uhr.", "ur": "میری نو بجے ملاقات کا وقت ہے۔", "hi": "मेरा नौ बजे अपॉइंटमेंट है।", "en": "I have an appointment at nine o'clock."},
+        {"v": "🛂📋", "de": "Bitte Ihren Reisepass und das Formular.", "ur": "اپنا پاسپورٹ اور فارم دیجیے، پلیز۔", "hi": "कृपया अपना पासपोर्ट और फ़ॉर्म दीजिए।", "en": "Your passport and the form, please."},
+        {"v": "✍️🙂", "de": "Hier ist meine Unterschrift.", "ur": "یہ میرے دستخط ہیں۔", "hi": "ये मेरे हस्ताक्षर हैं।", "en": "Here is my signature."},
+        {"v": "✉️📬", "de": "Sie bekommen einen Brief per Post.", "ur": "آپ کو ڈاک سے ایک خط ملے گا۔", "hi": "आपको डाक से एक चिट्ठी मिलेगी।", "en": "You'll get a letter by post."}
+      ],
+      "words": {
+        "Termin": {"de": "der Termin", "ur": "ملاقات کا وقت", "hi": "अपॉइंटमेंट", "en": "the appointment"}, "neun": "numbers:neun", "Uhr": "time:die Uhr",
+        "Bitte": "greet:Bitte", "Reisepass": "office:der Reisepass", "und": "connect:und", "Formular": "office:das Formular",
+        "Hier": "city:hier / dort", "Unterschrift": "office:die Unterschrift",
+        "bekommen": {"de": "bekommen", "ur": "ملنا", "hi": "मिलना", "en": "to get"}, "Brief": "office:der Brief"
+      }
+    },
+    {
+      "id": "firstday", "level": "A2", "cover": "💼",
+      "title": "Der erste Arbeitstag", "t": {"ur": "نوکری کا پہلا دن", "hi": "नौकरी का पहला दिन", "en": "The first day at work"},
+      "panels": [
+        {"v": "🏢👋", "de": "Guten Tag! Ich bin die neue Webentwicklerin.", "ur": "السلام علیکم! میں نئی ویب ڈویلپر ہوں۔", "hi": "नमस्ते! मैं नई वेब डेवलपर हूँ।", "en": "Hello! I'm the new web developer."},
+        {"v": "👥🙂", "de": "Das ist dein Kollege Jonas.", "ur": "یہ تمہارا ساتھی یوناس ہے۔", "hi": "यह तुम्हारा सहकर्मी योनास है।", "en": "This is your colleague Jonas."},
+        {"v": "📊⏰", "de": "Die Besprechung fängt um zehn Uhr an.", "ur": "میٹنگ دس بجے شروع ہوتی ہے۔", "hi": "मीटिंग दस बजे शुरू होती है।", "en": "The meeting starts at ten o'clock."},
+        {"v": "💬👍", "de": "Können wir auf Englisch sprechen? Ja, kein Problem!", "ur": "کیا ہم انگریزی میں بات کر سکتے ہیں؟ ہاں، کوئی مسئلہ نہیں!", "hi": "क्या हम अंग्रेज़ी में बात कर सकते हैं? हाँ, कोई समस्या नहीं!", "en": "Can we speak English? Yes, no problem!"}
+      ],
+      "words": {
+        "Guten Tag": "greet:Guten Tag", "neue": "adj:neu", "Webentwicklerin": {"de": "die Webentwicklerin", "ur": "ویب ڈویلپر", "hi": "वेब डेवलपर", "en": "the web developer (woman)"},
+        "Kollege": "work:der Kollege / die Kollegin", "Besprechung": "work:die Besprechung",
+        "fängt": {"de": "anfangen", "ur": "شروع ہونا", "hi": "शुरू होना", "en": "to start"}, "zehn": "numbers:zehn", "Uhr": "time:die Uhr",
+        "sprechen": "verbs:sprechen", "Ja": "greet:Ja", "kein Problem": {"de": "kein Problem", "ur": "کوئی مسئلہ نہیں", "hi": "कोई समस्या नहीं", "en": "no problem"}
+      }
+    },
+    {
+      "id": "callhome", "level": "A2", "cover": "📞",
+      "title": "Ein Anruf nach Hause", "t": {"ur": "گھر فون", "hi": "घर पर फ़ोन", "en": "A call home"},
+      "panels": [
+        {"v": "📞🌙", "de": "Ich rufe meine Mutter in Pakistan an.", "ur": "میں پاکستان میں اپنی امی کو فون کرتی ہوں۔", "hi": "मैं पाकिस्तान में अपनी माँ को फ़ोन करती हूँ।", "en": "I call my mother in Pakistan."},
+        {"v": "🥹👨‍👩‍👧", "de": "Ich vermisse meine Familie.", "ur": "مجھے گھر والوں کی یاد آتی ہے۔", "hi": "मुझे घरवालों की याद आती है।", "en": "I miss my family."},
+        {"v": "📚✏️", "de": "Aber ich lerne jeden Tag Deutsch.", "ur": "لیکن میں ہر روز جرمن سیکھتی ہوں۔", "hi": "लेकिन मैं हर दिन जर्मन सीखती हूँ।", "en": "But I learn German every day."},
+        {"v": "❤️🏙️", "de": "Berlin gefällt mir!", "ur": "مجھے برلن اچھا لگتا ہے!", "hi": "मुझे बर्लिन अच्छा लगता है!", "en": "I like Berlin!"}
+      ],
+      "words": {
+        "rufe": {"de": "anrufen", "ur": "فون کرنا", "hi": "फ़ोन करना", "en": "to call"}, "Mutter": "family:die Mutter",
+        "Ich vermisse meine Familie": "feelings:Ich vermisse meine Familie", "Aber": "connect:aber", "lerne": "verbs:lernen",
+        "jeden Tag": {"de": "jeden Tag", "ur": "ہر روز", "hi": "हर दिन", "en": "every day"}, "Berlin gefällt mir": "feelings:Berlin gefällt mir"
+      }
+    }
+  ]
+}

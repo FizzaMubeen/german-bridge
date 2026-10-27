@@ -430,3 +430,38 @@ body.in-session main{padding-block:max(10px,env(safe-area-inset-top,0px)) max(10
 .updatebar{position:fixed;left:50%;transform:translateX(-50%);top:calc(64px + env(safe-area-inset-top,0px));z-index:45;display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:center;background:var(--ink);color:var(--bg);padding:10px 14px;border-radius:14px;font-weight:700;font-size:14px;width:max-content;max-width:min(94vw,560px);box-shadow:0 8px 28px rgb(0 0 0 / .25);text-align:center}
 body.in-session .updatebar{top:calc(12px + env(safe-area-inset-top,0px))}
 .installcard{margin-bottom:14px;border-color:var(--accent);background:var(--accent-soft)}
+
+/* ---------- stories ---------- */
+.stories{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:10px}
+.storytile{display:grid;grid-template-columns:64px minmax(0,1fr);gap:12px;align-items:center;text-decoration:none;background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:12px}
+.storytile .cover{font-size:34px;width:64px;height:64px;display:grid;place-items:center;border-radius:14px;background:var(--sunk)}
+.storytile .meta{display:grid;gap:4px;min-width:0}
+.storytile b{font-size:16px}
+.storytile .tr{font-size:14px;color:var(--muted)}
+.storytile .tr .ur{font-size:15px;line-height:1.8}
+.storyhead{display:flex;gap:16px;align-items:center;flex-wrap:wrap;margin-bottom:14px}
+.storyhead .cover{font-size:44px;width:76px;height:76px;display:grid;place-items:center;border-radius:20px;background:var(--accent-soft)}
+.storyknow{display:grid;gap:8px}
+.spanels{display:grid;gap:12px}
+@media (min-width:760px){ .spanels{grid-template-columns:1fr 1fr} }
+.spanel{margin:0;background:var(--surface);border:1px solid var(--line);border-radius:18px;overflow:hidden;display:grid}
+.spanel .scene{font-size:64px;letter-spacing:8px;text-align:center;padding:26px 10px 20px;background:var(--sunk);line-height:1.1}
+.spanel figcaption{padding:14px 16px 16px;display:grid;gap:8px;justify-items:start;position:relative}
+.snum{position:absolute;top:-15px;right:14px;width:30px;height:30px;border-radius:50%;background:var(--surface);border:1px solid var(--line);display:grid;place-items:center;font:600 12px var(--f-mono);color:var(--muted)}
+.sde{margin:0;font-size:21px;line-height:1.6;font-weight:700}
+.str{margin:0;display:grid;gap:2px;color:var(--ink);font-size:16px}
+.str .ur{font-size:19px;line-height:1.9}
+.sw{font:inherit;color:inherit;background:none;border:0;padding:0 1px;margin:0;cursor:pointer;border-bottom:2.5px solid transparent;line-height:inherit;border-radius:2px}
+.sw.known{border-bottom-color:var(--ok)}
+.sw.new{border-bottom:2.5px dotted var(--accent)}
+.sw:hover{background:var(--sunk)}
+.sw.demo{cursor:default;font-weight:700;color:var(--ink)}
+.wsheet{position:fixed;inset:0;z-index:60;background:rgb(0 0 0 / .28);display:flex;align-items:flex-end;justify-content:center}
+.ws-inner{position:relative;width:min(560px,100%);background:var(--surface);border-radius:22px 22px 0 0;padding:26px 18px calc(22px + env(safe-area-inset-bottom,0px));display:grid;gap:8px;justify-items:center;text-align:center;box-shadow:0 -8px 30px rgb(0 0 0 / .15)}
+@media (min-width:700px){ .wsheet{align-items:center} .ws-inner{border-radius:22px} }
+.ws-x{position:absolute;top:12px;right:12px}
+.ws-v{font-size:48px;line-height:1.1}
+.ws-v.txt{font-family:var(--f-display);font-size:28px}
+.ws-de{font-size:26px;font-weight:700}
+.ws-my{font-size:20px;font-weight:700}
+.ws-my .ur{font-size:24px;line-height:1.9;font-weight:400}
