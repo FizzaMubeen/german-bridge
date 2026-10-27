@@ -5,7 +5,7 @@
  */
 (() => {
 "use strict";
-const APP_VERSION = "1.2.0";
+const APP_VERSION = "1.3.0";
 const KEY = "gb-v1";
 
 /* =====================================================================
@@ -94,7 +94,7 @@ function parseDeck(txt){
    ===================================================================== */
 const DEFAULTS = () => ({
   format:1, created: Date.now(),
-  cards:{}, known:{}, want:{}, custom:[], storiesRead:{},
+  cards:{}, known:{}, want:{}, custom:[], storiesRead:{}, listenSessions:[],
   xp:0, days:{}, badges:{}, sessions:0, perfect:0, quizzes:0, listens:0, reports:0,
   settings:{name:"", base:"ur", front:"de", mode:"flip", goal:20, theme:"system", autoplay:false, hideInstall:0, extra:{rom:true, en:true, ur:false, hi:false}}
 });
@@ -109,6 +109,7 @@ function sanitize(raw){
   out.custom = (Array.isArray(raw.custom)?raw.custom:[]).filter(c => c && /^my-[a-z0-9]{4,24}$/.test(c.id) && c.de).slice(0,5000).map(c => ({
     id:c.id, v:clip(c.v,8)||"📝", de:clip(c.de,200), my:clip(c.my,200), en:clip(c.en,200), note:clip(c.note,300), created:num(c.created,Date.now())}));
   for(const k of ["xp","sessions","perfect","quizzes","listens","reports"]) out[k] = Math.max(0, num(raw[k],0));
+  out.listenSessions = (Array.isArray(raw.listenSessions)?raw.listenSessions:[]).slice(0,40).map(x => ({at:num(x&&x.at,0), w:Math.max(0,num(x&&x.w,0)), k:Math.max(0,num(x&&x.k,0)), src: (x&&x.src)==="text"?"text":"mic"})).filter(x => x.w > 0);
   for(const [k,v] of Object.entries(raw.storiesRead||{})) if(/^[a-z0-9-]{1,40}$/.test(k)) out.storiesRead[k] = num(v, Date.now());
   for(const [k,v] of Object.entries(raw.days||{})) if(/^\d{4}-\d{2}-\d{2}$/.test(k)) out.days[k] = Math.max(0, num(v,0));
   for(const [k,v] of Object.entries(raw.badges||{})) if(typeof k==="string" && k.length<40) out.badges[k] = clip(v,20);
@@ -116,7 +117,7 @@ function sanitize(raw){
   out.settings = {
     name: clip(s.name,60), base: ["ur","hi","en"].includes(s.base)?s.base:"ur", front: s.front==="base"?"base":"de",
     mode: s.mode==="quiz"?"quiz":"flip", goal: [10,20,40].includes(+s.goal)?+s.goal:20, theme: ["light","dark"].includes(s.theme)?s.theme:"system",
-    autoplay: !!s.autoplay, hideInstall: Math.max(0, num(s.hideInstall,0)), extra: {rom: s.extra?.rom!==false, en: s.extra?.en!==false, ur: !!s.extra?.ur, hi: !!s.extra?.hi}
+    autoplay: !!s.autoplay, listenOk: !!s.listenOk, hideInstall: Math.max(0, num(s.hideInstall,0)), extra: {rom: s.extra?.rom!==false, en: s.extra?.en!==false, ur: !!s.extra?.ur, hi: !!s.extra?.hi}
   };
   return out;
 }
@@ -211,6 +212,8 @@ const BADGES = [
   {id:"report", e:"🖨️", t:"On paper", d:"Make your first PDF", ok:()=>S.reports>=1},
   {id:"a1", e:"🥉", t:"A1 complete", d:"Learn every A1 card", ok:()=>DECK.filter(c=>c.level==="A1").every(isLearned)},
   {id:"a2", e:"🥈", t:"A2 complete", d:"Learn every A2 card", ok:()=>DECK.filter(c=>c.level==="A2").every(isLearned)},
+  {id:"listen1", e:"👂", t:"Good ears", d:"Finish a listening session", ok:()=>S.listenSessions.some(x=>x.src==="mic" && x.w>=10)},
+  {id:"listen50", e:"🎯", t:"Half way there", d:"Understand 50% in a listening session", ok:()=>S.listenSessions.some(x=>x.w>=10 && x.k/x.w>=0.5)},
   {id:"stories3", e:"📖", t:"Storyteller", d:"Read 3 stories", ok:()=>Object.keys(S.storiesRead).length>=3},
   {id:"xp1000", e:"💎", t:"1,000 XP", d:"Earn 1,000 XP", ok:()=>S.xp>=1000},
 ];
@@ -309,9 +312,10 @@ let words = {q:"", sort:"new"};
 function setNav(nav){ $$("[data-nav]").forEach(a => a.dataset.nav===nav ? a.setAttribute("aria-current","page") : a.removeAttribute("aria-current")); }
 function route(){
   stopConfetti();
+  if(typeof stopListening === "function") stopListening(true);
   session = null; document.body.classList.remove("in-session");
   const h = (location.hash||"#today").slice(1);
-  const nav = h.startsWith("learn")||h.startsWith("unit-")||h.startsWith("stor")||h.startsWith("fun") ? "learn" : h.startsWith("words") ? "words" : h.startsWith("guide") ? "guide" : (h.startsWith("me")||h.startsWith("report")) ? "me" : "today";
+  const nav = h.startsWith("learn")||h.startsWith("unit-")||h.startsWith("stor")||h.startsWith("fun")||h.startsWith("guide") ? "learn" : h.startsWith("words") ? "words" : h.startsWith("listen") ? "listen" : (h.startsWith("me")||h.startsWith("report")) ? "me" : "today";
   setNav(nav); applyPrefs(); renderStats();
   if(h==="learn") return viewLearn();
   if(h==="stories") return viewStories();
@@ -322,6 +326,7 @@ function route(){
   if(h==="words-learned") return viewWords("learned");
   if(h==="words-add") return viewAdd(null);
   if(h.startsWith("words-edit-")) return viewAdd(BYID.get(h.slice(11)) || null);
+  if(h==="listen") return viewListen();
   if(h==="guide") return viewGuide();
   if(h.startsWith("guide-")) return viewLesson(h.slice(6));
   if(h==="me") return viewMe();
@@ -462,7 +467,10 @@ function viewLearn(){
         return `<a class="unit${u===nu?" next":""}" href="#unit-${u.id}"><span class="ico">${esc(u.emoji)}</span><span class="num">Unit ${u.n}</span><b>${esc(u.title)}</b><span class="meta">${starsHTML(st.stars)}<span>${st.mastered}/${st.total}</span></span></a>`; }).join("")}</div>`;
   };
   app.innerHTML = `<h1>Learn</h1><p class="muted" style="margin:6px 0 0">Units are in the order you need them in daily life. Start at the top or jump to what you need this week.</p>
-    ${practiceChips()}${storiesStrip()}${funStrip()}${levels.map(block).join("")}`;
+    ${practiceChips()}${storiesStrip()}${funStrip()}
+    <div class="section-title"><h2>Grammar guide</h2><a class="btn sm" href="#guide">Open</a></div>
+    <p class="small muted" style="margin:-4px 0 0">Short lessons comparing German with Urdu, Hindi and English: der/die/das, word order, cases, past tense and more.</p>
+    ${levels.map(block).join("")}`;
 }
 function viewUnit(u){
   const st = unitStats(u), next = UNITS[UNITS.indexOf(u)+1];
@@ -528,15 +536,17 @@ function viewWords(tab){
 }
 
 const EMOJI = ["📝","💬","🏠","🍽️","🛒","🚇","💼","🏥","👪","❤️","☕","🧾","📞","🌍","🎓","⭐"];
+let addPrefill = null;
 function viewAdd(c){
   if(c && !c.custom) c = null;
+  const pre = !c && addPrefill ? addPrefill : null; addPrefill = null;
   const st = S.settings, inWant = c ? !!S.want[c.id] : true;
   app.innerHTML = `<a class="back" href="#words">← My words</a>
     <h1>${c?"Edit my word":"Add a word or sentence"}</h1>
     <p class="muted" style="margin:6px 0 16px">Add what you need in your own life: a sentence for work, your street name, what you say at the doctor. It becomes a flashcard like all the others.</p>
     <form class="panel stack" id="addForm" autocomplete="off" novalidate>
       <div class="field"><label for="f-de">German</label>
-        <input class="input" id="f-de" maxlength="200" required placeholder="z. B. Ich arbeite als Webentwicklerin." value="${esc(c?.de)}" lang="de" spellcheck="true">
+        <input class="input" id="f-de" maxlength="200" required placeholder="z. B. Ich arbeite als Webentwicklerin." value="${esc(c?.de ?? pre?.de)}" lang="de" spellcheck="true">
         <span class="help">For nouns, write the article too: <b>der</b>, <b>die</b> or <b>das</b>. It gets its color automatically.</span></div>
       <div class="field"><label for="f-my">Meaning in ${LANG_NAME[st.base]} (or any language)</label>
         <input class="input" id="f-my" maxlength="200" dir="auto" value="${esc(c?.my)}" placeholder="${st.base==="ur"?"مثلاً: میں ویب ڈویلپر کے طور پر کام کرتی ہوں":st.base==="hi"?"जैसे: मैं वेब डेवलपर के रूप में काम करती हूँ":"e.g. I work as a web developer."}"></div>
@@ -1306,6 +1316,221 @@ function viewFun(tab){
     <nav class="chips" style="margin-bottom:16px" aria-label="Fun sections">${tabs.map(([k,l]) => `<a class="chip" href="#fun-${k}" aria-pressed="${k===tab}" style="text-decoration:none">${l}</a>`).join("")}</nav>
     ${body}`;
   $$("[data-joke]", app).forEach(b => b.onclick = () => { jokeOpen[+b.dataset.joke] = true; const y = window.scrollY; viewFun("jokes"); window.scrollTo(0,y); });
+}
+
+/* =====================================================================
+   LISTEN & UNDERSTAND — live speech to text, coloured by what you know
+   ===================================================================== */
+const SR = window.SpeechRecognition || window.webkitSpeechRecognition || null;
+/* irregular and short forms → the form used on the cards */
+const IRR = (() => {
+  const m = {};
+  const add = (base, forms) => forms.split(" ").forEach(f => m[f] = base);
+  add("sein","bin bist ist sind seid war warst waren wart gewesen");
+  add("haben","habe hast hat habt hatte hattest hatten gehabt");
+  add("werden","werde wirst wird werdet wurde wurden geworden");
+  add("gehen","ging gingen gegangen"); add("kommen","kam kamen gekommen"); add("essen","isst aß aßen gegessen");
+  add("trinken","trank getrunken"); add("sehen","siehst sieht sah sahen gesehen"); add("fahren","fährst fährt fuhr fuhren gefahren");
+  add("sprechen","sprichst spricht sprach gesprochen"); add("nehmen","nimmst nimmt nahm genommen"); add("geben","gibst gibt gab gegeben");
+  add("wissen","weiß weißt wisst wusste wussten gewusst"); add("lesen","liest las gelesen"); add("schlafen","schläfst schläft schlief geschlafen");
+  add("schreiben","schrieb geschrieben"); add("verstehen","verstand verstanden"); add("bleiben","blieb geblieben"); add("finden","fand gefunden");
+  add("können","kann kannst konnte konnten gekonnt"); add("müssen","muss musst musste mussten"); add("wollen","will willst wollte wollten");
+  add("dürfen","darf darfst durfte"); add("sollen","soll sollst sollte sollten"); add("möchten","möchte möchtest");
+  add("der","den dem des"); add("ein","eine einen einem einer eines"); add("kein","keine keinen keinem keiner");
+  add("ich","mich mir"); add("du","dich dir"); add("er","ihn ihm"); add("wir","uns"); add("ihr","euch");
+  add("mein","meine meinen meinem meiner"); add("dein","deine deinen deinem deiner");
+  add("im","in"); add("zum","zu"); add("beim","bei");
+  return m;
+})();
+const normW = w => w.toLowerCase().replace(/[^\p{L}ß-]/gu, "");
+let lexCache = null, lexKey = "";
+function lexicon(){
+  const key = allCards().length + ":" + S.custom.length;
+  if(lexCache && lexKey === key) return lexCache;
+  const idx = new Map();
+  const put = (t, id) => { if(!t || t.length < 1) return; if(!idx.has(t)) idx.set(t, new Set()); idx.get(t).add(id); };
+  for(const c of allCards()){
+    for(const raw of (c.de.match(/[\p{L}ß]+/gu) || [])){
+      const t = raw.toLowerCase(); put(t, c.id);
+      if(t.length > 4 && /en$/.test(t)){ const st = t.slice(0,-2); ["e","st","t","en","te","ten"].forEach(e => put(st+e, c.id)); put("ge"+st+"t", c.id); }
+    }
+  }
+  lexCache = idx; lexKey = key; return idx;
+}
+function lookupWord(w){
+  const idx = lexicon(), t = normW(w); if(!t) return [];
+  const tryKeys = [t, IRR[t]];
+  for(const suf of ["en","em","er","es","e","n","s","st","t"]) if(t.length > suf.length + 2 && t.endsWith(suf)) tryKeys.push(t.slice(0, -suf.length));
+  tryKeys.push(t.replace(/ä/g,"a").replace(/ö/g,"o").replace(/ü/g,"u"));
+  for(const k of tryKeys){ if(k && idx.has(k)) return [...idx.get(k)].map(id => BYID.get(id)).filter(Boolean); }
+  return [];
+}
+function wordStatus(w){
+  const cards = lookupWord(w);
+  if(!cards.length) return {st:"unknown", cards};
+  if(cards.some(isLearned)) return {st:"known", cards};
+  if(cards.some(c => isWanted(c) || seen(c))) return {st:"learning", cards};
+  return {st:"new", cards};
+}
+function analyse(text){
+  const parts = String(text).split(/([\p{L}ß]+(?:-[\p{L}ß]+)*)/u);
+  let total = 0, known = 0; const out = [];
+  for(let i = 0; i < parts.length; i++){
+    const p = parts[i]; if(!p) continue;
+    if(i % 2 === 1 && !/^\d+$/.test(p)){ const s = wordStatus(p); total++; if(s.st === "known") known++; out.push({w:p, ...s}); }
+    else out.push({txt:p});
+  }
+  return {parts: out, total, known, pct: total ? Math.round(known/total*100) : 0};
+}
+const LST = {listening:false, rec:null, lines:[], interim:"", err:"", startedAt:0, text:""};
+function renderTokens(a){
+  return a.parts.map(x => x.txt !== undefined ? esc(x.txt) : `<button type="button" class="lw ${x.st}" data-lw="${esc(x.w)}">${esc(x.w)}</button>`).join("");
+}
+function sessionTotals(){ let w = 0, k = 0; LST.lines.forEach(l => { const a = analyse(l); w += a.total; k += a.known; }); return {w, k, pct: w ? Math.round(k/w*100) : 0}; }
+function ringBig(pct){
+  const r = 44, c = 2*Math.PI*r, f = Math.min(1, pct/100);
+  return `<svg viewBox="0 0 100 100" class="bigring" aria-hidden="true"><circle cx="50" cy="50" r="${r}" fill="none" stroke="var(--line)" stroke-width="9"/><circle cx="50" cy="50" r="${r}" fill="none" stroke="var(--ok)" stroke-width="9" stroke-linecap="round" stroke-dasharray="${c*f} ${c}" transform="rotate(-90 50 50)"/></svg>`;
+}
+function renderLive(){
+  const box = $("#liveBox"); if(!box) return;
+  const t = sessionTotals();
+  $("#liveScore").innerHTML = `${ringBig(t.pct)}<div class="bigpct"><b>${t.pct}%</b><span>${t.k} of ${t.w} words you know</span></div>`;
+  box.innerHTML = (LST.lines.length || LST.interim) ? LST.lines.slice(-30).map(l => { const a = analyse(l); return `<p class="lline"><span class="lpct ${a.pct>=60?"hi":a.pct>=30?"mid":"lo"}">${a.pct}%</span><span lang="de">${renderTokens(a)}</span></p>`; }).join("") + (LST.interim ? `<p class="lline interim"><span class="lpct">…</span><span lang="de">${esc(LST.interim)}</span></p>` : "")
+    : `<p class="muted small" style="margin:0">${LST.listening ? "Listening… play a German video or speak German near your phone." : "Your words will appear here."}</p>`;
+  box.scrollTop = box.scrollHeight;
+  const nw = newWordsFrom(LST.lines.join(" ")); const b = $("#addNew");
+  if(b){ b.hidden = !nw.length; b.textContent = `☆ Add ${nw.length} new word${nw.length===1?"":"s"} to I want to learn`; }
+  const m = $("#micBtn"); if(m){ m.classList.toggle("on", LST.listening); m.setAttribute("aria-pressed", LST.listening); $("#micLabel").textContent = LST.listening ? "Listening… tap to stop" : "Tap to start listening"; }
+  const e = $("#micErr"); if(e){ e.hidden = !LST.err; e.textContent = LST.err; }
+}
+function newWordsFrom(text){
+  const seenIds = new Set(), out = [];
+  for(const p of analyse(text).parts){ if(p.st === "new" || p.st === "unknown"){ const c = p.cards && p.cards.find(x => !isLearned(x) && !isWanted(x) && x.de.replace(/^(der|die|das)\s+/i, "").split(/\s+/).length === 1); if(c && !seenIds.has(c.id)){ seenIds.add(c.id); out.push(c); } } }
+  return out;
+}
+function startListening(){
+  if(!SR) return;
+  LST.err = ""; LST.lines = []; LST.interim = ""; LST.startedAt = Date.now();
+  const rec = new SR(); LST.rec = rec;
+  rec.lang = "de-DE"; rec.continuous = true; rec.interimResults = true; rec.maxAlternatives = 1;
+  rec.onresult = e => {
+    let interim = "";
+    for(let i = e.resultIndex; i < e.results.length; i++){
+      const r = e.results[i];
+      if(r.isFinal){ const t = r[0].transcript.trim(); if(t) LST.lines.push(t); } else interim += r[0].transcript;
+    }
+    LST.interim = interim.trim(); renderLive();
+  };
+  rec.onerror = e => {
+    if(e.error === "no-speech" || e.error === "aborted") return;
+    LST.err = e.error === "not-allowed" || e.error === "service-not-allowed" ? "The microphone is blocked. Allow microphone access for this site in your browser settings, then try again."
+      : e.error === "network" ? "Speech recognition needs an internet connection in this browser." : "Listening stopped: " + e.error;
+    LST.listening = false; renderLive();
+  };
+  rec.onend = () => { if(LST.listening){ try{ rec.start(); }catch(err){} } else renderLive(); };
+  try{ rec.start(); LST.listening = true; }catch(err){ LST.err = "Could not start the microphone."; }
+  renderLive();
+}
+function stopListening(silent){
+  if(!LST.rec) return;
+  const was = LST.listening; LST.listening = false;
+  try{ LST.rec.stop(); }catch(e){}
+  LST.rec = null;
+  if(LST.interim){ LST.lines.push(LST.interim); LST.interim = ""; }
+  const t = sessionTotals();
+  if(was && t.w >= 3){
+    S.listenSessions.unshift({at: Date.now(), w: t.w, k: t.k, src: "mic"}); S.listenSessions = S.listenSessions.slice(0,40);
+    if(t.w >= 10){ S.xp += 10; } save(); const fresh = checkBadges(); renderStats();
+    if(!silent) toast(`👂 Saved: you knew ${t.pct}% of ${t.w} words${t.w>=10?" · +10 XP":""}${fresh.length?` · New badge: ${fresh[0].t}`:""}`);
+  }
+  if(!silent) renderLive();
+}
+function historyHTML(){
+  const hs = S.listenSessions.slice(0,10);
+  if(!hs.length) return `<p class="muted small" style="margin:0">Your listening sessions will show here, so you can watch your percentage grow.</p>`;
+  return `<div class="lhist">${hs.map(x => { const pc = Math.round(x.k/x.w*100); return `<div class="lh"><span class="small muted">${fmtDate(x.at)} · ${x.src==="mic"?"🎤":"📄"}</span><div class="bar"><i style="width:${pc}%"></i></div><b>${pc}%</b><span class="small muted">${x.k}/${x.w}</span></div>`; }).join("")}</div>`;
+}
+function viewListen(){
+  const st = S.settings;
+  const intro = `<h1>Listen &amp; understand</h1>
+    <p class="muted" style="margin:6px 0 14px;max-width:62ch">Hear German around you and see how much you already understand. Words you know turn <b style="color:var(--ok)">green</b>, words you're learning <b style="color:var(--accent)">yellow</b>, new words stay <b>grey</b>. Tap any word to learn it.</p>`;
+  const consent = !st.listenOk ? `<div class="panel stack listenok">
+      <b>Before you start</b>
+      <ul class="small" style="margin:0;padding-left:18px;display:grid;gap:4px">
+        <li>German Bridge does <b>not record or save audio</b>. Only your score and the words you choose are kept on this phone.</li>
+        <li>Your browser turns speech into text. In Chrome and Edge this is done by Google's or Microsoft's speech service, in Safari by Apple.</li>
+        <li>Use it for TV, videos, podcasts, announcements and conversations you're part of. Recording other people's private conversations is not allowed in Germany.</li>
+      </ul>
+      <div><button class="btn primary" type="button" id="lOk">I understand, let's start</button></div></div>` : "";
+  const mic = SR ? `<div class="micwrap">
+      <button class="micbtn" type="button" id="micBtn" aria-pressed="false" ${st.listenOk?"":"disabled"} aria-label="Start or stop listening">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3M9 21h6"/></svg></button>
+      <span id="micLabel" class="small" style="font-weight:700">Tap to start listening</span>
+      <p id="micErr" class="small" style="color:var(--bad);margin:0;text-align:center" hidden></p></div>`
+    : `<div class="panel small"><b>Live listening isn't available in this browser.</b> It works in Chrome, Edge and Safari. You can still paste German text below.</div>`;
+  app.innerHTML = `${intro}${consent}
+    <div class="listengrid">
+      <div class="panel stack">
+        ${mic}
+        <div class="lscore" id="liveScore"></div>
+        <div class="legend small" style="margin:0"><div><span class="lw known demo">green</span> you know it</div><div><span class="lw learning demo">yellow</span> learning</div><div><span class="lw new demo">grey</span> new</div></div>
+      </div>
+      <div class="panel stack">
+        <div class="row between"><b>What I heard</b><button class="btn sm ghost" type="button" id="lClear">Clear</button></div>
+        <div class="livebox" id="liveBox" aria-live="polite"></div>
+        <button class="btn want" type="button" id="addNew" hidden></button>
+      </div>
+    </div>
+    <div class="section-title"><h2>Check a German text</h2></div>
+    <div class="panel stack">
+      <label class="small" for="lText" style="font-weight:700">Paste a letter, a message or any German text to see how much of it you know.</label>
+      <textarea class="input" id="lText" lang="de" placeholder="z. B. Sehr geehrte Frau Khan, bitte bringen Sie Ihren Reisepass und die Wohnungsgeberbestätigung zum Termin mit.">${esc(LST.text)}</textarea>
+      <div class="row"><button class="btn primary" type="button" id="lCheck">Check this text</button></div>
+      <div id="lResult"></div>
+    </div>
+    <div class="section-title"><h2>My listening progress</h2></div>
+    <div class="panel">${historyHTML()}</div>`;
+  if($("#lOk")) $("#lOk").onclick = () => { S.settings.listenOk = true; save(); viewListen(); };
+  if($("#micBtn")) $("#micBtn").onclick = () => { if(LST.listening) stopListening(false); else startListening(); };
+  $("#lClear").onclick = () => { LST.lines = []; LST.interim = ""; renderLive(); };
+  $("#addNew").onclick = () => {
+    const nw = newWordsFrom(LST.lines.join(" ")); nw.forEach(c => { if(!isWanted(c)) toggleWant(c); });
+    checkBadges(); renderStats(); toast(`☆ ${nw.length} word${nw.length===1?"":"s"} added to I want to learn`); renderLive();
+  };
+  $("#lCheck").onclick = () => {
+    const txt = $("#lText").value.trim(); LST.text = txt;
+    if(!txt){ $("#lResult").innerHTML = ""; return; }
+    const a = analyse(txt), nw = newWordsFrom(txt);
+    if(a.total >= 3){ S.listenSessions.unshift({at: Date.now(), w: a.total, k: a.known, src: "text"}); S.listenSessions = S.listenSessions.slice(0,40); save(); }
+    $("#lResult").innerHTML = `<div class="row" style="gap:14px;align-items:center"><div class="lscore">${ringBig(a.pct)}<div class="bigpct"><b>${a.pct}%</b><span>${a.known} of ${a.total} words you know</span></div></div></div>
+      <p class="ltext" lang="de">${renderTokens(a)}</p>
+      ${nw.length ? `<button class="btn want" type="button" id="addNewT">☆ Add ${nw.length} new word${nw.length===1?"":"s"} from the app to I want to learn</button>` : ""}`;
+    const b = $("#addNewT"); if(b) b.onclick = () => { nw.forEach(c => { if(!isWanted(c)) toggleWant(c); }); renderStats(); toast(`☆ ${nw.length} words added to I want to learn`); b.remove(); };
+  };
+  renderLive();
+}
+app.addEventListener("click", e => {
+  const b = e.target.closest("[data-lw]"); if(!b || b.classList.contains("demo")) return;
+  openListenSheet(b.dataset.lw);
+});
+function openListenSheet(w){
+  closeWordSheet();
+  const s = wordStatus(w);
+  const sh = document.createElement("div");
+  sh.className = "wsheet"; sh.setAttribute("role","dialog"); sh.setAttribute("aria-label","Word");
+  const list = s.cards.slice(0,3);
+  sh.innerHTML = `<div class="ws-inner" style="justify-items:stretch;text-align:left">
+    <button class="iconbtn ws-x" type="button" aria-label="Close">✕</button>
+    <div class="ws-de" style="text-align:center">${esc(w)}</div>
+    ${list.length ? `<p class="small muted" style="margin:0;text-align:center">Found in ${s.cards.length} card${s.cards.length===1?"":"s"}</p><div class="words">${list.map(c => wordRow(c, {showUnit:true})).join("")}</div>`
+      : `<p class="small muted" style="margin:0;text-align:center">This word isn't in the app yet. Add it as your own word with its meaning.</p>
+         <div class="row" style="justify-content:center">${canSpeak?`<button class="speak" type="button" data-say="${esc(w)}">🔊 Listen</button>`:""}<a class="btn primary sm" href="#words-add" id="lsAdd">＋ Add as my word</a></div>`}
+  </div>`;
+  document.body.appendChild(sh);
+  sh.querySelector(".ws-x").onclick = closeWordSheet;
+  sh.addEventListener("click", ev => { if(ev.target === sh) closeWordSheet(); });
+  const a = sh.querySelector("#lsAdd"); if(a) a.addEventListener("click", () => { addPrefill = {de: w}; stopListening(true); });
+  sh.addEventListener("click", ev => { if(ev.target.closest("[data-want],[data-known]")) setTimeout(() => { closeWordSheet(); if($("#liveBox")){ renderLive(); const r = $("#lCheck"); if(r && LST.text) r.click(); } }, 0); });
 }
 
 /* =====================================================================

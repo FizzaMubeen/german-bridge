@@ -1,6 +1,6 @@
 /* German Bridge offline support.
    After you change any file, raise VERSION so phones fetch the new files. */
-const VERSION = "gb-1.2.0";
+const VERSION = "gb-1.3.0";
 const CORE = [
   "./", "index.html", "manifest.webmanifest",
   "assets/css/app.css", "assets/css/fonts.css", "assets/js/app.js",

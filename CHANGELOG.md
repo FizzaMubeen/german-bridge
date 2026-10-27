@@ -3,6 +3,14 @@
 The version shown in the app (Me → bottom of the page) matches the tags in this repository.
 Phones that installed the app update themselves; learners keep all their progress.
 
+## 1.3.0 — 2026-10-27
+- **Listen & understand (phase 2 prototype):** tap the mic and see German speech as text, live
+- Every word coloured: green = you know it, yellow = learning, grey = new; % understood per sentence and per session
+- Recognises word forms (ging → gehen, hat → haben, den/dem → der)
+- Tap a word to learn it or add it as your own word; "Add all new words" to your wish list
+- **Check a German text:** paste a letter or message and see how much you understand
+- Listening history and two new badges; Listen replaces Guide in the menu (Guide is now in Learn)
+
 ## 1.2.0 — 2026-10-27
 - **1,000 flashcards** (541 A1, 459 A2) in 54 units, in daily-life order
 - New A1 units: small important words, numbers & prices, months & dates, daily routine, body, clothes, fruit & vegetables, kitchen, around the house, jobs, countries & languages, hobbies, phone, animals & nature, opposites
