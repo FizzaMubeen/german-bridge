@@ -5,7 +5,7 @@
  */
 (() => {
 "use strict";
-const APP_VERSION = "1.4.0";
+const APP_VERSION = "1.5.0";
 const KEY = "gb-v1";
 
 /* =====================================================================
@@ -96,7 +96,7 @@ const DEFAULTS = () => ({
   format:1, created: Date.now(),
   cards:{}, known:{}, want:{}, custom:[], storiesRead:{}, listenSessions:[],
   xp:0, days:{}, badges:{}, sessions:0, perfect:0, quizzes:0, listens:0, reports:0,
-  settings:{name:"", base:"ur", front:"de", mode:"flip", goal:20, theme:"system", autoplay:false, hideInstall:0, extra:{rom:true, en:true, ur:false, hi:false}}
+  settings:{level:"A1", name:"", base:"ur", front:"de", mode:"flip", goal:20, theme:"system", autoplay:false, hideInstall:0, extra:{rom:true, en:true, ur:false, hi:false}}
 });
 let S = null;
 function sanitize(raw){
@@ -115,7 +115,7 @@ function sanitize(raw){
   for(const [k,v] of Object.entries(raw.badges||{})) if(typeof k==="string" && k.length<40) out.badges[k] = clip(v,20);
   const s = raw.settings||{};
   out.settings = {
-    name: clip(s.name,60), base: ["ur","hi","en"].includes(s.base)?s.base:"ur", front: s.front==="base"?"base":"de",
+    level: ["A1","A2","B1"].includes(s.level)?s.level:"A1", name: clip(s.name,60), base: ["ur","hi","en"].includes(s.base)?s.base:"ur", front: s.front==="base"?"base":"de",
     mode: s.mode==="quiz"?"quiz":"flip", goal: [10,20,40].includes(+s.goal)?+s.goal:20, theme: ["light","dark"].includes(s.theme)?s.theme:"system",
     autoplay: !!s.autoplay, listenOk: !!s.listenOk, hideInstall: Math.max(0, num(s.hideInstall,0)), extra: {rom: s.extra?.rom!==false, en: s.extra?.en!==false, ur: !!s.extra?.ur, hi: !!s.extra?.hi}
   };
@@ -185,7 +185,8 @@ function streak(){
   while(S.days[dayKey(d)]){ n++; d.setDate(d.getDate()-1); }
   return n;
 }
-const nextUnit = () => UNITS.find(u => unitStats(u).stars < 3) || UNITS[0];
+const curLevel = () => UNITS.some(u => u.level===S.settings.level) ? S.settings.level : (UNITS[0]||{}).level;
+const nextUnit = () => UNITS.find(u => u.level===curLevel() && unitStats(u).stars < 3) || UNITS.find(u => unitStats(u).stars < 3) || UNITS[0];
 function wordOfDay(){
   const pool = DECK.filter(c => !isLearned(c) && c.de.length < 40);
   const list = pool.length ? pool : DECK;
@@ -212,6 +213,7 @@ const BADGES = [
   {id:"report", e:"🖨️", t:"On paper", d:"Make your first PDF", ok:()=>S.reports>=1},
   {id:"a1", e:"🥉", t:"A1 complete", d:"Learn every A1 card", ok:()=>DECK.filter(c=>c.level==="A1").every(isLearned)},
   {id:"a2", e:"🥈", t:"A2 complete", d:"Learn every A2 card", ok:()=>DECK.filter(c=>c.level==="A2").every(isLearned)},
+  {id:"b1", e:"🥇", t:"B1 complete", d:"Learn every B1 card", ok:()=>DECK.some(c=>c.level==="B1") && DECK.filter(c=>c.level==="B1").every(isLearned)},
   {id:"listen1", e:"👂", t:"Good ears", d:"Finish a listening session", ok:()=>S.listenSessions.some(x=>x.src==="mic" && x.w>=10)},
   {id:"listen50", e:"🎯", t:"Half way there", d:"Understand 50% in a listening session", ok:()=>S.listenSessions.some(x=>x.w>=10 && x.k/x.w>=0.5)},
   {id:"stories3", e:"📖", t:"Storyteller", d:"Read 3 stories", ok:()=>Object.keys(S.storiesRead).length>=3},
@@ -317,7 +319,7 @@ function route(){
   const h = (location.hash||"#today").slice(1);
   const nav = h.startsWith("learn")||h.startsWith("unit-")||h.startsWith("stor")||h.startsWith("fun")||h.startsWith("guide") ? "learn" : h.startsWith("words") ? "words" : h.startsWith("listen") ? "listen" : (h.startsWith("me")||h.startsWith("report")) ? "me" : "today";
   setNav(nav); applyPrefs(); renderStats();
-  if(h==="learn") return viewLearn();
+  if(h==="learn" || h.startsWith("learn-")){ const [lv, tab] = h.slice(6).split("-"); return viewLearn(lv, tab); }
   if(h==="stories") return viewStories();
   if(h==="fun" || h.startsWith("fun-")) return viewFun(h.slice(4) || "tricks");
   if(h.startsWith("story-") && storyById(h.slice(6))) return viewStory(storyById(h.slice(6)));
@@ -428,7 +430,7 @@ function viewToday(){
       <ol class="steps">
         <li class="${nDue?"":"complete"}"><span class="n">${nDue?1:"✓"}</span><span>Review cards that are due</span><b>${p.due.length}</b></li>
         <li class="${nWant?"":"complete"}"><span class="n">${nWant?2:"✓"}</span><span>Practise from <a href="#words">I want to learn</a></span><b>${p.want.length}</b></li>
-        <li><span class="n">3</span><span>New from Unit ${p.nu.n}: ${esc(p.nu.title)}</span><b>${nNew}</b></li>
+        <li><span class="n">3</span><span>New from Unit ${p.nu.n}: ${esc(p.nu.title)} <a class="lvl ${esc(p.nu.level)}" href="#learn-${esc(curLevel())}" title="Change level">${esc(curLevel())} · change</a></span><b>${nNew}</b></li>
       </ol>
       <button class="btn primary big block" data-start="today">▶ Start today's practice</button>
     </div>
@@ -469,27 +471,59 @@ function practiceChips(){
       <button class="chip" data-v="quiz" aria-pressed="${st.mode==="quiz"}">🎲 Quiz</button></div></div>
   </div>`;
 }
-function viewLearn(){
-  const nu = nextUnit();
-  const levels = [...new Set(UNITS.map(u=>u.level))];
-  const block = lv => {
-    const us = UNITS.filter(u=>u.level===lv), done = us.filter(u=>unitStats(u).stars===3).length;
-    const cards = DECK.filter(c=>c.level===lv), m = cards.filter(isLearned).length;
-    return `<div class="lvlhead"><h2>${lv==="A1"?"A1 · Beginner":lv==="A2"?"A2 · Elementary":lv}</h2><span class="lvl ${esc(lv)}">${esc(lv)}</span>
-      <div class="bar ${lv==="A2"?"gold":""}"><i style="width:${Math.round(m/cards.length*100)}%"></i></div>
-      <span class="small muted">${m}/${cards.length} words · ${done}/${us.length} units</span></div>
-      <div class="units">${us.map(u => { const st = unitStats(u);
-        return `<a class="unit${u===nu?" next":""}" href="#unit-${u.id}"><span class="ico">${esc(u.emoji)}</span><span class="num">Unit ${u.n}</span><b>${esc(u.title)}</b><span class="meta">${starsHTML(st.stars)}<span>${st.mastered}/${st.total}</span></span></a>`; }).join("")}</div>`;
-  };
-  app.innerHTML = `<h1>Learn</h1><p class="muted" style="margin:6px 0 0">Units are in the order you need them in daily life. Start at the top or jump to what you need this week.</p>
-    ${practiceChips()}${storiesStrip()}${funStrip()}
-    <div class="section-title"><h2>Grammar guide</h2><a class="btn sm" href="#guide">Open</a></div>
-    <p class="small muted" style="margin:-4px 0 0">Short lessons comparing German with Urdu, Hindi and English: der/die/das, word order, cases, past tense and more.</p>
-    ${levels.map(block).join("")}`;
+const LEVELS = {
+  A1:{name:"Beginner", ur:"ابتدائی", hi:"शुरुआती", about:"Your first weeks: greetings, shopping, numbers, transport, the doctor."},
+  A2:{name:"Elementary", ur:"بنیادی", hi:"प्रारंभिक", about:"Everyday life: appointments, work, housing, the past tense, invitations."},
+  B1:{name:"Intermediate", ur:"درمیانہ", hi:"मध्यम", about:"Independent: job interviews, contracts, offices, opinions, polite German."},
+};
+const lvlName = lv => `${lv} · ${(LEVELS[lv]||{}).name||lv}`;
+function levelStats(lv){
+  const cards = DECK.filter(c=>c.level===lv), us = UNITS.filter(u=>u.level===lv);
+  return {cards, units: us, learned: cards.filter(isLearned).length, done: us.filter(u=>unitStats(u).stars===3).length};
+}
+function levelPicker(cur){
+  const lvls = [...new Set(UNITS.map(u=>u.level))];
+  return `<nav class="levelpick" aria-label="Choose your level">${lvls.map(lv => { const x = levelStats(lv), pct = x.cards.length ? Math.round(x.learned/x.cards.length*100) : 0, L = LEVELS[lv]||{};
+    const tr = S.settings.base==="ur" ? `<span class="ur">${esc(L.ur||"")}</span>` : S.settings.base==="hi" ? `<span class="hi">${esc(L.hi||"")}</span>` : "";
+    return `<a class="lvltile lv-${esc(lv)}" href="#learn-${esc(lv)}" ${lv===cur?'aria-current="page"':""}>
+      <span class="code">${esc(lv)}</span><b>${esc(L.name||lv)}</b>${tr?`<span class="tr">${tr}</span>`:""}
+      <span class="bar"><i style="width:${pct}%"></i></span><span class="small muted">${x.learned}/${x.cards.length} words</span></a>`; }).join("")}</nav>`;
+}
+function viewLearn(lv, tab){
+  if(lv && !UNITS.some(u=>u.level===lv)) lv = null;
+  if(lv && lv !== S.settings.level){ S.settings.level = lv; save(); }
+  lv = lv || curLevel();
+  tab = ["units","stories","grammar"].includes(tab) ? tab : "units";
+  const x = levelStats(lv), nu = nextUnit();
+  const stories = STORIES.filter(st => st.level===lv);
+  const lessons = guideSections().filter(sec => sec.dataset.level===lv || (lv==="A1" && sec.dataset.level==="Start"));
+  const tabs = [["units","Units",x.units.length],["stories","Stories",stories.length],["grammar","Grammar",lessons.length]];
+  let body = "";
+  if(tab==="units") body = `<div class="units">${x.units.map(u => { const st = unitStats(u);
+      return `<a class="unit${u===nu?" next":""}" href="#unit-${u.id}"><span class="ico">${esc(u.emoji)}</span><span class="num">Unit ${u.n}</span><b>${esc(u.title)}</b><span class="meta">${starsHTML(st.stars)}<span>${st.mastered}/${st.total}</span></span></a>`; }).join("")}</div>`;
+  if(tab==="stories") body = stories.length ? `<p class="small muted" style="margin:0 0 10px">Short scenes from daily life. Words you know are underlined in green.</p><div class="stories">${stories.map(storyTile).join("")}</div>`
+      : `<div class="empty"><span class="e">📖</span>Stories for ${esc(lv)} are coming soon.</div>`;
+  if(tab==="grammar") body = lessons.length ? `<div class="lessons">${lessons.map(sec=>`<a class="lesson${sec.dataset.level==="Start"?" start":""}" href="#guide-${esc(sec.dataset.id)}"><b>${esc(sec.dataset.title)}</b><span>${esc(sec.dataset.sum)}</span></a>`).join("")}</div>`
+      : `<div class="empty"><span class="e">📐</span>Grammar for ${esc(lv)} is coming soon.</div>`;
+  app.innerHTML = `<h1>Learn</h1><p class="muted" style="margin:4px 0 12px">Pick your level. Everything below changes to match it.</p>
+    ${levelPicker(lv)}
+    <section class="panel lvlpanel" aria-label="${esc(lvlName(lv))}">
+      <div class="row between" style="align-items:flex-start"><div class="stack" style="gap:2px"><h2>${esc(lvlName(lv))}</h2><span class="small muted">${esc((LEVELS[lv]||{}).about||"")}</span></div>
+        <span class="small muted">${x.done}/${x.units.length} units done</span></div>
+      <div class="row">
+        <button class="btn primary" data-start="level" data-id="${esc(lv)}">▶ Practise ${esc(lv)}</button>
+        ${nu && nu.level===lv ? `<a class="btn" href="#unit-${nu.id}">${esc(nu.emoji)} Continue: ${esc(nu.title)}</a>` : ""}
+      </div>
+      <nav class="seg seg3" aria-label="${esc(lv)} sections">${tabs.map(([k,t,n])=>`<a href="#learn-${esc(lv)}-${k}" ${k===tab?'aria-current="page"':""}><b>${n}</b>${t}</a>`).join("")}</nav>
+      ${body}
+    </section>
+    ${funStrip()}
+    <details class="panel prefs"><summary><b>Practice settings</b> <span class="small muted">card front and mode</span></summary>${practiceChips()}</details>
+    <p class="small" style="margin-top:14px"><a href="#guide">All grammar lessons</a> · <a href="#stories">All stories</a></p>`;
 }
 function viewUnit(u){
   const st = unitStats(u), next = UNITS[UNITS.indexOf(u)+1];
-  app.innerHTML = `<a class="back" href="#learn">← All units</a>
+  app.innerHTML = `<a class="back" href="#learn-${esc(u.level)}">← ${esc(u.level)} units</a>
     <div class="unithead"><div class="ico">${esc(u.emoji)}</div>
       <div class="stack" style="gap:4px"><span class="label">Unit ${u.n} · <span class="lvl ${esc(u.level)}">${esc(u.level)}</span></span><h1>${esc(u.title)}</h1>
       <span class="muted small">${starsHTML(st.stars)} · ${st.mastered} of ${st.total} learned · ${st.total-st.seen} new</span></div></div>
@@ -630,6 +664,7 @@ function pickCards(kind, id){
     if(!fresh.length && due.length + want.length < 5) fresh = lowFirst(p.nu.cards).slice(0,8);
     return shuffle(uniq([...due, ...want, ...fresh]));
   }
+  if(kind==="level"){ const pool = DECK.filter(c => c.level===id && !isLearned(c)); return shuffle(lowFirst(pool.length ? pool : DECK.filter(c=>c.level===id)).slice(0,12)); }
   if(kind==="unit") return shuffle(lowFirst(unitById(id).cards).slice(0,10));
   if(kind==="unitall") return shuffle([...unitById(id).cards]);
   if(kind==="weak") return lowFirst(shuffle(allCards().filter(c=>seen(c)&&!isLearned(c)))).slice(0,12);
@@ -642,7 +677,7 @@ function pickCards(kind, id){
 function startSession(kind, id){
   const cards = pickCards(kind, id);
   if(!cards.length){ toast("No cards to practise here yet."); return; }
-  session = {kind, storyId: kind==="story" ? id : null, unitId: (kind==="unit"||kind==="unitall") ? id : null, queue:[...cards], done:0, xp:0, right:0, wrong:0, retried:new Set(), moved:[], state:"front", picked:null, opts:null, mode:S.settings.mode,
+  session = {kind, storyId: kind==="story" ? id : null, unitId: (kind==="unit"||kind==="unitall") ? id : null, levelId: kind==="level" ? id : null, queue:[...cards], done:0, xp:0, right:0, wrong:0, retried:new Set(), moved:[], state:"front", picked:null, opts:null, mode:S.settings.mode,
     before: (kind==="unit"||kind==="unitall") ? unitStats(unitById(id)).stars : 0};
   document.body.classList.add("in-session"); setNav(""); window.scrollTo(0,0); drawSession();
 }
@@ -773,7 +808,7 @@ function finishSession(early){
   const acc = Math.round(s.right/Math.max(1,s.right+s.wrong)*100);
   const msg = s.right+s.wrong===0 ? ["✓","Gut!","You sorted your cards."] : acc>=90 ? ["🏆","Ausgezeichnet!","Excellent work."] : acc>=70 ? ["🎉","Sehr gut!","Very good."] : acc>=50 ? ["💪","Gut gemacht!","Well done. Keep going."] : ["🌱","Weiter so!","Every round makes it stick."];
   const goalNow = todayCount()>=S.settings.goal && todayCount()-s.done < S.settings.goal;
-  const backHash = u ? "#unit-"+u.id : s.kind==="story" ? "#story-"+s.storyId : (s.kind==="want"||s.kind==="mine") ? "#words" : s.kind==="learned" ? "#words-learned" : "#today";
+  const backHash = u ? "#unit-"+u.id : s.kind==="story" ? "#story-"+s.storyId : (s.kind==="want"||s.kind==="mine") ? "#words" : s.kind==="learned" ? "#words-learned" : s.kind==="level" ? "#learn-"+s.levelId : "#today";
   history.replaceState(null,"", backHash); setNav(backHash.startsWith("#unit")?"learn":backHash.startsWith("#words")?"words":"today");
   app.innerHTML = `<div class="done pop">
     <div class="trophy">${msg[0]}</div>
@@ -791,7 +826,7 @@ function finishSession(early){
     ${goalNow?`<div class="newbadge"><span class="e">🎯</span><div><b>Daily goal reached!</b><div class="small muted">Streak: ${streak()} day${streak()===1?"":"s"}</div></div></div>`:""}
     ${fresh.map(b=>`<div class="newbadge"><span class="e">${b.e}</span><div><b>New badge: ${esc(b.t)}</b><div class="small muted">${esc(b.d)}</div></div></div>`).join("")}
     <div class="row" style="justify-content:center">
-      <button class="btn primary big" data-start="${s.kind}" ${s.unitId?`data-id="${s.unitId}"`:""}>Another round</button>
+      <button class="btn primary big" data-start="${s.kind}" ${s.unitId||s.levelId?`data-id="${s.unitId||s.levelId}"`:""}>Another round</button>
       <a class="btn ghost big" href="${backHash}">Done</a>
     </div></div>`;
   if(acc>=70 || fresh.length || goalNow) confetti();
@@ -1155,7 +1190,7 @@ function storyTodayCard(){
   return `<div class="section-title"><h2>Story for you</h2><a class="small muted" href="#stories">All stories</a></div>${storyTile(st)}`;
 }
 function viewStories(){
-  app.innerHTML = `<a class="back" href="#learn">← Learn</a><h1>Stories</h1>
+  app.innerHTML = `<a class="back" href="#learn-${esc(curLevel())}-stories">← Learn</a><h1>Stories</h1>
     <p class="muted" style="margin:6px 0 16px;max-width:60ch">Short scenes from life in Berlin. The more words you learn, the more of each story you understand. Tap any underlined word to see what it means.</p>
     <div class="stories">${storiesSorted().map(storyTile).join("")}</div>`;
 }
@@ -1556,14 +1591,15 @@ function viewGuide(){
   const L = guideSections().map(s => ({id:s.dataset.id, title:s.dataset.title, level:s.dataset.level, sum:s.dataset.sum}));
   const groups = [...new Set(L.map(l=>l.level))];
   app.innerHTML = `<h1>Guide</h1><p class="muted" style="margin:6px 0 4px;max-width:64ch">Short lessons that compare German with Urdu, Hindi and English. Read one, then practise the matching unit.</p>
-    ${groups.map(g=>`<div class="lvlhead"><h2>${g==="Start"?"Start here":g==="A1"?"A1 · Beginner":g==="A2"?"A2 · Elementary":esc(g)}</h2>${g!=="Start"?`<span class="lvl ${esc(g)}">${esc(g)}</span>`:""}</div>
+    ${groups.map(g=>`<div class="lvlhead"><h2>${g==="Start"?"Start here":g==="A1"?"A1 · Beginner":g==="A2"?"A2 · Elementary":g==="B1"?"B1 · Intermediate":esc(g)}</h2>${g!=="Start"?`<span class="lvl ${esc(g)}">${esc(g)}</span>`:""}</div>
     <div class="lessons">${L.filter(l=>l.level===g).map(l=>`<a class="lesson${g==="Start"?" start":""}" href="#guide-${esc(l.id)}"><b>${esc(l.title)}</b><span>${esc(l.sum)}</span></a>`).join("")}</div>`).join("")}`;
 }
 function viewLesson(id){
   const secs = guideSections(), i = secs.findIndex(s=>s.dataset.id===id);
   if(i<0) return viewGuide();
   const nx = secs[i+1];
-  app.innerHTML = `<a class="back" href="#guide">← All lessons</a><div class="guide-body"></div>
+  const blv = secs[i].dataset.level==="Start" ? "A1" : secs[i].dataset.level;
+  app.innerHTML = `<a class="back" href="#learn-${esc(blv)}-grammar">← ${esc(blv)} grammar</a><div class="guide-body"></div>
     ${nx?`<div class="row" style="margin-top:22px"><a class="btn" href="#guide-${esc(nx.dataset.id)}">Next: ${esc(nx.dataset.title)} →</a></div>`:""}`;
   $(".guide-body", app).appendChild(secs[i]);
   $$("[data-fill]", app).forEach(el => { const f = FILL[el.dataset.fill]; if(f) el.innerHTML = f(); });
@@ -1586,6 +1622,8 @@ const orderBlock = o => `<div class="order"><h4>${o.t}</h4>
   <div class="orow"><span class="olbl">DE</span>${o.g.map(w=>tok(w)).join("")} ${spk(plain(o.g))}</div>
   <p>${o.n}</p></div>`;
 const G = {
+ b1conn:[["اگرچہ بارش ہو رہی ہے، میں جا رہی ہوں","agarche baarish ho rahi hai, main ja rahi hoon","हालाँकि बारिश हो रही है, मैं जा रही हूँ","Although it is raining, I'm going","Obwohl es <b>regnet</b>, gehe ich.","obwohl: verb (regnet) at the end of its part."],["بارش ہو رہی ہے، پھر بھی میں جا رہی ہوں","baarish ho rahi hai, phir bhi main ja rahi hoon","बारिश हो रही है, फिर भी मैं जा रही हूँ","It is raining, but I'm going anyway","Es regnet. Trotzdem <b>gehe</b> ich.","trotzdem: verb straight after it."],["میں بیمار ہوں، اس لیے گھر پر ہوں","main beemar hoon, is liye ghar par hoon","मैं बीमार हूँ, इसलिए घर पर हूँ","I'm ill, so I'm at home","Ich bin krank. Deshalb <b>bleibe</b> ich zu Hause.","deshalb = is liye. Verb next."],["میں سیکھتی ہوں تاکہ نوکری مل جائے","main seekhti hoon taake naukri mil jaaye","मैं सीखती हूँ ताकि नौकरी मिल जाए","I learn so that I find a job","Ich lerne, damit ich eine Arbeit <b>finde</b>.","damit = taake. Verb last, just like جائے / जाए."],["جب میں برلن آئی، سردی تھی","jab main Berlin aayi, sardi thi","जब मैं बर्लिन आई, ठंड थी","When I came to Berlin, it was cold","Als ich nach Berlin <b>kam</b>, war es kalt.","als: one time in the past. Verb last."],["مجھے نہیں معلوم کہ وہ آئے گا یا نہیں","mujhe nahin maaloom ke woh aayega ya nahin","मुझे नहीं पता कि वह आएगा या नहीं","I don't know whether he will come","Ich weiß nicht, ob er <b>kommt</b>.","ob = whether. Verb last."]],
+ konj2:[["میں ایک کافی چاہوں گی","main aik coffee chahoongi","मैं एक कॉफ़ी चाहूँगी","I'd like a coffee","Ich <b>hätte</b> gern einen Kaffee.","The polite way to order."],["کیا آپ میری مدد کریں گے؟","kya aap meri madad karenge?","क्या आप मेरी मदद करेंगे?","Would you help me?","<b>Würden</b> Sie mir helfen?","würde + infinitive at the end."],["یہ بہت اچھا ہو گا","ye bohat achha hoga","यह बहुत अच्छा होगा","That would be great","Das <b>wäre</b> toll.",""],["اگر میرے پاس وقت ہوتا تو میں آتی","agar mere paas waqt hota to main aati","अगर मेरे पास समय होता तो मैं आती","If I had time, I would come","Wenn ich Zeit <b>hätte</b>, <b>würde</b> ich kommen.","Same shape as اگر … ہوتا / अगर … होता."],["میں تمہاری جگہ ہوتی تو ...","main tumhari jagah hoti to ...","मैं तुम्हारी जगह होती तो ...","If I were you ...","An deiner Stelle <b>würde</b> ich …","For advice."],["کاش میں جرمن اچھی بولتی","kaash main German achhi bolti","काश मैं जर्मन अच्छी बोलती","I wish I spoke good German","Ich <b>wünschte</b>, ich <b>würde</b> gut Deutsch sprechen.","کاش / काश = Ich wünschte …"]],
  gender:[["آدمی","aadmi","आदमी","the man","der Mann","Same gender in all three. Easy start."],["عورت","aurat","औरत","the woman","die Frau",""],["بچہ","bachcha","बच्चा","the child","das Kind","Neuter even though a child is a person."],["چائے","chai","चाय","the tea","der Tee","Feminine for us, masculine in German."],["پانی","paani","पानी","the water","das Wasser",""],["کتاب","kitaab","किताब","the book","das Buch",""],["دروازہ","darwaaza","दरवाज़ा","the door","die Tür","Masculine for us, feminine in German."],["گھر","ghar","घर","the house","das Haus",""],["شہر","shehar","शहर","the city","die Stadt",""],["گاڑی","gaari","गाड़ी","the car","das Auto",""],["لڑکی","larki","लड़की","the girl","das Mädchen","-chen words are always das, even for a girl."],["اخبار","akhbaar","अख़बार","the newspaper","die Zeitung","-ung is always die."],["کتابیں","kitaabein","किताबें","the books","die Bücher","Every plural takes die."]],
  akk:[["میرے پاس ایک کتاب ہے","mere paas aik kitaab hai","मेरे पास एक किताब है","I have a book","Ich habe ein Buch.","das Buch: no change."],["میں ایک کافی پیتی ہوں","main aik coffee peeti hoon","मैं एक कॉफ़ी पीती हूँ","I drink a coffee","Ich trinke einen Kaffee.","der Kaffee → einen Kaffee."],["میں آدمی کو دیکھتی ہوں","main aadmi ko dekhti hoon","मैं आदमी को देखती हूँ","I see the man","Ich sehe den Mann.","کو / को on a definite object = Akkusativ den."],["میرے پاس گاڑی نہیں ہے","mere paas gaari nahin hai","मेरे पास गाड़ी नहीं है","I don't have a car","Ich habe kein Auto.","kein = no / not a."]],
  time:[["کتنے بجے ہیں؟","kitne baje hain?","कितने बजे हैं?","What time is it?","Wie spät ist es?",""],["سوا تین","sawa teen","सवा तीन","quarter past three","Viertel nach drei",""],["ساڑھے تین","saarhe teen","साढ़े तीन","half past three","halb vier","Half toward four."],["پونے چار","paune chaar","पौने चार","quarter to four","Viertel vor vier","پونے / पौने and vor both count down to the hour."],["کل","kal","कल","tomorrow / yesterday","morgen / gestern","Our کل / कल means both. German has two words."]],
@@ -1612,6 +1650,8 @@ const ORD = {
   {t:"wenn · if", u:["اگر","وقت","*ملا","تو","^میں","*آؤں گی"], h:["अगर","समय","*मिला","तो","^मैं","*आऊँगी"], r:"agar waqt mila to main aaoon gi", e:["If","^I","*have","time,","^I'll","*come"], g:["Wenn","^ich","Zeit","*habe,","*komme","^ich"], n:"The whole wenn-clause fills slot 1, so the main verb comes right after the comma."}],
 };
 const FILL = {
+  b1conn: () => G.b1conn.map(([u,r,hi,en,de,n])=>bridge(u,r,hi,en,de,n,{html:true,speak:de.replace(/<[^>]+>/g,"")})).join(""),
+  konj2: () => G.konj2.map(([u,r,hi,en,de,n])=>bridge(u,r,hi,en,de,n,{html:true,speak:de.replace(/<[^>]+>/g,"")})).join(""),
   gender: () => G.gender.map(x=>bridge(...x)).join(""),
   akk: () => G.akk.map(x=>bridge(...x)).join(""),
   time: () => G.time.map(x=>bridge(...x)).join(""),

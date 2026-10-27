@@ -3,6 +3,15 @@
 The version shown in the app (Me → bottom of the page) matches the tags in this repository.
 Phones that installed the app update themselves; learners keep all their progress.
 
+## 1.5.0 — 2026-10-27
+- **Choose your level:** A1, A2 or B1 at the top of Learn. Tap a level and only its units, stories and grammar show, in three tabs
+- **New B1 level:** 12 units, 180 cards for working life: job interviews, meetings, renting, offices and forms, health insurance, bank and contracts, giving opinions, linking ideas, feelings, news and society, phone calls and formal emails, polite wishes
+- 2 B1 stories (*Das Vorstellungsgespräch*, *Ärger mit der Heizung*) and 2 B1 grammar lessons (obwohl / trotzdem / deshalb, and würde / hätte / wäre)
+- "Practise A1 / A2 / B1" button for a mixed round from the whole level
+- Today's new words follow the level you picked; tap the level tag to change it
+- New badge: B1 complete
+- Practice settings moved into a small panel at the bottom of Learn
+
 ## 1.4.0 — 2026-10-27
 - **New name: Wortzi** (was German Bridge) with a new mascot icon: a smiling speech bubble
 - New address: wortzi.fizzamubeen.com; WordPress shortcode is now `[wortzi]` (`[german_bridge]` still works)

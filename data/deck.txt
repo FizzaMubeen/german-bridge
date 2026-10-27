@@ -4,7 +4,7 @@
 #
 # A unit starts with:   ## id|level|emoji|Unit title
 #   id     short name, letters only, never change it later (progress is linked to it)
-#   level  A1 or A2 (B1 works too)
+#   level  A1, A2 or B1
 #
 # Each card is one line:  picture|Urdu|Roman Urdu|Hindi|English|German
 #   picture  an emoji, or short text like 3:15
@@ -1068,3 +1068,195 @@ Dez|دسمبر|disambar|दिसंबर|December|der Dezember
 🌧️|موسلا دھار بارش ہو رہی ہے|moosla dhaar baarish ho rahi hai|मूसलाधार बारिश हो रही है|It's pouring (lit. raining in streams)|Es regnet in Strömen
 🤷|مجھے کوئی اندازہ نہیں|mujhe koi andaaza nahin|मुझे कोई अंदाज़ा नहीं|I have no idea|Keine Ahnung
 🐻|کسی کو بے وقوف بنانا|kisi ko bewaqoof banaana|किसी को बेवक़ूफ़ बनाना|to fool someone (lit. tie a bear on someone)|jemandem einen Bären aufbinden
+## b1job|B1|💼|Job applications & interviews
+📄|درخواست|darkhwaast|आवेदन|the application|die Bewerbung
+📑|سی وی|CV|बायोडाटा|the CV|der Lebenslauf
+✉️|کور لیٹر|cover letter|कवर लेटर|the cover letter|das Anschreiben
+🗓️|انٹرویو|interview|इंटरव्यू|the job interview|das Vorstellungsgespräch
+🎓|تجربہ|tajurba|अनुभव|the experience|die Erfahrung
+🏅|سرٹیفکیٹ|certificate|प्रमाणपत्र|the certificate|das Zeugnis
+💶|تنخواہ|tankhwaah|वेतन|the salary|das Gehalt
+📝|ملازمت کا معاہدہ|mulazmat ka muaahida|नौकरी का अनुबंध|the employment contract|der Arbeitsvertrag
+⏳|آزمائشی مدت|aazmaishi muddat|परिवीक्षा अवधि|the probation period|die Probezeit
+🖥️|میں اس نوکری کے لیے درخواست دینا چاہتی ہوں|main is naukri ke liye darkhwaast dena chahti hoon|मैं इस नौकरी के लिए आवेदन करना चाहती हूँ|I would like to apply for this job|Ich möchte mich auf diese Stelle bewerben
+💪|میری طاقت ٹیم ورک ہے|meri taaqat team work hai|मेरी ताक़त टीमवर्क है|My strength is teamwork|Meine Stärke ist Teamarbeit
+🧑‍💻|مجھے پانچ سال کا تجربہ ہے|mujhe paanch saal ka tajurba hai|मुझे पाँच साल का अनुभव है|I have five years of experience|Ich habe fünf Jahre Berufserfahrung
+🤔|مجھے یہ کام دلچسپ لگتا ہے کیونکہ ...|mujhe ye kaam dilchasp lagta hai kyunke ...|मुझे यह काम दिलचस्प लगता है क्योंकि ...|I find this job interesting because ...|Ich finde die Stelle interessant, weil ...
+📅|میں یکم سے شروع کر سکتی ہوں|main pehli taareekh se shuru kar sakti hoon|मैं पहली तारीख़ से शुरू कर सकती हूँ|I can start on the first|Ich kann ab dem Ersten anfangen
+❓|کیا میں ایک سوال پوچھ سکتی ہوں؟|kya main aik sawaal pooch sakti hoon?|क्या मैं एक सवाल पूछ सकती हूँ?|May I ask a question?|Darf ich eine Frage stellen?
+## b1work|B1|🏢|At work: meetings & colleagues
+👥|میٹنگ|meeting|मीटिंग|the meeting|die Besprechung
+👔|باس|boss|बॉस|the boss|der Chef
+🧑‍🤝‍🧑|ساتھی|saathi|सहकर्मी|the colleague|der Kollege
+🎯|کام / ذمہ داری|kaam / zimmedaari|काम / ज़िम्मेदारी|the task|die Aufgabe
+⏰|ڈیڈ لائن|deadline|समय सीमा|the deadline|die Frist
+🏖️|چھٹی|chhutti|छुट्टी|the holiday leave|der Urlaub
+🤒|بیماری کی چھٹی|beemari ki chhutti|बीमारी की छुट्टी|sick leave|die Krankmeldung
+🕗|اوور ٹائم|overtime|ओवरटाइम|overtime|die Überstunden
+🏠|گھر سے کام|ghar se kaam|घर से काम|working from home|das Homeoffice
+📊|پیش کرنا|pesh karna|प्रस्तुत करना|to present|präsentieren
+🗂️|میں اس کا خیال رکھوں گی|main is ka khayaal rakhoongi|मैं इसका ध्यान रखूँगी|I'll take care of it|Ich kümmere mich darum
+🙋|کیا آپ میری مدد کر سکتے ہیں؟|kya aap meri madad kar sakte hain?|क्या आप मेरी मदद कर सकते हैं?|Could you help me?|Könnten Sie mir helfen?
+📆|کیا ہم میٹنگ آگے کر سکتے ہیں؟|kya hum meeting aage kar sakte hain?|क्या हम मीटिंग आगे कर सकते हैं?|Can we move the meeting?|Können wir den Termin verschieben?
+✅|میں نے کام ختم کر لیا ہے|main ne kaam khatam kar liya hai|मैंने काम ख़त्म कर लिया है|I have finished the task|Ich habe die Aufgabe erledigt
+🤝|ٹیم کا شکریہ|team ka shukriya|टीम का धन्यवाद|Thanks to the team|Danke an das Team
+## b1flat|B1|🔑|Renting a flat
+🏢|مالک مکان|maalik-e-makaan|मकान मालिक|the landlord|der Vermieter
+📝|کرایہ نامہ|kiraya naama|किरायानामा|the rental contract|der Mietvertrag
+💰|سیکیورٹی ڈپازٹ|security deposit|ज़मानत राशि|the deposit|die Kaution
+🧾|اضافی خرچے|izaafi kharche|अतिरिक्त ख़र्च|the extra costs|die Nebenkosten
+🔥|ہیٹنگ|heating|हीटिंग|the heating|die Heizung
+🛠️|مرمت|marammat|मरम्मत|the repair|die Reparatur
+🧑‍🔧|عمارت کا نگران|imaarat ka nigraan|इमारत का केयरटेकर|the caretaker|der Hausmeister
+📦|سامان منتقل کرنا|saamaan muntaqil karna|सामान शिफ़्ट करना|to move house|umziehen
+📋|رہائش کا اندراج|rihaaish ka indiraaj|पता पंजीकरण|the address registration|die Anmeldung
+🏘️|پڑوس|paros|पड़ोस|the neighbourhood|die Nachbarschaft
+💧|نل ٹپک رہا ہے|nal tapak raha hai|नल टपक रहा है|The tap is dripping|Der Wasserhahn tropft
+❄️|ہیٹنگ کام نہیں کر رہی|heating kaam nahin kar rahi|हीटिंग काम नहीं कर रही|The heating isn't working|Die Heizung funktioniert nicht
+👀|کیا میں فلیٹ دیکھ سکتی ہوں؟|kya main flat dekh sakti hoon?|क्या मैं फ़्लैट देख सकती हूँ?|Can I view the flat?|Kann ich die Wohnung besichtigen?
+🗓️|میں معاہدہ ختم کرنا چاہتی ہوں|main muaahida khatam karna chahti hoon|मैं अनुबंध ख़त्म करना चाहती हूँ|I want to end the contract|Ich möchte den Vertrag kündigen
+🔇|رات دس بجے کے بعد خاموشی|raat das baje ke baad khaamoshi|रात दस बजे के बाद शांति|Quiet after 10 pm|die Nachtruhe
+## b1office|B1|🏛️|Offices & forms
+🏛️|سرکاری دفتر|sarkaari daftar|सरकारी दफ़्तर|the authority / office|die Behörde
+📋|فارم|form|फ़ॉर्म|the form|das Formular
+🆔|شناختی کارڈ|shanaakhti card|पहचान पत्र|the ID card|der Ausweis
+🛂|رہائشی اجازت نامہ|rihaaishi ijaazat naama|निवास परमिट|the residence permit|die Aufenthaltserlaubnis
+🖊️|دستخط|dastakhat|हस्ताक्षर|the signature|die Unterschrift
+📎|کاغذات|kaaghazaat|दस्तावेज़|the documents|die Unterlagen
+📮|درخواست (سرکاری)|darkhwaast|आवेदन (सरकारी)|the application (official)|der Antrag
+✅|منظوری|manzoori|स्वीकृति|the approval|die Genehmigung
+⌛|انتظار کا نمبر|intezaar ka number|प्रतीक्षा संख्या|the waiting number|die Wartenummer
+📆|ملاقات کا وقت|mulaaqaat ka waqt|अपॉइंटमेंट|the appointment|der Termin
+📨|خط|khat|पत्र|the letter|der Brief
+✍️|براہ کرم یہاں دستخط کریں|baraah-e-karam yahan dastakhat karein|कृपया यहाँ हस्ताक्षर करें|Please sign here|Bitte unterschreiben Sie hier
+🧐|مجھے یہ خط سمجھ نہیں آیا|mujhe ye khat samajh nahin aaya|मुझे यह पत्र समझ नहीं आया|I don't understand this letter|Ich verstehe diesen Brief nicht
+📂|کون سے کاغذات چاہیئں؟|kaun se kaaghazaat chahiyein?|कौन से दस्तावेज़ चाहिए?|Which documents do I need?|Welche Unterlagen brauche ich?
+⏱️|اس میں کتنا وقت لگے گا؟|is mein kitna waqt lagega?|इसमें कितना समय लगेगा?|How long will it take?|Wie lange dauert das?
+## b1health|B1|🩺|Health & insurance
+🏥|ہیلتھ انشورنس|health insurance|स्वास्थ्य बीमा|the health insurance|die Krankenkasse
+💳|انشورنس کارڈ|insurance card|बीमा कार्ड|the insurance card|die Versichertenkarte
+🩺|فیملی ڈاکٹر|family doctor|फ़ैमिली डॉक्टर|the family doctor|der Hausarzt
+👩‍⚕️|اسپیشلسٹ|specialist|विशेषज्ञ|the specialist|der Facharzt
+📃|ریفرل|referral|रेफ़रल|the referral (to a specialist)|die Überweisung
+💊|نسخہ|nuskha|पर्चा|the prescription|das Rezept
+🚑|ایمرجنسی|emergency|आपातकाल|the emergency|der Notfall
+🦷|دانتوں کا ڈاکٹر|daanton ka doctor|दाँतों का डॉक्टर|the dentist|der Zahnarzt
+🤧|علامات|alaamaat|लक्षण|the symptoms|die Symptome
+💉|ویکسین|vaccine|टीका|the vaccination|die Impfung
+🤕|مجھے تین دن سے درد ہے|mujhe teen din se dard hai|मुझे तीन दिन से दर्द है|I've had pain for three days|Ich habe seit drei Tagen Schmerzen
+📝|مجھے بیماری کا سرٹیفکیٹ چاہیے|mujhe beemari ka certificate chahiye|मुझे बीमारी का सर्टिफ़िकेट चाहिए|I need a sick note|Ich brauche eine Krankschreibung
+⚠️|مجھے کسی دوا سے الرجی ہے|mujhe kisi dawa se allergy hai|मुझे किसी दवा से एलर्जी है|I'm allergic to a medicine|Ich bin gegen ein Medikament allergisch
+💊|یہ دوا دن میں کتنی بار لوں؟|ye dawa din mein kitni baar loon?|यह दवा दिन में कितनी बार लूँ?|How often a day do I take this?|Wie oft am Tag soll ich das nehmen?
+📞|رات اور چھٹی کے دن کی طبی سروس|raat aur chhutti ke din ki tibbi service|रात और छुट्टी के दिन की डॉक्टर सेवा|out-of-hours doctor (116 117)|der ärztliche Bereitschaftsdienst
+## b1money|B1|🏦|Bank, bills & contracts
+🏦|بینک اکاؤنٹ|bank account|बैंक खाता|the bank account|das Konto
+💸|رقم بھیجنا|raqam bhejna|पैसे भेजना|the bank transfer|die Überweisung
+🧾|بل|bill|बिल|the invoice / bill|die Rechnung
+🔁|ڈائریکٹ ڈیبٹ|direct debit|ऑटो डेबिट|the direct debit|die Lastschrift
+📜|معاہدہ|muaahida|अनुबंध|the contract|der Vertrag
+❌|منسوخی|mansookhi|रद्दीकरण|the cancellation|die Kündigung
+📡|انٹرنیٹ کنکشن|internet connection|इंटरनेट कनेक्शन|the internet contract|der Internetanschluss
+📺|ریڈیو ٹی وی فیس|radio TV fees|रेडियो-टीवी शुल्क|the broadcasting fee|der Rundfunkbeitrag
+🧮|ٹیکس|tax|कर|the tax|die Steuer
+🔔|یاد دہانی (ادائیگی)|yaad dihaani|भुगतान रिमाइंडर|the payment reminder|die Mahnung
+⚡|بجلی فراہم کرنے والا|bijli faraham karne wala|बिजली कंपनी|the electricity provider|der Stromanbieter
+💳|میں اکاؤنٹ کھولنا چاہتی ہوں|main account kholna chahti hoon|मैं खाता खोलना चाहती हूँ|I'd like to open an account|Ich möchte ein Konto eröffnen
+📆|معاہدہ کتنی دیر کا ہے؟|muaahida kitni der ka hai?|अनुबंध कितने समय का है?|How long is the contract?|Wie lange läuft der Vertrag?
+🔍|اس بل میں غلطی ہے|is bill mein ghalti hai|इस बिल में ग़लती है|There's a mistake in this bill|Die Rechnung ist falsch
+🧾|کیا میں قسطوں میں ادا کر سکتی ہوں؟|kya main qiston mein ada kar sakti hoon?|क्या मैं किस्तों में भुगतान कर सकती हूँ?|Can I pay in instalments?|Kann ich in Raten zahlen?
+## b1opinion|B1|💬|Giving your opinion
+💭|میرے خیال میں ...|mere khayaal mein ...|मेरे ख़याल में ...|In my opinion ...|Meiner Meinung nach ...
+🤔|مجھے لگتا ہے کہ ...|mujhe lagta hai ke ...|मुझे लगता है कि ...|I think that ...|Ich denke, dass ...
+👍|میں آپ سے متفق ہوں|main aap se muttafiq hoon|मैं आपसे सहमत हूँ|I agree with you|Da stimme ich Ihnen zu
+👎|میں متفق نہیں ہوں|main muttafiq nahin hoon|मैं सहमत नहीं हूँ|I don't agree|Da bin ich anderer Meinung
+⚖️|ایک طرف ... دوسری طرف ...|aik taraf ... doosri taraf ...|एक तरफ़ ... दूसरी तरफ़ ...|On one hand ... on the other ...|Einerseits ... andererseits ...
+✅|فائدہ|faaida|फ़ायदा|the advantage|der Vorteil
+⛔|نقصان|nuqsaan|नुक़सान|the disadvantage|der Nachteil
+🎯|بات یہ ہے کہ ...|baat ye hai ke ...|बात यह है कि ...|The point is ...|Es geht darum, dass ...
+😮|یہ سچ ہے|ye sach hai|यह सच है|That's true|Das stimmt
+🙃|یہ اس پر منحصر ہے|ye is par munhasir hai|यह इस पर निर्भर है|It depends|Das kommt darauf an
+🧩|مثال کے طور پر|misaal ke taur par|उदाहरण के लिए|for example|zum Beispiel
+🤷|مجھے یقین نہیں ہے|mujhe yaqeen nahin hai|मुझे यक़ीन नहीं है|I'm not sure|Ich bin mir nicht sicher
+💡|میری تجویز ہے کہ ...|meri tajweez hai ke ...|मेरा सुझाव है कि ...|I suggest that ...|Ich schlage vor, dass ...
+🗣️|میں ایک بات کہنا چاہتی ہوں|main aik baat kehna chahti hoon|मैं एक बात कहना चाहती हूँ|I'd like to say something|Ich möchte etwas sagen
+🔚|خلاصہ یہ کہ|khulaasa ye ke|सारांश यह कि|To sum up|Zusammenfassend
+## b1connect|B1|🔗|Linking ideas
+🔗|اگرچہ|agarche|हालाँकि|although|obwohl
+💪|پھر بھی|phir bhi|फिर भी|nevertheless|trotzdem
+➡️|اس لیے|is liye|इसलिए|therefore|deshalb
+⏳|جب تک|jab tak|जब तक|until|bis
+🕰️|جب (ماضی)|jab|जब (अतीत में)|when (past)|als
+🔁|جب بھی|jab bhi|जब भी|whenever|wenn
+🎯|تاکہ|taake|ताकि|so that|damit
+📌|اس سے پہلے کہ|is se pehle ke|इससे पहले कि|before|bevor
+📍|اس کے بعد کہ|is ke baad ke|इसके बाद कि|after|nachdem
+❓|کیا (اگر)|kya|कि क्या|whether|ob
+↔️|بجائے اس کے|bajaaye is ke|इसके बजाय|instead of|statt
+🔀|یا تو ... یا|ya to ... ya|या तो ... या|either ... or|entweder ... oder
+🌧️|اگرچہ بارش ہو رہی ہے، میں جا رہی ہوں|agarche baarish ho rahi hai, main ja rahi hoon|हालाँकि बारिश हो रही है, मैं जा रही हूँ|Although it's raining, I'm going|Obwohl es regnet, gehe ich
+😴|میں تھکی ہوئی ہوں، پھر بھی کام کر رہی ہوں|main thaki hui hoon, phir bhi kaam kar rahi hoon|मैं थकी हुई हूँ, फिर भी काम कर रही हूँ|I'm tired, but I'm working anyway|Ich bin müde, trotzdem arbeite ich
+📚|میں سیکھتی ہوں تاکہ نوکری مل جائے|main seekhti hoon taake naukri mil jaaye|मैं सीखती हूँ ताकि नौकरी मिल जाए|I learn so that I find a job|Ich lerne, damit ich eine Arbeit finde
+## b1feel|B1|💞|Feelings & relationships
+😊|خوش ہونا|khush hona|ख़ुश होना|to be happy about|sich freuen
+😟|فکر کرنا|fikr karna|चिंता करना|to worry|sich Sorgen machen
+😤|ناراض ہونا|naaraaz hona|नाराज़ होना|to be annoyed|sich ärgern
+🥲|اکیلا محسوس کرنا|akela mehsoos karna|अकेला महसूस करना|to feel lonely|sich einsam fühlen
+🫶|بھروسہ|bharosa|भरोसा|the trust|das Vertrauen
+💔|جھگڑا|jhagra|झगड़ा|the argument|der Streit
+🤗|صلح کرنا|sulah karna|सुलह करना|to make up|sich versöhnen
+🎉|حیران ہونا|hairaan hona|हैरान होना|to be surprised|überrascht sein
+😰|گھبرایا ہوا|ghabraya hua|घबराया हुआ|nervous|nervös
+🥰|پیار ہو جانا|pyaar ho jaana|प्यार हो जाना|to fall in love|sich verlieben
+😌|سکون|sukoon|सुकून|relaxed|entspannt
+🙏|مجھے آپ کی مدد پر بہت خوشی ہے|mujhe aap ki madad par bohat khushi hai|मुझे आपकी मदद से बहुत ख़ुशी है|I'm very happy about your help|Ich freue mich sehr über Ihre Hilfe
+😕|مجھے افسوس ہے|mujhe afsos hai|मुझे अफ़सोस है|I'm sorry about that|Das tut mir leid
+🫂|میں تمہاری بات سمجھتی ہوں|main tumhari baat samajhti hoon|मैं तुम्हारी बात समझती हूँ|I understand how you feel|Ich kann dich verstehen
+🗨️|ہمیں بات کرنی چاہیے|humein baat karni chahiye|हमें बात करनी चाहिए|We should talk|Wir sollten reden
+## b1society|B1|📰|News, environment & society
+📰|خبریں|khabrein|ख़बरें|the news|die Nachrichten
+🗳️|انتخاب|intikhaab|चुनाव|the election|die Wahl
+🏛️|حکومت|hukoomat|सरकार|the government|die Regierung
+⚖️|قانون|qaanoon|क़ानून|the law|das Gesetz
+🌍|ماحول|maahol|पर्यावरण|the environment|die Umwelt
+🌡️|موسمیاتی تبدیلی|mausamiyaati tabdeeli|जलवायु परिवर्तन|climate change|der Klimawandel
+♻️|کچرا الگ کرنا|kachra alag karna|कूड़ा अलग करना|to separate rubbish|den Müll trennen
+🚲|پائیدار|paaydaar|टिकाऊ|sustainable|nachhaltig
+🤝|معاشرہ|muaashra|समाज|the society|die Gesellschaft
+🙋‍♀️|رضاکار کام|razaakaar kaam|स्वयंसेवा|volunteering|das Ehrenamt
+🧑‍🤝‍🧑|انضمام|inzimaam|एकीकरण|integration|die Integration
+📊|سروے|survey|सर्वेक्षण|the survey|die Umfrage
+💹|مہنگائی|mehngaai|महँगाई|inflation|die Inflation
+📢|میں نے خبروں میں پڑھا کہ ...|main ne khabron mein parha ke ...|मैंने ख़बरों में पढ़ा कि ...|I read in the news that ...|Ich habe in den Nachrichten gelesen, dass ...
+🌱|ہمیں ماحول کا خیال رکھنا چاہیے|humein maahol ka khayaal rakhna chahiye|हमें पर्यावरण का ध्यान रखना चाहिए|We should protect the environment|Wir sollten die Umwelt schützen
+## b1phone|B1|☎️|Phone calls & formal emails
+📞|میں ... بول رہی ہوں|main ... bol rahi hoon|मैं ... बोल रही हूँ|This is ... speaking|Hier spricht ...
+🔀|کیا آپ مجھے ... سے ملا سکتے ہیں؟|kya aap mujhe ... se mila sakte hain?|क्या आप मुझे ... से जोड़ सकते हैं?|Could you put me through to ...?|Könnten Sie mich mit ... verbinden?
+📝|کیا میں پیغام چھوڑ سکتی ہوں؟|kya main paighaam chhor sakti hoon?|क्या मैं संदेश छोड़ सकती हूँ?|Can I leave a message?|Kann ich eine Nachricht hinterlassen?
+🔁|براہ کرم دوبارہ کہیں|baraah-e-karam dobaara kahein|कृपया दोबारा कहें|Could you repeat that, please?|Könnten Sie das bitte wiederholen?
+🐢|براہ کرم آہستہ بولیں|baraah-e-karam aahista bolein|कृपया धीरे बोलें|Please speak more slowly|Bitte sprechen Sie langsamer
+🔤|کیا آپ ہجے کر سکتے ہیں؟|kya aap hijje kar sakte hain?|क्या आप स्पेलिंग बता सकते हैं?|Could you spell that?|Können Sie das buchstabieren?
+📲|میں آپ کو واپس کال کروں گی|main aap ko waapas call karoongi|मैं आपको वापस कॉल करूँगी|I'll call you back|Ich rufe Sie zurück
+✉️|محترم جناب / محترمہ|mohtaram janaab / mohtarma|आदरणीय महोदय / महोदया|Dear Sir or Madam|Sehr geehrte Damen und Herren
+👋|نیک تمناؤں کے ساتھ|naik tamannaon ke saath|शुभकामनाओं सहित|Kind regards|Mit freundlichen Grüßen
+📎|ساتھ منسلک|saath munsalik|संलग्न|attached / enclosed|im Anhang
+🙏|آپ کے جواب کا انتظار رہے گا|aap ke jawaab ka intezaar rahega|आपके जवाब का इंतज़ार रहेगा|I look forward to your reply|Ich freue mich auf Ihre Antwort
+❓|میرا ایک سوال ہے ...|mera aik sawaal hai ...|मेरा एक सवाल है ...|I have a question about ...|Ich habe eine Frage zu ...
+📩|آپ کے ای میل کا شکریہ|aap ke email ka shukriya|आपके ईमेल के लिए धन्यवाद|Thank you for your email|Vielen Dank für Ihre E-Mail
+🕐|میں ... سے رابطہ کر رہی ہوں|main ... se raabta kar rahi hoon|मैं ... के बारे में संपर्क कर रही हूँ|I'm writing regarding ...|Ich schreibe Ihnen wegen ...
+🔕|افسوس، میں نہیں آ سکتی|afsos, main nahin aa sakti|अफ़सोस, मैं नहीं आ सकती|Unfortunately I can't come|Leider kann ich nicht kommen
+## b1polite|B1|🎩|Polite wishes: würde, hätte, wäre
+🙂|میں ... چاہوں گی|main ... chahoongi|मैं ... चाहूँगी|I would like ...|Ich hätte gern ...
+🧭|میں ہوتی تو ...|main hoti to ...|मैं होती तो ...|If I were you ...|An deiner Stelle würde ich ...
+💭|کاش میرے پاس زیادہ وقت ہوتا|kaash mere paas zyaada waqt hota|काश मेरे पास ज़्यादा समय होता|I wish I had more time|Ich wünschte, ich hätte mehr Zeit
+🌟|یہ بہت اچھا ہو گا|ye bohat achha hoga|यह बहुत अच्छा होगा|That would be great|Das wäre toll
+🙏|کیا آپ کھڑکی بند کر دیں گے؟|kya aap khirki band kar denge?|क्या आप खिड़की बंद कर देंगे?|Would you close the window?|Würden Sie bitte das Fenster schließen?
+🤝|کیا آپ کے پاس وقت ہو گا؟|kya aap ke paas waqt hoga?|क्या आपके पास समय होगा?|Would you have time?|Hätten Sie Zeit?
+💡|آپ کو ... کرنا چاہیے|aap ko ... karna chahiye|आपको ... करना चाहिए|You should ...|Sie sollten ...
+🧳|میں سفر کرنا پسند کروں گی|main safar karna pasand karoongi|मैं सफ़र करना पसंद करूँगी|I would love to travel|Ich würde gern reisen
+🎲|اگر میں امیر ہوتی ...|agar main ameer hoti ...|अगर मैं अमीर होती ...|If I were rich ...|Wenn ich reich wäre ...
+⏰|اگر میرے پاس وقت ہوتا، میں آتی|agar mere paas waqt hota, main aati|अगर मेरे पास समय होता, मैं आती|If I had time, I would come|Wenn ich Zeit hätte, würde ich kommen
+☕|کیا ہم کافی پینے چلیں؟|kya hum coffee peene chalein?|क्या हम कॉफ़ी पीने चलें?|Shall we go for a coffee?|Wollen wir einen Kaffee trinken gehen?
+🙇|کیا یہ ممکن ہو گا؟|kya ye mumkin hoga?|क्या यह संभव होगा?|Would that be possible?|Wäre das möglich?
+🤲|یہ آپ کی بہت مہربانی ہو گی|ye aap ki bohat meharbaani hogi|यह आपकी बहुत मेहरबानी होगी|That would be very kind of you|Das wäre sehr nett von Ihnen
+😅|مجھے معاف کیجیے، میں دیر سے آئی|mujhe maaf kijiye, main der se aayi|माफ़ कीजिए, मैं देर से आई|Sorry, I'm late|Entschuldigen Sie die Verspätung
+🌈|کاش!|kaash!|काश!|If only!|Wenn doch nur!
