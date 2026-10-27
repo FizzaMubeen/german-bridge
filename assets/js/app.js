@@ -392,7 +392,7 @@ let session = null;
 let words = {q:"", sort:"new"};
 function setNav(nav){ $$("[data-nav]").forEach(a => a.dataset.nav===nav ? a.setAttribute("aria-current","page") : a.removeAttribute("aria-current")); }
 function route(){
-  stopConfetti(); speakStop();
+  stopConfetti(); speakCleanup(true); SPK.rec = null;
   if(typeof stopListening === "function") stopListening(true);
   session = null; document.body.classList.remove("in-session");
   const h = (location.hash||"#today").slice(1);
@@ -447,7 +447,9 @@ app.addEventListener("click", e => {
   if(t.closest("[data-next]")) return grade(!!session.lastOk);
   if(t.closest("[data-smic]")) return speakStart();
   if(t.closest("[data-sstop]")) return speakStop();
-  if(t.closest("[data-sself]")){ session.result = null; session.state = "back"; return drawSession(); }
+  if(t.closest("[data-sself]")){ speakCleanup(false); SPK.on = false; session.result = null; session.state = "back"; return drawSession(); }
+  if(t.closest("[data-sreconly]")){ session.recordOnly = true; return drawSession(); }
+  if(t.closest("[data-myrec]")){ if(SPK.url && player){ player.pause(); player.src = SPK.url; player.playbackRate = 1; player.play().catch(()=>{}); } return; }
   if(t.closest("[data-swant]")){ const c = session.queue[0]; const on = toggleWant(c); toast(on?`<b>${esc(c.de)}</b> added to I want to learn`:"Removed from I want to learn", {html:true, kind: on?"want":"info"}); return drawSession(); }
 });
 function refresh(){ if(session) drawSession(); else { const y = window.scrollY; route(); window.scrollTo(0,y); } }
@@ -952,61 +954,161 @@ function heardHTML(text, c){
   const tw = new Set(targetsOf(c).flatMap(wordsOf));
   return normDe(text).split(" ").map(w => `<span class="${tw.has(foldDe(w)) || [...tw].some(x=>x.length>3 && lev(x,foldDe(w))<=1) ? "hit" : "miss"}">${esc(w)}</span>`).join(" ");
 }
-function speakStart(){
-  const s = session; if(!s) return;
-  s.speakErr = "";
-  if(SR){
-    S.settings.listenOk = true; save();
-    const rec = new SR(); SPK.rec = rec; SPK.on = true;
-    rec.lang = "de-DE"; rec.continuous = false; rec.interimResults = false; rec.maxAlternatives = 5;
-    rec.onresult = e => { const alts = [...e.results[0]].map(a => a.transcript); SPK.on = false;
-      const sc = scoreSpeech(alts, s.queue[0]); s.result = {heard: alts[0]||"", score: sc}; s.state = "back"; drawSession(); };
-    rec.onerror = e => { SPK.on = false; s.speakErr = e.error==="no-speech" ? "I didn't hear anything. Tap the mic and speak clearly." : (e.error==="not-allowed"||e.error==="service-not-allowed") ? "The microphone is blocked. Allow it for this site in your browser settings." : e.error==="network" ? "Speech checking needs internet in this browser. You can still say it and check yourself." : "Couldn't hear that. Try again."; drawSession(); };
-    rec.onend = () => { if(SPK.on){ SPK.on = false; drawSession(); } };
-    try{ rec.start(); }catch(err){ SPK.on = false; }
-    return drawSession();
-  }
-  // no speech recognition (e.g. some iPhones): record yourself and compare by ear
-  if(!navigator.mediaDevices || !window.MediaRecorder){ s.result = null; s.state = "back"; return drawSession(); }
-  navigator.mediaDevices.getUserMedia({audio:true}).then(stream => {
-    SPK.chunks = []; const mr = new MediaRecorder(stream); SPK.media = mr; SPK.on = true;
-    mr.ondataavailable = e => { if(e.data.size) SPK.chunks.push(e.data); };
-    mr.onstop = () => { stream.getTracks().forEach(t=>t.stop()); SPK.on = false; if(SPK.url) URL.revokeObjectURL(SPK.url);
-      SPK.url = URL.createObjectURL(new Blob(SPK.chunks, {type: mr.mimeType || "audio/mp4"})); s.result = {recorded:true}; s.state = "back"; drawSession(); };
-    mr.start(); setTimeout(() => { if(mr.state==="recording") mr.stop(); }, 6000); drawSession();
-  }).catch(() => { s.speakErr = "The microphone is blocked. Allow it for this site in your browser settings."; drawSession(); });
+/* Speak practice. Best: the offline engine (Vosk) limited to the words in Wortzi, which makes it accurate for learners.
+   Also: the phone's speech service, or just recording yourself to compare by ear. Your recording stays on the phone. */
+const speakEngine = () => {
+  if(session && session.recordOnly) return "record";
+  if(S.settings.stt === "device" && SR) return "device";
+  if(S.settings.sttReady && offlineSTT()) return "offline";
+  if(offlineSTT()) return "need";
+  return SR ? "device" : "record";
+};
+let SPK_GRAMMAR = "";
+function speakGrammar(){
+  if(SPK_GRAMMAR) return SPK_GRAMMAR;
+  const w = new Set();
+  for(const c of allCards()) for(const t of (String(c.de).toLowerCase().match(/[a-zäöüß]+/g) || [])) if(t.length > 0) w.add(t);
+  SPK_GRAMMAR = JSON.stringify([...w, "[unk]"]);
+  return SPK_GRAMMAR;
 }
-function speakStop(){ try{ if(SPK.rec) SPK.rec.stop(); }catch(e){} try{ if(SPK.media && SPK.media.state==="recording") SPK.media.stop(); }catch(e){} }
+async function speakRecognizer(rate){
+  if(SPK.vrec && SPK.vrate === rate) return SPK.vrec;
+  const model = await sttModel();
+  let rec;
+  try{ rec = new model.KaldiRecognizer(rate, speakGrammar()); }catch(e){ rec = new model.KaldiRecognizer(rate); }
+  rec.on("result", m => { const t = ((m && m.result && m.result.text) || "").replace(/\[unk\]/g, "").trim(); if(t) SPK.final = (SPK.final ? SPK.final + " " : "") + t; if(SPK.waitFinal) SPK.waitFinal(); });
+  rec.on("partialresult", m => { const t = ((m && m.result && m.result.partial) || "").replace(/\[unk\]/g, "").trim(); SPK.partial = t; const el = $("#spkPartial"); if(el) el.textContent = t; });
+  SPK.vrec = rec; SPK.vrate = rate;
+  return rec;
+}
+function speakMeter(){
+  if(!SPK.on || !SPK.an) return;
+  const buf = SPK.buf || (SPK.buf = new Float32Array(SPK.an.fftSize));
+  SPK.an.getFloatTimeDomainData(buf);
+  let sum = 0; for(let i = 0; i < buf.length; i++) sum += buf[i]*buf[i];
+  const rms = Math.sqrt(sum/buf.length), now = Date.now();
+  const m = $("#micBtn"); if(m) m.style.setProperty("--lvl", Math.min(1, rms*12).toFixed(2));
+  if(rms > 0.015){ SPK.heard = true; SPK.lastVoice = now; }
+  const lab = $("#spkLabel"); if(lab && SPK.heard) lab.textContent = "I can hear you… pause when you're done";
+  if((SPK.heard && now - SPK.lastVoice > 1300) || now - SPK.t0 > 9000) return speakFinish();
+  SPK.raf = requestAnimationFrame(speakMeter);
+}
+async function speakStart(){
+  const s = session; if(!s || SPK.on) return;
+  s.speakErr = ""; SPK.partial = ""; SPK.final = "";
+  const eng = speakEngine();
+  if(eng === "device") return speakDevice();
+  if(eng === "need") return;
+  const AC = window.AudioContext || window.webkitAudioContext;
+  if(!AC || !navigator.mediaDevices){ s.result = null; s.state = "back"; return drawSession(); }
+  if(!SPK.ctx || SPK.ctx.state === "closed") SPK.ctx = new AC();           // made inside the tap, for iPhone
+  try{ SPK.ctx.resume(); }catch(e){}
+  SPK.on = true; SPK.starting = true; drawSession();
+  try{
+    const stream = await navigator.mediaDevices.getUserMedia({audio:{echoCancellation:true, noiseSuppression:true, channelCount:1}});
+    if(!SPK.on){ stream.getTracks().forEach(t => t.stop()); return; }
+    const ctx = SPK.ctx, src = ctx.createMediaStreamSource(stream), an = ctx.createAnalyser(); an.fftSize = 1024; src.connect(an);
+    Object.assign(SPK, {stream, src, an, heard:false, t0: Date.now(), lastVoice: Date.now(), buf:null});
+    if(window.MediaRecorder){ try{ SPK.chunks = []; const mr = new MediaRecorder(stream); mr.ondataavailable = e => { if(e.data.size) SPK.chunks.push(e.data); }; mr.start(); SPK.media = mr; }catch(e){ SPK.media = null; } }
+    if(eng === "offline"){
+      const rec = await speakRecognizer(ctx.sampleRate);
+      const node = ctx.createScriptProcessor(4096, 1, 1);
+      node.onaudioprocess = e => { if(SPK.on) try{ rec.acceptWaveform(e.inputBuffer); }catch(err){} };
+      src.connect(node); node.connect(ctx.destination); SPK.node = node;
+    }
+    SPK.t0 = Date.now(); SPK.starting = false; drawSession();
+    SPK.raf = requestAnimationFrame(speakMeter);
+  }catch(e){
+    SPK.on = false; SPK.starting = false; speakCleanup(false);
+    s.speakErr = e && (e.name === "NotAllowedError" || e.name === "SecurityError") ? "The microphone is blocked. Allow it for this site in your browser settings, then try again." : (e && e.message) || "Could not start the microphone.";
+    drawSession();
+  }
+}
+async function speakFinish(){
+  if(!SPK.on) return;
+  SPK.on = false; cancelAnimationFrame(SPK.raf);
+  const s = session, c = s && s.queue[0];
+  const lab = $("#spkLabel"); if(lab) lab.textContent = "Checking…";
+  if(SPK.vrec && SPK.node){
+    await new Promise(res => { SPK.waitFinal = res; try{ SPK.vrec.retrieveFinalResult(); }catch(e){ res(); } setTimeout(res, 1600); });
+    SPK.waitFinal = null;
+  }
+  const url = await new Promise(res => {
+    if(!SPK.media || SPK.media.state !== "recording") return res("");
+    SPK.media.onstop = () => { try{ if(SPK.url) URL.revokeObjectURL(SPK.url); SPK.url = SPK.chunks.length ? URL.createObjectURL(new Blob(SPK.chunks, {type: SPK.media.mimeType || "audio/mp4"})) : ""; }catch(e){ SPK.url = ""; } res(SPK.url); };
+    try{ SPK.media.stop(); }catch(e){ res(""); }
+  });
+  speakCleanup(false);
+  if(!s || session !== s || !c) return;
+  const heard = (SPK.final || SPK.partial || "").trim();
+  if(speakEngine() === "offline" && heard) s.result = {heard, score: scoreSpeech([heard], c), recorded: !!url};
+  else if(speakEngine() === "offline" && SPK.heard) s.result = {heard:"", score:0, recorded: !!url, unclear:true};
+  else if(speakEngine() === "offline"){ s.speakErr = "I didn't hear anything. Hold the phone closer and speak clearly."; return drawSession(); }
+  else s.result = {recorded: !!url};
+  s.state = "back"; drawSession();
+}
+function speakCleanup(closeCtx){
+  cancelAnimationFrame(SPK.raf);
+  try{ SPK.node && SPK.node.disconnect(); }catch(e){} try{ SPK.src && SPK.src.disconnect(); }catch(e){}
+  try{ SPK.media && SPK.media.state === "recording" && SPK.media.stop(); }catch(e){}
+  try{ SPK.stream && SPK.stream.getTracks().forEach(t => t.stop()); }catch(e){}
+  Object.assign(SPK, {node:null, src:null, an:null, stream:null, media:null});
+  if(closeCtx){ try{ SPK.rec && SPK.rec.stop(); }catch(e){} try{ SPK.vrec && SPK.vrec.remove(); }catch(e){} try{ SPK.ctx && SPK.ctx.close(); }catch(e){} Object.assign(SPK, {ctx:null, vrec:null, vrate:0, on:false}); }
+}
+function speakDevice(){
+  const s = session;
+  S.settings.listenOk = true; save();
+  const rec = new SR(); SPK.rec = rec; SPK.on = true; SPK.t0 = Date.now();
+  rec.lang = "de-DE"; rec.continuous = false; rec.interimResults = true; rec.maxAlternatives = 5;
+  rec.onresult = e => { const r = e.results[e.results.length-1]; const el = $("#spkPartial"); if(el) el.textContent = r[0].transcript;
+    if(!r.isFinal) return; const alts = [...r].map(a => a.transcript); SPK.on = false;
+    s.result = {heard: alts[0]||"", score: scoreSpeech(alts, s.queue[0])}; s.state = "back"; drawSession(); };
+  rec.onerror = e => { SPK.on = false; s.speakErr = e.error==="no-speech" ? "I didn't hear anything. Tap the mic and speak clearly." : (e.error==="not-allowed"||e.error==="service-not-allowed") ? "The microphone is blocked. Allow it for this site in your browser settings." : e.error==="network" ? "The phone's speech service needs internet. Download Wortzi offline listening instead." : "Couldn't hear that. Try again."; drawSession(); };
+  rec.onend = () => { if(SPK.on){ SPK.on = false; drawSession(); } };
+  try{ rec.start(); }catch(err){ SPK.on = false; }
+  drawSession();
+}
+function speakStop(){ if(SPK.on && !SPK.rec) speakFinish(); else { try{ if(SPK.rec) SPK.rec.stop(); }catch(e){} } }
 function speakBody(c, cat, dots, isBack){
-  const s = session, prompt = `<div class="face">${sideHTML("my",c)}</div>`;
+  const s = session, prompt = `<div class="face">${sideHTML("my",c)}</div>`, eng = speakEngine();
   if(!isBack){
-    const how = SR ? "Say it in German. I'll check your pronunciation." : window.MediaRecorder ? "Say it in German. I'll record you so you can compare." : "Say it out loud in German, then check.";
-    return `<div class="card ${c.g} speak" style="cursor:default">
+    const card = `<div class="card ${c.g} speakcard" style="cursor:default">
         <span class="cat">${esc(cat)}</span>${dots}
         ${visHTML(c)}${prompt}
-        <div class="hint">${how}</div>
+        <div class="hint">${eng==="record" ? "Say it in German. I'll record you so you can compare." : "Say it in German. I'll check how well you said it."}</div>
+        <div class="partial" id="spkPartial" lang="de" aria-live="polite">${esc(SPK.partial||"")}</div>
         ${s.speakErr ? `<div class="flash no">${esc(s.speakErr)}</div>` : ""}
-      </div>
+      </div>`;
+    if(eng === "need") return `${card}
+      <div class="sttget">
+        <b>Turn on pronunciation checking</b>
+        <span class="small muted">Download German listening once (about 45 MB). It runs on your phone, works offline and is also used by the Listen tab.</span>
+        ${STT.loading ? `<div class="bar gold"><i style="width:${STT.progress}%"></i></div><span class="small">Downloading… ${STT.progress}%</span>`
+          : `<div class="row"><button class="btn primary" type="button" id="sttGet">${ic("download")}Download (45 MB)</button>${SR?`<button class="btn" type="button" data-stt="device">Use the phone's service</button>`:""}<button class="btn ghost" type="button" data-sreconly>Just record me</button></div>`}
+        ${LST.err ? `<span class="small" style="color:var(--bad)">${esc(LST.err)}</span>` : ""}
+      </div>`;
+    return `${card}
       <div class="micwrap">
-        <button class="micbtn${SPK.on?" on":""}" type="button" ${SPK.on?"data-sstop":"data-smic"} aria-label="${SPK.on?"Stop":"Speak"}"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3M9 21h6"/></svg></button>
-        <span class="small muted">${SPK.on ? "Listening… tap to stop" : "Tap and speak"}</span>
+        <button class="micbtn spk${SPK.on?" on":""}" id="micBtn" type="button" ${SPK.on?"data-sstop":"data-smic"} aria-label="${SPK.on?"Stop":"Speak"}" ${SPK.starting?"disabled":""}>${ic("mic")}</button>
+        <span class="small" id="spkLabel" style="font-weight:700">${SPK.starting ? "Starting the microphone…" : SPK.on ? "Speak now…" : "Tap and speak"}</span>
+        <span class="small muted">${eng==="offline" ? "Checked on your phone, nothing is sent anywhere" : eng==="device" ? "Checked by your phone's speech service" : "Recorded on your phone only"}</span>
       </div>
-      <div class="sactions"><button class="btn ghost big full" data-sself>Show the answer instead</button></div>
-      ${SR && !S.settings.listenOk ? `<p class="small muted" style="margin:0;text-align:center">Your browser turns your voice into text (Google in Chrome, Apple in Safari). Wortzi saves no audio.</p>` : ""}`;
+      <div class="sactions"><button class="btn ghost big full" data-sself>Show the answer instead</button></div>`;
   }
   const r = s.result;
   let verdict = "", self = false;
-  if(r && r.score !== undefined){
+  if(r && r.score !== undefined && !r.unclear){
     s.lastOk = r.score >= 70;
-    verdict = `<div class="flash ${s.lastOk?"ok":"no"}">${r.score>=90?"✓ Sehr gut! Clear and correct.":r.score>=70?"✓ Gut! Nearly perfect.":r.score>=40?"Almost. Listen and try once more next time.":"Not yet. Listen to it, then say it again."} <b>${r.score}%</b></div>
+    verdict = `<div class="flash ${s.lastOk?"ok":"no"}">${r.score>=90?"✓ Sehr gut! Clear and correct.":r.score>=70?"✓ Gut! Nearly perfect.":r.score>=40?"Almost. Listen, then try once more next time.":"Not yet. Listen to it, then say it again."} <b>${r.score}%</b></div>
       <div class="yours"><span class="label">I heard</span><span class="heard">${heardHTML(r.heard, c)}</span></div>`;
-  } else self = true;
+  } else if(r && r.unclear){ self = true; verdict = `<div class="flash no">I heard you, but couldn't make out the words. Listen to both and judge yourself.</div>`; }
+  else self = true;
   return `<div class="card ${c.g} is-back" style="cursor:default">
       <span class="cat">${esc(cat)}</span>${dots}
       ${visHTML(c)}${prompt}
       ${verdict}
-      <div class="answer"><div class="dd">${colorDe(c.de)}</div>${spk(c.de,c.id)}
-        ${r && r.recorded && SPK.url ? `<audio controls src="${SPK.url}" class="myrec"></audio><span class="small muted">Your voice. Play both and compare.</span>` : ""}</div>
+      <div class="answer"><div class="dd">${colorDe(c.de)}</div>
+        <div class="row" style="justify-content:center">${spk(c.de,c.id)}${r && r.recorded && SPK.url ? `<button class="speak" type="button" data-myrec>${ic("play")}My voice</button>` : ""}</div></div>
     </div>
     <div class="sactions">${self
       ? `<button class="btn bad big" data-ans="0">${ic("x")}Not yet</button><button class="btn good big" data-ans="1">${ic("check")}I said it right</button>`
@@ -1740,19 +1842,20 @@ const offlineSTT = () => !!(window.WebAssembly && navigator.mediaDevices && navi
 const sttEngine = () => { const want = S.settings.stt; if(want==="device" && SR) return "device"; if(want==="offline" && offlineSTT()) return "offline"; return offlineSTT() ? "offline" : SR ? "device" : ""; };
 const STT_URL = () => new URL("stt/de.tar.gz", location.href).href;
 function loadScript(src){ return new Promise((res, rej) => { if(document.querySelector(`script[data-src="${src}"]`)) return res(); const sc = document.createElement("script"); sc.src = src; sc.dataset.src = src; sc.onload = res; sc.onerror = () => rej(new Error("Could not load the listening engine")); document.head.appendChild(sc); }); }
+const sttChanged = () => { renderLive(); if(session && session.mode === "speak" && session.state === "front") drawSession(); };
 async function sttDownload(){
-  if(STT.loading) return; STT.loading = true; STT.progress = 0; LST.err = ""; renderLive();
+  if(STT.loading) return; STT.loading = true; STT.progress = 0; LST.err = ""; sttChanged();
   try{
     const r = await fetch("stt/de.tar.gz");
     if(!r.ok) throw new Error("The listening model is not on the server yet (" + r.status + ")");
     const total = +r.headers.get("content-length") || 46e6, reader = r.body.getReader(); let got = 0;
-    for(;;){ const {done, value} = await reader.read(); if(done) break; got += value.length; const p = Math.min(99, Math.round(got/total*100)); if(p !== STT.progress){ STT.progress = p; renderLive(); } }
+    for(;;){ const {done, value} = await reader.read(); if(done) break; got += value.length; const p = Math.min(99, Math.round(got/total*100)); if(p !== STT.progress){ STT.progress = p; sttChanged(); } }
     await loadScript("stt/vosk.js");
     S.settings.sttReady = true; S.settings.stt = "offline"; save();
     try{ if(navigator.storage && navigator.storage.persist) navigator.storage.persist(); }catch(e){}
     STT.progress = 100; toast("German listening is ready, also offline", {kind:"ok"});
   }catch(e){ LST.err = (e && e.message) || "Download failed. Try again on Wi-Fi."; }
-  STT.loading = false; renderLive();
+  STT.loading = false; sttChanged();
 }
 async function sttModel(){
   if(STT.model) return STT.model;
@@ -1867,7 +1970,7 @@ function sttBoxHTML(){
 }
 app.addEventListener("click", e => {
   const t = e.target;
-  const pk = t.closest("[data-stt]"); if(pk){ if(LST.listening) stopListening(true); S.settings.stt = pk.dataset.stt; save(); return renderLive(); }
+  const pk = t.closest("[data-stt]"); if(pk){ if(LST.listening) stopListening(true); S.settings.stt = pk.dataset.stt; save(); renderLive(); if(session) drawSession(); return; }
   if(t.closest("#sttGet")) return sttDownload();
   if(t.closest("#micBtn")){ if(LST.listening) stopListening(false); else startListening(); }
 });

@@ -49,6 +49,21 @@ with sync_playwright() as pw:
         note("notice", "HEARD: " + json.dumps(heard, ensure_ascii=False))
         note("notice", f"SCORE: {' '.join(score.split())} | CHEER: {cheer} | ERROR: {err}")
         ok = bool(heard)
+        p.click("#micBtn")  # stop listening
+        # Speak practice with the learned words (the recording says several of them)
+        p.goto("http://localhost:8765/#words-learned"); p.wait_for_timeout(800)
+        p.click('[data-mode="speak"]'); p.wait_for_timeout(600)
+        target = p.text_content(".card .face") or ""
+        p.screenshot(path="out/listen-4-speak.png")
+        p.click("[data-smic]")
+        try:
+            p.wait_for_selector("[data-next], [data-ans]", timeout=25000)
+            verdict = " ".join((p.text_content(".card") or "").split())
+            note("notice", f"SPEAK prompt={' '.join(target.split())} -> {verdict[:300]}")
+        except Exception:
+            note("warning", "SPEAK: no result; label=" + (p.text_content("#spkLabel") or "") + " err=" + " ".join((p.text_content(".card") or "").split())[:300])
+            ok = False
+        p.screenshot(path="out/listen-5-speak-result.png")
     except Exception:
         note("error", traceback.format_exc()[-1500:])
         try: p.screenshot(path="out/listen-error.png")
