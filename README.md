@@ -1,6 +1,6 @@
 # Wortzi
 
-**Live:** https://wortzi.fizzamubeen.com · **Version:** 1.7.1 · [Changelog](CHANGELOG.md)
+**Live:** https://wortzi.fizzamubeen.com · **Version:** 1.8.0 · [Changelog](CHANGELOG.md)
 
 **Learn everyday German from Urdu, Hindi or English.** Picture flashcards, your own word lists, daily practice that adapts to you, and printable PDFs of everything you learn. Private by design: no account, no tracking, all data stays on the learner's phone.
 
@@ -94,7 +94,8 @@ Raise `VERSION` at the top of `sw.js` (e.g. `wortzi-1.4.1`) so phones that insta
 ## Privacy
 
 - All progress, lists and own words are stored in the browser's `localStorage` on the learner's device.
-- The page has a strict Content Security Policy: it can only load its own files.
+- The page has a strict Content Security Policy: it can only load its own files. (It allows `unsafe-eval` only because the offline listening engine compiles itself in the browser.)
+- Offline listening (Vosk, Apache-2.0, `scripts/get-stt.sh`) runs entirely on the phone. The German model is downloaded from this site once, when the learner asks.
 - No cookies, analytics, ads, external fonts or CDNs.
 - German audio is pre-recorded with the free Piper voice (files in `audio/`, made by the *Make audio* workflow). The device's own voice is a fallback. Nothing is sent to any speech service when listening.
 - Backups are files the learner downloads and keeps. With a password they are encrypted with AES-GCM 256 (PBKDF2-SHA256, 250,000 iterations).

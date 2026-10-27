@@ -5,7 +5,7 @@
  */
 (() => {
 "use strict";
-const APP_VERSION = "1.7.1";
+const APP_VERSION = "1.8.0";
 const KEY = "gb-v1";
 
 /* =====================================================================
@@ -1737,7 +1737,7 @@ function newWordsFrom(text){
    The German model (about 45 MB) is downloaded once, then everything happens on the phone: no audio leaves it. ---------- */
 const STT = {model:null, loading:false, progress:0, ctx:null, stream:null, src:null, node:null, rec:null};
 const offlineSTT = () => !!(window.WebAssembly && navigator.mediaDevices && navigator.mediaDevices.getUserMedia && (window.AudioContext || window.webkitAudioContext)) && !SANDBOX && location.protocol !== "file:";
-const sttEngine = () => { const want = S.settings.stt; if(want==="device" && SR) return "device"; if(want==="offline" && offlineSTT()) return "offline"; if(S.settings.sttReady && offlineSTT()) return "offline"; return SR ? "device" : offlineSTT() ? "offline" : ""; };
+const sttEngine = () => { const want = S.settings.stt; if(want==="device" && SR) return "device"; if(want==="offline" && offlineSTT()) return "offline"; return offlineSTT() ? "offline" : SR ? "device" : ""; };
 const STT_URL = () => new URL("stt/de.tar.gz", location.href).href;
 function loadScript(src){ return new Promise((res, rej) => { if(document.querySelector(`script[data-src="${src}"]`)) return res(); const sc = document.createElement("script"); sc.src = src; sc.dataset.src = src; sc.onload = res; sc.onerror = () => rej(new Error("Could not load the listening engine")); document.head.appendChild(sc); }); }
 async function sttDownload(){
@@ -1848,7 +1848,7 @@ function sttBoxHTML(){
   const eng = sttEngine(), st = S.settings;
   const both = SR && offlineSTT();
   const pick = both ? `<div class="chips engine" role="group" aria-label="Listening engine">
-      <button class="chip" type="button" data-stt="offline" aria-pressed="${eng==="offline"}">${ic("phone")}Wortzi offline · private</button>
+      <button class="chip" type="button" data-stt="offline" aria-pressed="${eng==="offline"}">${ic("phone")}Wortzi offline · recommended</button>
       <button class="chip" type="button" data-stt="device" aria-pressed="${eng==="device"}">${ic("mic")}Phone's speech service</button></div>` : "";
   if(!eng) return `<div class="small"><b>Live listening isn't available in this browser.</b> You can still paste German text below.</div>`;
   if(eng==="offline" && !st.sttReady) return `${pick}

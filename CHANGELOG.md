@@ -3,6 +3,14 @@
 The version shown in the app (Me → bottom of the page) matches the tags in this repository.
 Phones that installed the app update themselves; learners keep all their progress.
 
+## 1.8.0 — 2026-10-27
+- **Listen works offline and on every phone:** a German speech-recognition engine (Vosk, open source) now runs inside Wortzi. Download it once (about 45 MB) and the Listen tab turns German around you into text without internet, and no audio ever leaves the phone
+- Choose the engine on the Listen tab: **Wortzi offline** (recommended, private) or the **phone's speech service** (Google, Microsoft or Apple, needs internet)
+- Encouraging messages under your score: "You already catch 20% of the words. That's how understanding starts!"
+- Nouns heard in lower case are shown with their capital letter, as on the cards
+- **PDFs are always white** with dark, readable text, also when the phone is in dark mode
+- Automatic test on GitHub (*Test offline listening*): plays a German recording into a virtual microphone and checks the result
+
 ## 1.7.1 — 2026-10-27
 - **Fixed: Listen did not play.** The recording now starts in the same moment as the tap, which iPhone and Safari require; before, they blocked the sound and the fallback voice too
 - Recordings play offline on iPhone as well (the app answers the audio range requests Safari sends)
