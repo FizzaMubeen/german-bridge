@@ -3,6 +3,13 @@
 The version shown in the app (Me → bottom of the page) matches the tags in this repository.
 Phones that installed the app update themselves; learners keep all their progress.
 
+## 1.9.0 — 2026-10-28
+- **Speak practice fixed and much better:** uses the offline engine with Wortzi's own vocabulary, so it understands learners far better. A green ring moves with your voice so you can see it hears you, it stops by itself when you pause, and **My voice** plays your recording next to the correct one. Without the engine: download it right there, use the phone's service, or "Just record me"
+- **154 new cards in 10 new units:** At the supermarket (Pfand!), Asking the way, In the German course, Rubbish & recycling, Sport & fitness, Hairdresser & repairs, Buying clothes, Complaints & refunds, Parents/Kita/school, Neighbours & house rules. Now 1,334 cards in 76 units
+- **8 new stories** (20 in total): Pfand zurück, Mein erster Deutschkurs, Ich habe mich verlaufen, Welche Tonne?, Beim Friseur, Neue Schuhe, Der Elternabend, Zwei Stunden Verspätung
+- **White theme** next to Light and Dark, and a theme button in the top bar (Auto → Light → White → Dark)
+- **Me:** this week in one sentence, My skills (cards, written, said, listening best, stories), My levels A1/A2/B1, reviews coming up in the next 7 days, and a daily reminder you add to your phone's calendar
+
 ## 1.8.0 — 2026-10-27
 - **Listen works offline and on every phone:** a German speech-recognition engine (Vosk, open source) now runs inside Wortzi. Download it once (about 45 MB) and the Listen tab turns German around you into text without internet, and no audio ever leaves the phone
 - Choose the engine on the Listen tab: **Wortzi offline** (recommended, private) or the **phone's speech service** (Google, Microsoft or Apple, needs internet)

@@ -5,7 +5,7 @@
  */
 (() => {
 "use strict";
-const APP_VERSION = "1.8.0";
+const APP_VERSION = "1.9.0";
 const KEY = "gb-v1";
 
 /* =====================================================================
@@ -62,6 +62,9 @@ const ICONS = {
   undo:'<path d="M9 14 4 9l5-5"/><path d="M4 9h10.5a5.5 5.5 0 0 1 0 11H11"/>',
   info:'<circle cx="12" cy="12" r="9"/><path d="M12 16v-4M12 8h.01"/>',
   phone:'<rect x="6" y="2" width="12" height="20" rx="3"/><path d="M11 18h2"/>',
+  book:'<path d="M4 4.5A2.5 2.5 0 0 1 6.5 2H20v17H6.5A2.5 2.5 0 0 0 4 21.5z"/><path d="M4 21.5A2.5 2.5 0 0 1 6.5 19H20v3H6.5"/>',
+  sun:'<circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/>',
+  moon:'<path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/>',
   gear:'<circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/>',
 };
 const ic = (n, cls="") => `<svg class="ic${cls?" "+cls:""}" viewBox="0 0 24 24" aria-hidden="true">${ICONS[n]||""}</svg>`;
@@ -184,8 +187,8 @@ function sanitize(raw){
   const s = raw.settings||{};
   out.settings = {
     level: ["A1","A2","B1"].includes(s.level)?s.level:"A1", name: clip(s.name,60), base: ["ur","hi","en"].includes(s.base)?s.base:"ur", front: s.front==="base"?"base":"de",
-    mode: s.mode==="quiz"?"quiz":"flip", goal: [10,20,40].includes(+s.goal)?+s.goal:20, theme: ["light","dark"].includes(s.theme)?s.theme:"system",
-    autoplay: !!s.autoplay, listenOk: !!s.listenOk, stt: ["offline","device"].includes(s.stt) ? s.stt : "", sttReady: !!s.sttReady, hideInstall: Math.max(0, num(s.hideInstall,0)), extra: {rom: s.extra?.rom!==false, en: s.extra?.en!==false, ur: !!s.extra?.ur, hi: !!s.extra?.hi}
+    mode: s.mode==="quiz"?"quiz":"flip", goal: [10,20,40].includes(+s.goal)?+s.goal:20, theme: ["light","white","dark"].includes(s.theme)?s.theme:"system",
+    autoplay: !!s.autoplay, listenOk: !!s.listenOk, stt: ["offline","device"].includes(s.stt) ? s.stt : "", sttReady: !!s.sttReady, remind: /^\d{2}:\d{2}$/.test(s.remind||"") ? s.remind : "", hideInstall: Math.max(0, num(s.hideInstall,0)), extra: {rom: s.extra?.rom!==false, en: s.extra?.en!==false, ur: !!s.extra?.ur, hi: !!s.extra?.hi}
   };
   return out;
 }
@@ -304,6 +307,9 @@ function shown(lang){
 function applyPrefs(){
   ["ur","hi","rom","en"].forEach(l => document.body.classList.toggle("hide-"+l, !shown(l)));
   const t = S.settings.theme; if(t==="system") document.documentElement.removeAttribute("data-theme"); else document.documentElement.setAttribute("data-theme", t);
+  const dark = t==="dark" || (t==="system" && matchMedia("(prefers-color-scheme: dark)").matches);
+  document.querySelectorAll('meta[name="theme-color"]').forEach(m => { m.setAttribute("content", dark ? "#1a201e" : "#ffffff"); m.removeAttribute("media"); });
+  const tb = document.getElementById("themeBtn"); if(tb){ tb.innerHTML = ic(dark ? "moon" : "sun"); tb.setAttribute("aria-label", "Theme: " + ({system:"Auto",light:"Light",white:"White",dark:"Dark"})[t] + ". Tap to change"); }
 }
 /* the card's text in the learner's own language */
 function myText(c){ if(c.custom) return c.my || c.en || ""; return {ur:c.u, hi:c.hi, en:c.en}[S.settings.base]; }
@@ -354,10 +360,14 @@ function ringSVG(frac){
   const r=8, c=2*Math.PI*r, f=Math.min(1,frac);
   return `<svg class="ring" viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="${r}" fill="none" stroke="var(--line)" stroke-width="3"/><circle cx="10" cy="10" r="${r}" fill="none" stroke="${f>=1?"var(--accent)":"var(--ok)"}" stroke-width="3" stroke-linecap="round" stroke-dasharray="${c*f} ${c}" transform="rotate(-90 10 10)"/></svg>`;
 }
+const THEMES = ["system","light","white","dark"], THEME_NAME = {system:"Auto (follows your phone)", light:"Light", white:"White", dark:"Dark"};
+document.addEventListener("click", e => { if(!e.target.closest("#themeBtn")) return;
+  const i = THEMES.indexOf(S.settings.theme); S.settings.theme = THEMES[(i+1) % THEMES.length]; save(); applyPrefs(); toast("Theme: " + THEME_NAME[S.settings.theme]); });
 function renderStats(){
-  $("#stats").innerHTML = `<a class="stat" href="#me" title="Day streak">🔥 ${streak()}</a><a class="stat" href="#me" title="Today's goal">${ringSVG(todayCount()/S.settings.goal)} ${Math.min(todayCount(),S.settings.goal)}/${S.settings.goal}</a>`;
+  $("#stats").innerHTML = `<button class="themebtn" id="themeBtn" type="button"></button><a class="stat" href="#me" title="Day streak">🔥 ${streak()}</a><a class="stat" href="#me" title="Today's goal">${ringSVG(todayCount()/S.settings.goal)} ${Math.min(todayCount(),S.settings.goal)}/${S.settings.goal}</a>`;
   const w = wantList().length, el = $("#wantCount");
   el.hidden = !w; el.textContent = w;
+  applyPrefs();
 }
 function wordActions(c, opts={}){
   const k = isLearned(c), w = isWanted(c);
@@ -1222,6 +1232,51 @@ let confirmReset = false, backupMsg = "", importState = {text:"", needPw:false, 
 let installEvt = null;
 addEventListener("beforeinstallprompt", e => { e.preventDefault(); installEvt = e; if(!session && (location.hash==="" || location.hash==="#today")) route(); });
 addEventListener("appinstalled", () => { installEvt = null; askPersist(); toast("✓ Installed. Find Wortzi on your home screen."); });
+/* ---------- Me: this week, skills, levels, upcoming reviews, reminder ---------- */
+function weekStats(){
+  const since = Date.now() - 7*DAY; let cards = 0, days = 0;
+  for(let i = 0; i < 7; i++){ const d = new Date(Date.now() - i*DAY), n = S.days[dayKey(d)] || 0; cards += n; if(n) days++; }
+  const learned = allCards().filter(c => { const k = S.known[c.id], r = S.cards[c.id]; return (k && k >= since) || (r && r.b >= 3 && (r.seen||0) >= since); }).length;
+  return {cards, days, learned};
+}
+function forecast(){
+  const out = []; const start = new Date(); start.setHours(0,0,0,0);
+  for(let i = 0; i < 7; i++){ const a = start.getTime() + i*DAY, b = a + DAY;
+    const n = allCards().filter(c => { const r = S.cards[c.id]; if(!r || r.b < 0) return false; const due = r.due || 0; return i === 0 ? due < b : due >= a && due < b; }).length;
+    out.push({lab: i===0 ? "Today" : ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"][new Date(a).getDay()], n}); }
+  return out;
+}
+function meInsights(){
+  const w = weekStats(), f = forecast(), fmax = Math.max(1, ...f.map(x => x.n));
+  const ls = S.listenSessions.filter(x => x.w >= 5), best = ls.length ? Math.max(...ls.map(x => Math.round(x.k/x.w*100))) : 0, last = ls.length ? Math.round(ls[0].k/ls[0].w*100) : 0;
+  const lv = [...new Set(UNITS.map(u => u.level))].map(l => { const x = levelStats(l); return {l, pct: x.cards.length ? Math.round(x.learned/x.cards.length*100) : 0, learned: x.learned, total: x.cards.length, done: x.done, units: x.units.length}; });
+  const sum = w.cards ? `This week you practised <b>${w.cards}</b> card${w.cards===1?"":"s"} on <b>${w.days}</b> day${w.days===1?"":"s"} and learned <b>${w.learned}</b> new word${w.learned===1?"":"s"}.${w.days>=5?" Wunderbar!":w.days>=3?" Good rhythm!":" A few minutes every day works best."}`
+    : `No practice yet this week. Ten minutes today is a great start.`;
+  const sk = [["cards","Cards practised", Object.values(S.days).reduce((a,b)=>a+b,0)],["pen","Written right", S.written||0],["mic","Said right", S.spoken||0],
+    ["volume","Listening best", best ? best+"%" : "–", ls.length ? `last ${last}%` : "try the Listen tab"],["book","Stories read", Object.keys(S.storiesRead).length, `of ${STORIES.length}`]];
+  return `<div class="panel weekly" style="margin-top:12px"><span class="label">This week</span><p style="margin:4px 0 0">${sum}</p></div>
+    <div class="section-title"><h2>My skills</h2></div>
+    <div class="skills">${sk.map(([i,t,v,sub]) => `<div class="skill"><span class="si">${ic(i)}</span><b>${v}</b><span>${t}</span>${sub?`<small>${esc(sub)}</small>`:""}</div>`).join("")}</div>
+    <div class="section-title"><h2>My levels</h2><a class="small muted" href="#learn">Open Learn</a></div>
+    <div class="panel stack">${lv.map(x => `<a class="lvlrow" href="#learn-${esc(x.l)}"><span class="lvl ${esc(x.l)}">${esc(x.l)}</span><div class="bar ${x.l==="A2"?"gold":""} ${x.l==="B1"?"blue":""}"><i style="width:${x.pct}%"></i></div><span class="small"><b>${x.pct}%</b> · ${x.learned}/${x.total} words · ${x.done}/${x.units} units</span></a>`).join("")}</div>
+    <div class="section-title"><h2>Coming up for review</h2><span class="small muted">so you never forget</span></div>
+    <div class="panel"><div class="fc">${f.map(x => `<div><b>${x.n}</b><i style="height:${Math.max(3, Math.round(x.n/fmax*60))}px" class="${x.n?"":"zero"}"></i><small>${x.lab}</small></div>`).join("")}</div>
+      <p class="small muted" style="margin:8px 0 0">${f[0].n ? `${f[0].n} card${f[0].n===1?" is":"s are"} ready today. Start from Today → Start today's practice.` : "Nothing due today. Learn something new!"}</p></div>
+    <div class="section-title"><h2>Daily reminder</h2></div>
+    <div class="panel stack">
+      <span class="small muted">Wortzi has no account and sends no notifications. Instead, add a repeating reminder to your phone's calendar. It opens Wortzi when you tap it.</span>
+      <div class="row"><label class="small" for="remT" style="font-weight:700">Every day at</label><input class="input" id="remT" type="time" value="${esc(S.settings.remind || "19:00")}" style="max-width:130px">
+        <button class="btn" type="button" id="remBtn">${ic("download")}Add to my calendar</button></div>
+    </div>`;
+}
+function reminderICS(time){
+  const [h, m] = String(time||"19:00").split(":").map(x => +x || 0), d = new Date(); d.setHours(h, m, 0, 0); if(d < new Date()) d.setDate(d.getDate()+1);
+  const pad = n => String(n).padStart(2,"0"), loc = x => `${x.getFullYear()}${pad(x.getMonth()+1)}${pad(x.getDate())}T${pad(x.getHours())}${pad(x.getMinutes())}00`;
+  const end = new Date(d.getTime() + 10*60000), url = location.origin + location.pathname + "#today";
+  return ["BEGIN:VCALENDAR","VERSION:2.0","PRODID:-//Wortzi//Daily practice//EN","BEGIN:VEVENT",`UID:wortzi-daily-${Date.now()}@wortzi`,`DTSTAMP:${new Date().toISOString().replace(/[-:]/g,"").replace(/\.\d+Z$/,"Z")}`,
+    `DTSTART:${loc(d)}`,`DTEND:${loc(end)}`,"RRULE:FREQ=DAILY","SUMMARY:Wortzi: 10 minutes of German",`DESCRIPTION:Your daily German practice. ${url}`,`URL:${url}`,
+    "BEGIN:VALARM","TRIGGER:PT0M","ACTION:DISPLAY","DESCRIPTION:Time for German with Wortzi","END:VALARM","END:VEVENT","END:VCALENDAR"].join("\r\n");
+}
 function viewMe(){
   const L = levelInfo(), st = S.settings;
   const days = []; const d = new Date(); d.setDate(d.getDate()-13);
@@ -1241,12 +1296,13 @@ function viewMe(){
       <div class="week">${days.map(x=>`<div><i class="${x.n===0?"zero":x.n>=st.goal?"goal":""}" style="height:${Math.max(3,Math.round(x.n/max*88))}px" title="${x.k}: ${x.n}"></i><small>${x.lab}</small></div>`).join("")}</div>
     </div>
 
+    ${meInsights()}
     <div class="section-title"><h2>PDF reports and printouts</h2><span class="small muted">Your learning, on paper</span></div>
     <div class="reports">
       <div class="report"><span class="e">📈</span><b>Progress report</b><p>Level, streak, every unit, your two lists and badges. Good for your German course teacher or for yourself.</p><a class="btn" href="#report" data-rep="progress">Open</a></div>
       <div class="report"><span class="e">📒</span><b>My word book</b><p>Your I learned and I want to learn lists as a pocket phrasebook in your languages.</p><a class="btn" href="#report" data-rep="wordbook">Open</a></div>
       <div class="report"><span class="e">✂️</span><b>Cut-out flashcards</b><p>Print your wish list as real cards with pictures. Cut, fold, carry them in your bag.</p><a class="btn" href="#report" data-rep="cards">Open</a></div>
-      <div class="report"><span class="e">📘</span><b>Course book</b><p>Every unit of A1 or A2 with your status next to each word.</p><a class="btn" href="#report" data-rep="unitbook">Open</a></div>
+      <div class="report"><span class="e">📘</span><b>Course book</b><p>Every unit of A1, A2 or B1 with your status next to each word.</p><a class="btn" href="#report" data-rep="unitbook">Open</a></div>
     </div>
 
     <div class="section-title"><h2>Badges</h2><span class="small muted">${Object.keys(S.badges).length} of ${BADGES.length}</span></div>
@@ -1267,7 +1323,7 @@ function viewMe(){
       ${practiceChips()}
       <div class="setup">
         <div><span class="label">Daily goal</span><div class="chips" data-set="goal">${[10,20,40].map(g=>`<button class="chip" data-v="${g}" aria-pressed="${st.goal===g}">${g} cards</button>`).join("")}</div></div>
-        <div><span class="label">Theme</span><div class="chips" data-set="theme">${[["system","Auto"],["light","Light"],["dark","Dark"]].map(([v,l])=>`<button class="chip" data-v="${v}" aria-pressed="${st.theme===v}">${l}</button>`).join("")}</div></div>
+        <div><span class="label">Theme</span><div class="chips" data-set="theme">${[["system","Auto"],["light","Light"],["white","White"],["dark","Dark"]].map(([v,l])=>`<button class="chip" data-v="${v}" aria-pressed="${st.theme===v}">${l}</button>`).join("")}</div></div>
         <div><span class="label">Audio</span><div class="chips"><button class="chip" id="autoplay" aria-pressed="${!!st.autoplay}">Play German after each answer</button>
           ${AUDIO && !SANDBOX ? `<button class="chip" id="audioAll" type="button">${ic("download")}Save all audio for offline (${AUDIO.size} words, about ${Math.round(AUDIO.size*7/1000)} MB)</button>` : ""}</div>
           <span class="small muted">Words play with a natural recorded voice. Tap 🔊 twice for slow.</span></div>
@@ -1280,7 +1336,7 @@ function viewMe(){
       <ul class="privacy" style="margin:0;padding-left:18px">
         <li><b>No account, no sign-up.</b> Nobody can see your lists or progress.</li>
         <li><b>Everything stays on this device</b>, in this browser. Nothing is sent to any server.</li>
-        <li><b>No tracking, no ads, no cookies.</b> Fonts and audio come from your own device.</li>
+        <li><b>No tracking, no ads, no cookies.</b> Recordings and the offline listening engine come from this site once and are then kept on your device.</li>
         <li><b>You own your data:</b> make a backup file, protect it with a password, move it to a new phone, or delete it all.</li>
       </ul>
       <div class="field"><label for="b-pw">Backup password <span class="muted small">(optional, recommended)</span></label>
@@ -1308,6 +1364,9 @@ function viewMe(){
   $$("[data-rep]").forEach(a => a.addEventListener("click", () => { reportOpts.type = a.dataset.rep; }));
   $("#s-name").addEventListener("change", e => { S.settings.name = clip(e.target.value,60); save(); toast("Saved"); });
   $("#autoplay").onclick = () => { st.autoplay = !st.autoplay; save(); route(); };
+  const rb = $("#remBtn"); if(rb) rb.onclick = () => { const t = $("#remT").value || "19:00"; S.settings.remind = t; save();
+    const a = document.createElement("a"); a.href = URL.createObjectURL(new Blob([reminderICS(t)], {type:"text/calendar"})); a.download = "wortzi-daily-reminder.ics"; document.body.appendChild(a); a.click(); a.remove();
+    toast("Open the file to add the daily reminder to your calendar", {kind:"ok"}); };
   const aa = $("#audioAll"); if(aa) aa.onclick = () => saveAllAudio(aa);
   if($("#install")) $("#install").onclick = async () => { try{ installEvt.prompt(); await installEvt.userChoice; }catch(e){} installEvt = null; route(); };
   if($("#r-ask")) $("#r-ask").onclick = () => { confirmReset = true; route(); };
@@ -1511,7 +1570,7 @@ function reportCards(){
 function reportUnitbook(){
   const lv = reportOpts.level;
   const us = UNITS.filter(u => lv==="all" || u.level===lv);
-  return `<div class="page">${rHead(`Course book ${lv==="all"?"A1 + A2":lv}`, `${us.length} units · ${us.reduce((a,u)=>a+u.cards.length,0)} words · status from my practice`)}
+  return `<div class="page">${rHead(`Course book ${lv==="all"?"all levels":lv}`, `${us.length} units · ${us.reduce((a,u)=>a+u.cards.length,0)} words · status from my practice`)}
     ${us.map(u=>{const s=unitStats(u); return `<div class="rsec">${esc(u.emoji)} Unit ${u.n}: ${esc(u.title)} <small>${s.mastered}/${s.total} learned</small></div>${rTable(u.cards,true)}`}).join("")}</div>`;
 }
 

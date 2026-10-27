@@ -582,6 +582,58 @@ Dez|دسمبر|disambar|दिसंबर|December|der Dezember
 🍬|میٹھا / کڑوا|meetha / karwa|मीठा / कड़वा|sweet / bitter|süß / bitter
 🏁|شروع / آخر|shuru / aakhir|शुरुआत / अंत|the beginning / the end|der Anfang / das Ende
 🔓|کھولنا / بند کرنا|kholna / band karna|खोलना / बंद करना|to open / to close|aufmachen / zumachen
+## supermarket|A1|🛒|At the supermarket
+🛒|ٹرالی|trolley|ट्रॉली|the shopping trolley|der Einkaufswagen
+🧺|ٹوکری|tokri|टोकरी|the basket|der Korb
+💳|کاؤنٹر / ادائیگی|counter / adaaigi|काउंटर / भुगतान|the checkout|die Kasse
+🧾|رسید|raseed|रसीद|the receipt|der Kassenbon
+🛍️|تھیلا|thaila|थैला|the bag|die Tüte
+🍾|بوتل کی واپسی رقم|botal ki waapsi raqam|बोतल की वापसी राशि|the bottle deposit|das Pfand
+🏷️|سیل / رعایت|sale / riayat|सेल / छूट|the special offer|das Angebot
+⚖️|کلو|kilo|किलो|a kilo|ein Kilo
+🥫|ڈبہ|dabba|डिब्बा|the tin|die Dose
+📦|پیکٹ|packet|पैकेट|the packet|die Packung
+🥗|سبزی خور|sabzi khor|शाकाहारी|vegetarian|vegetarisch
+🥩|حلال|halaal|हलाल|halal|halal
+🔎|آٹا کہاں ہے؟|aata kahan hai?|आटा कहाँ है?|Where is the flour?|Wo finde ich Mehl?
+🛍️|کیا آپ کو تھیلا چاہیے؟|kya aap ko thaila chahiye?|क्या आपको थैला चाहिए?|Do you need a bag?|Brauchen Sie eine Tüte?
+💶|کارڈ سے یا نقد؟|card se ya naqd?|कार्ड से या नक़द?|Card or cash?|Mit Karte oder bar?
+🔢|میں کارڈ سے ادا کروں گی|main card se ada karoongi|मैं कार्ड से भुगतान करूँगी|I'll pay by card|Ich zahle mit Karte
+🍖|کیا اس میں سور کا گوشت ہے؟|kya is mein soor ka gosht hai?|क्या इसमें सूअर का मांस है?|Does this contain pork?|Ist da Schweinefleisch drin?
+## directions|A1|🧭|Asking the way
+⬅️|بائیں|baayein|बाएँ|left|links
+➡️|دائیں|daayein|दाएँ|right|rechts
+⬆️|سیدھا|seedha|सीधा|straight on|geradeaus
+🚦|ٹریفک لائٹ|traffic light|ट्रैफ़िक लाइट|the traffic light|die Ampel
+✖️|چوراہا|chauraaha|चौराहा|the crossroads|die Kreuzung
+🛣️|سڑک|sarak|सड़क|the street|die Straße
+🌉|پل|pul|पुल|the bridge|die Brücke
+🏪|کونا|kona|कोना|the corner|die Ecke
+📍|قریب|qareeb|पास|near|in der Nähe
+🗺️|نقشہ|naqsha|नक्शा|the map|der Stadtplan
+🚏|بس اسٹاپ|bus stop|बस स्टॉप|the bus stop|die Haltestelle
+🙋|معاف کیجیے، اسٹیشن کہاں ہے؟|maaf kijiye, station kahan hai?|माफ़ कीजिए, स्टेशन कहाँ है?|Excuse me, where is the station?|Entschuldigung, wo ist der Bahnhof?
+🚶|کیا یہ دور ہے؟|kya ye door hai?|क्या यह दूर है?|Is it far?|Ist das weit?
+⏱️|پیدل پانچ منٹ|paidal paanch minute|पैदल पाँच मिनट|five minutes on foot|fünf Minuten zu Fuß
+↪️|دوسری گلی میں بائیں|doosri gali mein baayein|दूसरी गली में बाएँ|second street on the left|die zweite Straße links
+🔁|میں راستہ بھول گئی ہوں|main raasta bhool gayi hoon|मैं रास्ता भूल गई हूँ|I'm lost|Ich habe mich verlaufen
+## course|A1|🎓|In the German course
+🏫|کورس|course|कोर्स|the course|der Kurs
+👩‍🏫|استانی|ustaani|अध्यापिका|the teacher (f)|die Lehrerin
+📓|کاپی|copy|कॉपी|the notebook|das Heft
+✏️|پنسل|pencil|पेंसिल|the pencil|der Bleistift
+🖊️|قلم|qalam|क़लम|the pen|der Kugelschreiber
+📖|صفحہ|safha|पन्ना|the page|die Seite
+🏠|گھر کا کام|ghar ka kaam|गृहकार्य|the homework|die Hausaufgaben
+📝|امتحان|imtihaan|परीक्षा|the exam|die Prüfung
+🗣️|دہرانا|dohraana|दोहराना|to repeat|wiederholen
+🔤|ہجے کرنا|hijje karna|स्पेलिंग बताना|to spell|buchstabieren
+🤔|میں نہیں سمجھی|main nahin samjhi|मैं नहीं समझी|I don't understand|Ich verstehe das nicht
+🐢|براہ کرم آہستہ|baraah-e-karam aahista|कृपया धीरे|More slowly, please|Langsamer, bitte
+❓|جرمن میں ... کو کیا کہتے ہیں؟|German mein ... ko kya kehte hain?|जर्मन में ... को क्या कहते हैं?|How do you say ... in German?|Wie sagt man ... auf Deutsch?
+✍️|اسے کیسے لکھتے ہیں؟|ise kaise likhte hain?|इसे कैसे लिखते हैं?|How do you write that?|Wie schreibt man das?
+🙋|کیا آپ دوبارہ کہہ سکتی ہیں؟|kya aap dobaara keh sakti hain?|क्या आप दोबारा कह सकती हैं?|Can you say that again?|Können Sie das noch einmal sagen?
+✅|میں تیار ہوں|main tayyaar hoon|मैं तैयार हूँ|I'm ready / done|Ich bin fertig
 ## feelings|A2|😊|Feelings
 😄|میں خوش ہوں|main khush hoon|मैं ख़ुश हूँ|I'm happy|Ich bin froh
 🥱|میں تھکی ہوئی ہوں|main thaki hui hoon|मैं थकी हुई हूँ|I'm tired|Ich bin müde
@@ -1044,6 +1096,70 @@ Dez|دسمبر|disambar|दिसंबर|December|der Dezember
 🍽️|ہمیں کھانے پر بلایا گیا تھا|hamein khaane par bulaaya gaya tha|हमें खाने पर बुलाया गया था|We were invited to dinner|Wir waren zum Essen eingeladen
 💐|دعوت کا شکریہ|daawat ka shukriya|न्योते के लिए धन्यवाद|Thank you for the invitation|Danke für die Einladung
 🎈|کیا آپ میری پارٹی میں آئیں گے؟|kya aap meri party mein aayenge?|क्या आप मेरी पार्टी में आएँगे?|Will you come to my party?|Kommen Sie zu meiner Party?
+## recycling|A2|♻️|Rubbish & recycling
+🗑️|کوڑے دان|koore daan|कूड़ेदान|the bin|die Mülltonne
+🟡|پیلا ڈبہ (پلاسٹک)|peela dabba (plastic)|पीला डिब्बा (प्लास्टिक)|the yellow bin (packaging)|die gelbe Tonne
+🟤|نامیاتی کچرا|naamiyaati kachra|जैविक कचरा|the organic waste|der Biomüll
+🔵|کاغذ کا ڈبہ|kaaghaz ka dabba|काग़ज़ का डिब्बा|the paper bin|die Papiertonne
+⚫|باقی کچرا|baaqi kachra|बाकी कचरा|the general waste|der Restmüll
+🍾|پرانا شیشہ|puraana sheesha|पुराना काँच|the used glass|das Altglas
+🔋|بیٹری|battery|बैटरी|the battery|die Batterie
+🛋️|بڑا کچرا|bara kachra|बड़ा कचरा|bulky waste|der Sperrmüll
+📦|پیکنگ|packing|पैकेजिंग|the packaging|die Verpackung
+🧴|بوتل واپسی مشین|botal waapsi machine|बोतल वापसी मशीन|the bottle return machine|der Pfandautomat
+♻️|کچرا الگ کرنا|kachra alag karna|कूड़ा अलग करना|to sort rubbish|Müll trennen
+❓|یہ کس ڈبے میں جائے گا؟|ye kis dabbe mein jaayega?|यह किस डिब्बे में जाएगा?|Which bin does this go in?|In welche Tonne gehört das?
+🗓️|کچرا کب اٹھایا جاتا ہے؟|kachra kab uthaaya jaata hai?|कूड़ा कब उठाया जाता है?|When is the rubbish collected?|Wann wird der Müll abgeholt?
+🌙|رات کو شیشہ نہ پھینکیں|raat ko sheesha na phenkein|रात को काँच न फेंकें|Don't throw glass at night|Kein Altglas in der Nacht einwerfen
+💶|بوتل پر پچیس سینٹ واپس|botal par pachchees cent waapas|बोतल पर पच्चीस सेंट वापस|25 cents back per bottle|25 Cent Pfand pro Flasche
+## sport|A2|⚽|Sport & fitness
+🏋️|جم|gym|जिम|the gym|das Fitnessstudio
+🏊|تیراکی|tairaaki|तैराकी|swimming|das Schwimmen
+🏊‍♀️|سوئمنگ پول|swimming pool|स्विमिंग पूल|the swimming pool|das Schwimmbad
+🏃|دوڑنا|daurna|दौड़ना|to go running|joggen
+🚴|سائیکل چلانا|cycle chalaana|साइकिल चलाना|to cycle|Rad fahren
+⚽|فٹبال|football|फ़ुटबॉल|football|der Fußball
+🏏|کرکٹ|cricket|क्रिकेट|cricket|das Cricket
+🧘|یوگا|yoga|योग|yoga|das Yoga
+👥|کلب|club|क्लब|the club|der Verein
+🏆|میچ / مقابلہ|match / muqaabla|मैच / मुक़ाबला|the match|das Spiel
+🎽|ٹیم|team|टीम|the team|die Mannschaft
+💪|صحت مند|sehatmand|स्वस्थ|fit|fit
+🗓️|میں ہفتے میں دو بار ورزش کرتی ہوں|main hafte mein do baar warzish karti hoon|मैं हफ़्ते में दो बार व्यायाम करती हूँ|I exercise twice a week|Ich mache zweimal pro Woche Sport
+🤝|کیا میں ساتھ کھیل سکتی ہوں؟|kya main saath khel sakti hoon?|क्या मैं साथ खेल सकती हूँ?|Can I play too?|Kann ich mitspielen?
+🏏|کیا یہاں کرکٹ کلب ہے؟|kya yahan cricket club hai?|क्या यहाँ क्रिकेट क्लब है?|Is there a cricket club here?|Gibt es hier einen Cricketverein?
+## services|A2|💇|Hairdresser, repairs & services
+💇|حجام / نائی|hajjaam / naai|नाई|the hairdresser|der Friseur
+✂️|بال کٹوانا|baal katwaana|बाल कटवाना|to get a haircut|sich die Haare schneiden lassen
+🔧|کاریگر|kaarigar|कारीगर|the tradesman|der Handwerker
+🔌|الیکٹریشن|electrician|बिजली मिस्त्री|the electrician|der Elektriker
+🚰|پلمبر|plumber|प्लंबर|the plumber|der Klempner
+👔|ڈرائی کلیننگ|dry cleaning|ड्राई क्लीनिंग|the dry cleaner's|die Reinigung
+👞|موچی|mochi|मोची|the shoe repair|der Schuster
+📱|موبائل مرمت|mobile marammat|मोबाइल मरम्मत|the phone repair shop|die Handyreparatur
+💰|اندازہ قیمت|andaaza qeemat|अनुमानित लागत|the quote|der Kostenvoranschlag
+🗓️|کیا آج کوئی وقت ملے گا؟|kya aaj koi waqt milega?|क्या आज कोई समय मिलेगा?|Do you have an appointment today?|Haben Sie heute einen Termin frei?
+📏|تھوڑا سا چھوٹا کر دیں|thora sa chhota kar dein|थोड़ा सा छोटा कर दीजिए|Just a little shorter, please|Nur ein bisschen kürzer, bitte
+💬|میرا فون ٹوٹ گیا ہے|mera phone toot gaya hai|मेरा फ़ोन टूट गया है|My phone is broken|Mein Handy ist kaputt
+⏳|یہ کب تیار ہو گا؟|ye kab tayyaar hoga?|यह कब तैयार होगा?|When will it be ready?|Wann ist es fertig?
+💶|اس کی کتنی قیمت ہو گی؟|is ki kitni qeemat hogi?|इसकी कितनी क़ीमत होगी?|How much will it cost?|Was kostet das ungefähr?
+🔑|چابی کہیں رہ گئی ہے|chaabi kahin reh gayi hai|चाबी कहीं रह गई है|I've locked myself out|Ich habe mich ausgesperrt
+## clothesshop|A2|👗|Buying clothes
+👗|کپڑوں کی دکان|kapron ki dukaan|कपड़ों की दुकान|the clothes shop|das Bekleidungsgeschäft
+🚪|ٹرائی روم|trial room|ट्रायल रूम|the changing room|die Umkleidekabine
+📏|سائز|size|साइज़|the size|die Größe
+🎨|رنگ|rang|रंग|the colour|die Farbe
+🔁|بدلنا|badalna|बदलना|to exchange|umtauschen
+💸|رقم واپسی|raqam waapsi|पैसे वापसी|the refund|die Rückerstattung
+🏷️|کم قیمت|kam qeemat|कम क़ीमत|reduced|reduziert
+🧥|جیکٹ|jacket|जैकेट|the jacket|die Jacke
+👖|پتلون|patloon|पतलून|the trousers|die Hose
+👟|جوتے|joote|जूते|the shoes|die Schuhe
+🪞|کیا میں اسے پہن کر دیکھ سکتی ہوں؟|kya main ise pehen kar dekh sakti hoon?|क्या मैं इसे पहनकर देख सकती हूँ?|Can I try this on?|Kann ich das anprobieren?
+🔍|کیا یہ بڑے سائز میں ہے؟|kya ye bare size mein hai?|क्या यह बड़े साइज़ में है?|Do you have this in a bigger size?|Haben Sie das eine Nummer größer?
+😕|یہ بہت تنگ ہے|ye bohat tang hai|यह बहुत तंग है|It's too tight|Das ist zu eng
+😊|یہ مجھے پسند ہے، میں لے لوں گی|ye mujhe pasand hai, main le loongi|यह मुझे पसंद है, मैं ले लूँगी|I like it, I'll take it|Das gefällt mir, ich nehme es
+🧾|کیا میں اسے واپس کر سکتی ہوں؟|kya main ise waapas kar sakti hoon?|क्या मैं इसे वापस कर सकती हूँ?|Can I return it?|Kann ich das zurückgeben?
 ## idioms|A2|🦉|German sayings & idioms
 🐷|میری قسمت اچھی تھی|meri qismat achhi thi|मेरी क़िस्मत अच्छी थी|I was lucky (lit. I had pig)|Ich habe Schwein gehabt
 🚉|مجھے کچھ سمجھ نہیں آیا|mujhe kuch samajh nahin aaya|मुझे कुछ समझ नहीं आया|I don't understand a thing (lit. I only understand "station")|Ich verstehe nur Bahnhof
@@ -1260,3 +1376,51 @@ Dez|دسمبر|disambar|दिसंबर|December|der Dezember
 🤲|یہ آپ کی بہت مہربانی ہو گی|ye aap ki bohat meharbaani hogi|यह आपकी बहुत मेहरबानी होगी|That would be very kind of you|Das wäre sehr nett von Ihnen
 😅|مجھے معاف کیجیے، میں دیر سے آئی|mujhe maaf kijiye, main der se aayi|माफ़ कीजिए, मैं देर से आई|Sorry, I'm late|Entschuldigen Sie die Verspätung
 🌈|کاش!|kaash!|काश!|If only!|Wenn doch nur!
+## b1complaint|B1|📣|Complaints & refunds
+📣|شکایت|shikaayat|शिकायत|the complaint|die Beschwerde
+⏰|تاخیر|taakheer|देरी|the delay|die Verspätung
+💸|معاوضہ|muaawza|मुआवज़ा|the compensation|die Entschädigung
+🧾|ثبوت|saboot|सबूत|the proof|der Nachweis
+🛡️|وارنٹی|warranty|वारंटी|the guarantee|die Garantie
+📦|خراب|kharaab|ख़राब|faulty / damaged|beschädigt
+📮|اعتراض|aitiraaz|आपत्ति|the objection|der Widerspruch
+⏳|مدت|muddat|अवधि|the deadline|die Frist
+🗣️|میں شکایت کرنا چاہتی ہوں|main shikaayat karna chahti hoon|मैं शिकायत करना चाहती हूँ|I would like to make a complaint|Ich möchte mich beschweren
+📦|پیکٹ خراب حالت میں پہنچا|packet kharaab haalat mein pahuncha|पैकेट ख़राब हालत में पहुँचा|The parcel arrived damaged|Das Paket ist beschädigt angekommen
+💶|میں اپنے پیسے واپس چاہتی ہوں|main apne paise waapas chahti hoon|मैं अपने पैसे वापस चाहती हूँ|I would like my money back|Ich möchte mein Geld zurück
+🚆|ٹرین دو گھنٹے لیٹ تھی|train do ghante late thi|ट्रेन दो घंटे लेट थी|The train was two hours late|Der Zug hatte zwei Stunden Verspätung
+🤝|کیا ہم کوئی حل نکال سکتے ہیں؟|kya hum koi hal nikaal sakte hain?|क्या हम कोई हल निकाल सकते हैं?|Can we find a solution?|Können wir eine Lösung finden?
+📅|میں دو ہفتے سے جواب کا انتظار کر رہی ہوں|main do hafte se jawaab ka intezaar kar rahi hoon|मैं दो हफ़्ते से जवाब का इंतज़ार कर रही हूँ|I've been waiting two weeks for an answer|Ich warte seit zwei Wochen auf eine Antwort
+✍️|میں تحریری طور پر تصدیق چاہتی ہوں|main tehreeri taur par tasdeeq chahti hoon|मैं लिखित पुष्टि चाहती हूँ|I would like written confirmation|Ich hätte gern eine schriftliche Bestätigung
+## b1parents|B1|🧒|Parents, Kita & school
+🧸|کنڈرگارٹن|kindergarten|किंडरगार्टन|the nursery|die Kita
+🎒|اسکول میں داخلہ|school mein daakhla|स्कूल में दाख़िला|school enrolment|die Einschulung
+👩‍🏫|کلاس ٹیچر|class teacher|क्लास टीचर|the class teacher|die Klassenlehrerin
+🗓️|والدین کی میٹنگ|waalidain ki meeting|अभिभावक बैठक|the parents' evening|der Elternabend
+📄|رپورٹ کارڈ|report card|रिपोर्ट कार्ड|the school report|das Zeugnis
+📊|نمبر|number|अंक|the mark / grade|die Note
+🧾|اجازت نامہ|ijaazat naama|अनुमति पत्र|the permission slip|die Einverständniserklärung
+🚌|اسکول ٹرپ|school trip|स्कूल ट्रिप|the school trip|der Ausflug
+🍽️|دوپہر کا کھانا (اسکول)|dopehar ka khaana|दोपहर का भोजन (स्कूल)|school lunch|das Mittagessen in der Schule
+🤒|میرا بیٹا آج بیمار ہے|mera beta aaj beemar hai|मेरा बेटा आज बीमार है|My son is ill today|Mein Sohn ist heute krank
+🙋|کیا ہم بات کرنے کے لیے وقت طے کر سکتے ہیں؟|kya hum baat karne ke liye waqt tay kar sakte hain?|क्या हम बात करने के लिए समय तय कर सकते हैं?|Can we arrange a time to talk?|Können wir einen Gesprächstermin vereinbaren?
+📚|میری بیٹی کیسی پڑھ رہی ہے؟|meri beti kaisi parh rahi hai?|मेरी बेटी कैसी पढ़ रही है?|How is my daughter doing at school?|Wie läuft es bei meiner Tochter in der Schule?
+🕐|میں اسے تین بجے لے جاؤں گی|main ise teen baje le jaaoongi|मैं इसे तीन बजे ले जाऊँगी|I'll pick her up at three|Ich hole sie um drei Uhr ab
+🧑‍🤝‍🧑|کیا کوئی جرمن کی اضافی کلاس ہے؟|kya koi German ki izaafi class hai?|क्या जर्मन की कोई अतिरिक्त क्लास है?|Is there extra German support?|Gibt es Deutschförderung?
+✍️|میں فارم پر دستخط کر دوں گی|main form par dastakhat kar doongi|मैं फ़ॉर्म पर हस्ताक्षर कर दूँगी|I'll sign the form|Ich unterschreibe das Formular
+## b1neighbours|B1|🏘️|Neighbours & house rules
+📜|عمارت کے قواعد|imaarat ke qawaaid|इमारत के नियम|the house rules|die Hausordnung
+🪜|سیڑھیاں|seerhiyaan|सीढ़ियाँ|the stairwell|das Treppenhaus
+🔊|شور|shor|शोर|the noise|der Lärm
+🧹|صفائی کی باری|safaai ki baari|सफ़ाई की बारी|the cleaning rota|der Putzplan
+🧺|کپڑے دھونے کا کمرہ|kapre dhone ka kamra|कपड़े धोने का कमरा|the laundry room|die Waschküche
+🚲|سائیکل رکھنے کی جگہ|cycle rakhne ki jagah|साइकिल रखने की जगह|the bike storage|der Fahrradkeller
+📦|پڑوسی کے لیے پیکٹ|parosi ke liye packet|पड़ोसी के लिए पैकेट|a parcel for a neighbour|ein Paket für den Nachbarn
+🔇|اتوار کو خاموشی|itwaar ko khaamoshi|रविवार को शांति|quiet on Sundays|die Sonntagsruhe
+🎉|آج رات ہماری پارٹی ہے، اگر شور ہو تو معاف کیجیے|aaj raat hamaari party hai, agar shor ho to maaf kijiye|आज रात हमारी पार्टी है, अगर शोर हो तो माफ़ कीजिए|We're having a party tonight, sorry for any noise|Wir feiern heute Abend, entschuldigen Sie bitte den Lärm
+📦|کیا آپ میرا پیکٹ لے سکتے ہیں؟|kya aap mera packet le sakte hain?|क्या आप मेरा पैकेट ले सकते हैं?|Could you take my parcel?|Könnten Sie mein Paket annehmen?
+🙏|کیا آپ تھوڑا آہستہ کر سکتے ہیں؟|kya aap thora aahista kar sakte hain?|क्या आप थोड़ा धीमा कर सकते हैं?|Could you be a little quieter?|Könnten Sie bitte etwas leiser sein?
+🍰|ہم نئے پڑوسی ہیں|hum naye parosi hain|हम नए पड़ोसी हैं|We are the new neighbours|Wir sind die neuen Nachbarn
+🔑|کیا آپ ہماری چابی رکھ سکتے ہیں؟|kya aap hamaari chaabi rakh sakte hain?|क्या आप हमारी चाबी रख सकते हैं?|Could you keep our spare key?|Könnten Sie unseren Ersatzschlüssel aufbewahren?
+💧|ہمارے ہاں پانی ٹپک رہا ہے|hamaare haan paani tapak raha hai|हमारे यहाँ पानी टपक रहा है|Water is dripping into our flat|Bei uns tropft Wasser von der Decke
+🤝|اچھے پڑوس کا شکریہ|achhe paros ka shukriya|अच्छे पड़ोस के लिए धन्यवाद|Thanks for being good neighbours|Danke für die gute Nachbarschaft

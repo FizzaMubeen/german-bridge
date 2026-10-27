@@ -830,6 +830,585 @@
      "en": "to answer the phone"
     }
    }
+  },
+  {
+   "id": "pfand",
+   "level": "A1",
+   "cover": "🍾",
+   "title": "Pfand zurück",
+   "t": {
+    "ur": "بوتلوں کے پیسے واپس",
+    "hi": "बोतलों के पैसे वापस",
+    "en": "Bottle money back"
+   },
+   "panels": [
+    {
+     "v": "🛒🍾",
+     "de": "Ich gehe mit vielen Flaschen zum Supermarkt.",
+     "ur": "میں بہت سی بوتلیں لے کر سپر مارکیٹ جاتی ہوں۔",
+     "hi": "मैं बहुत सारी बोतलें लेकर सुपरमार्केट जाती हूँ।",
+     "en": "I go to the supermarket with lots of bottles."
+    },
+    {
+     "v": "🧴➡️",
+     "de": "Am Pfandautomat gebe ich die Flaschen ab.",
+     "ur": "بوتل واپسی مشین میں بوتلیں ڈالتی ہوں۔",
+     "hi": "बोतल वापसी मशीन में बोतलें डालती हूँ।",
+     "en": "I put the bottles into the bottle return machine."
+    },
+    {
+     "v": "🧾✨",
+     "de": "Ich bekomme einen Bon: 25 Cent Pfand pro Flasche!",
+     "ur": "مجھے ایک پرچی ملتی ہے: ہر بوتل پر پچیس سینٹ!",
+     "hi": "मुझे एक पर्ची मिलती है: हर बोतल पर पच्चीस सेंट!",
+     "en": "I get a slip: 25 cents per bottle!"
+    },
+    {
+     "v": "🍞🥛",
+     "de": "Ich kaufe Brot und Milch.",
+     "ur": "میں روٹی اور دودھ خریدتی ہوں۔",
+     "hi": "मैं ब्रेड और दूध ख़रीदती हूँ।",
+     "en": "I buy bread and milk."
+    },
+    {
+     "v": "💳🙂",
+     "de": "An der Kasse fragt die Frau: Mit Karte oder bar?",
+     "ur": "کاؤنٹر پر خاتون پوچھتی ہیں: کارڈ سے یا نقد؟",
+     "hi": "काउंटर पर महिला पूछती हैं: कार्ड से या नक़द?",
+     "en": "At the checkout the woman asks: Card or cash?"
+    },
+    {
+     "v": "🎉💶",
+     "de": "Ich zahle mit Karte. Das Pfand macht das Brot billiger!",
+     "ur": "میں کارڈ سے ادا کرتی ہوں۔ بوتلوں کے پیسوں سے روٹی سستی ہو گئی!",
+     "hi": "मैं कार्ड से भुगतान करती हूँ। बोतलों के पैसों से ब्रेड सस्ती हो गई!",
+     "en": "I pay by card. The deposit makes the bread cheaper!"
+    }
+   ],
+   "words": {
+    "Supermarkt": {
+     "de": "der Supermarkt",
+     "ur": "سپر مارکیٹ",
+     "hi": "सुपरमार्केट",
+     "en": "the supermarket"
+    },
+    "Flaschen": {
+     "de": "die Flasche",
+     "ur": "بوتل",
+     "hi": "बोतल",
+     "en": "the bottle"
+    },
+    "Pfandautomat": "recycling:der Pfandautomat",
+    "25 Cent Pfand pro Flasche": "recycling:25 Cent Pfand pro Flasche",
+    "Brot": "food:das Brot",
+    "Milch": "food:die Milch",
+    "Kasse": "supermarket:die Kasse",
+    "Mit Karte oder bar": "supermarket:Mit Karte oder bar?",
+    "Ich zahle mit Karte": "supermarket:Ich zahle mit Karte",
+    "billiger": {
+     "de": "billiger",
+     "ur": "سستا",
+     "hi": "सस्ता",
+     "en": "cheaper"
+    }
+   }
+  },
+  {
+   "id": "course",
+   "level": "A1",
+   "cover": "🎓",
+   "title": "Mein erster Deutschkurs",
+   "t": {
+    "ur": "میرا پہلا جرمن کورس",
+    "hi": "मेरा पहला जर्मन कोर्स",
+    "en": "My first German course"
+   },
+   "panels": [
+    {
+     "v": "🗺️😟",
+     "de": "Der Kurs beginnt um neun Uhr. Wo ist die Schule?",
+     "ur": "کورس نو بجے شروع ہوتا ہے۔ اسکول کہاں ہے؟",
+     "hi": "कोर्स नौ बजे शुरू होता है। स्कूल कहाँ है?",
+     "en": "The course starts at nine. Where is the school?"
+    },
+    {
+     "v": "🙋🧭",
+     "de": "Entschuldigung, ist das weit? Nein, fünf Minuten zu Fuß.",
+     "ur": "معاف کیجیے، کیا یہ دور ہے؟ نہیں، پیدل پانچ منٹ۔",
+     "hi": "माफ़ कीजिए, क्या यह दूर है? नहीं, पैदल पाँच मिनट।",
+     "en": "Excuse me, is it far? No, five minutes on foot."
+    },
+    {
+     "v": "🚦➡️",
+     "de": "An der Ampel rechts, dann geradeaus.",
+     "ur": "ٹریفک لائٹ سے دائیں، پھر سیدھا۔",
+     "hi": "ट्रैफ़िक लाइट से दाएँ, फिर सीधे।",
+     "en": "Right at the traffic light, then straight on."
+    },
+    {
+     "v": "👩‍🏫📓",
+     "de": "Die Lehrerin sagt: Guten Morgen! Bitte öffnen Sie das Heft.",
+     "ur": "استانی کہتی ہیں: صبح بخیر! براہ کرم کاپی کھولیں۔",
+     "hi": "अध्यापिका कहती हैं: सुप्रभात! कृपया कॉपी खोलिए।",
+     "en": "The teacher says: Good morning! Please open your notebook."
+    },
+    {
+     "v": "🤔🐢",
+     "de": "Ich verstehe das nicht. Langsamer, bitte!",
+     "ur": "مجھے سمجھ نہیں آیا۔ براہ کرم آہستہ!",
+     "hi": "मुझे समझ नहीं आया। कृपया धीरे!",
+     "en": "I don't understand. More slowly, please!"
+    },
+    {
+     "v": "✅😊",
+     "de": "Am Ende sage ich: Ich bin fertig! Bis morgen!",
+     "ur": "آخر میں میں کہتی ہوں: میں تیار ہوں! کل ملیں گے!",
+     "hi": "आख़िर में मैं कहती हूँ: मैं तैयार हूँ! कल मिलेंगे!",
+     "en": "At the end I say: I'm done! See you tomorrow!"
+    }
+   ],
+   "words": {
+    "Kurs": "course:der Kurs",
+    "neun": "numbers:neun",
+    "Wo ist": "questions:wo?",
+    "Entschuldigung": "greet:Entschuldigung",
+    "ist das weit": "directions:Ist das weit?",
+    "fünf Minuten zu Fuß": "directions:fünf Minuten zu Fuß",
+    "Ampel": "directions:die Ampel",
+    "rechts": "directions:rechts",
+    "geradeaus": "directions:geradeaus",
+    "Lehrerin": "course:die Lehrerin",
+    "Guten Morgen": "greet:Guten Morgen",
+    "Heft": "course:das Heft",
+    "Ich verstehe das nicht": "course:Ich verstehe das nicht",
+    "Langsamer, bitte": "course:Langsamer, bitte",
+    "Ich bin fertig": "course:Ich bin fertig"
+   }
+  },
+  {
+   "id": "lost",
+   "level": "A1",
+   "cover": "🧭",
+   "title": "Ich habe mich verlaufen",
+   "t": {
+    "ur": "میں راستہ بھول گئی",
+    "hi": "मैं रास्ता भूल गई",
+    "en": "I got lost"
+   },
+   "panels": [
+    {
+     "v": "🌆😕",
+     "de": "Es ist Abend. Ich habe mich verlaufen.",
+     "ur": "شام ہے۔ میں راستہ بھول گئی ہوں۔",
+     "hi": "शाम है। मैं रास्ता भूल गई हूँ।",
+     "en": "It's evening. I'm lost."
+    },
+    {
+     "v": "📱🔋",
+     "de": "Mein Handy ist leer. Kein Stadtplan!",
+     "ur": "میرا فون بند ہو گیا۔ کوئی نقشہ نہیں!",
+     "hi": "मेरा फ़ोन बंद हो गया। कोई नक्शा नहीं!",
+     "en": "My phone is dead. No map!"
+    },
+    {
+     "v": "👵🙋",
+     "de": "Ich frage eine Frau: Entschuldigung, wo ist der Bahnhof?",
+     "ur": "میں ایک خاتون سے پوچھتی ہوں: معاف کیجیے، اسٹیشن کہاں ہے؟",
+     "hi": "मैं एक महिला से पूछती हूँ: माफ़ कीजिए, स्टेशन कहाँ है?",
+     "en": "I ask a woman: Excuse me, where is the station?"
+    },
+    {
+     "v": "👉🌉",
+     "de": "Die zweite Straße links, dann über die Brücke.",
+     "ur": "دوسری گلی میں بائیں، پھر پل کے پار۔",
+     "hi": "दूसरी गली में बाएँ, फिर पुल के पार।",
+     "en": "Second street on the left, then over the bridge."
+    },
+    {
+     "v": "🚏🙂",
+     "de": "Dort ist die Haltestelle. Vielen Dank!",
+     "ur": "وہاں بس اسٹاپ ہے۔ بہت شکریہ!",
+     "hi": "वहाँ बस स्टॉप है। बहुत धन्यवाद!",
+     "en": "The bus stop is there. Thank you very much!"
+    }
+   ],
+   "words": {
+    "Ich habe mich verlaufen": "directions:Ich habe mich verlaufen",
+    "Handy": "home:das Handy",
+    "Stadtplan": "directions:der Stadtplan",
+    "Entschuldigung, wo ist der Bahnhof": "directions:Entschuldigung, wo ist der Bahnhof?",
+    "Die zweite Straße links": "directions:die zweite Straße links",
+    "Brücke": "directions:die Brücke",
+    "Haltestelle": "directions:die Haltestelle",
+    "Vielen Dank": "greet:Vielen Dank",
+    "Frau": {
+     "de": "die Frau",
+     "ur": "خاتون",
+     "hi": "महिला",
+     "en": "the woman"
+    }
+   }
+  },
+  {
+   "id": "bins",
+   "level": "A2",
+   "cover": "♻️",
+   "title": "Welche Tonne?",
+   "t": {
+    "ur": "کون سا ڈبہ؟",
+    "hi": "कौन सा डिब्बा?",
+    "en": "Which bin?"
+   },
+   "panels": [
+    {
+     "v": "🗑️🤔",
+     "de": "In Deutschland gibt es viele Mülltonnen. In welche Tonne gehört das?",
+     "ur": "جرمنی میں بہت سے کوڑے دان ہیں۔ یہ کس ڈبے میں جائے گا؟",
+     "hi": "जर्मनी में बहुत सारे कूड़ेदान हैं। यह किस डिब्बे में जाएगा?",
+     "en": "There are many bins in Germany. Which bin does this go in?"
+    },
+    {
+     "v": "🧃🟡",
+     "de": "Die Verpackung kommt in die gelbe Tonne.",
+     "ur": "پیکنگ پیلے ڈبے میں جاتی ہے۔",
+     "hi": "पैकेजिंग पीले डिब्बे में जाती है।",
+     "en": "Packaging goes in the yellow bin."
+    },
+    {
+     "v": "🍌🟤",
+     "de": "Bananenschalen sind Biomüll.",
+     "ur": "کیلے کے چھلکے نامیاتی کچرا ہیں۔",
+     "hi": "केले के छिलके जैविक कचरा हैं।",
+     "en": "Banana peels are organic waste."
+    },
+    {
+     "v": "🍾🌙",
+     "de": "Altglas bringe ich zum Container, aber nicht in der Nacht.",
+     "ur": "پرانا شیشہ میں کنٹینر میں ڈالتی ہوں، لیکن رات کو نہیں۔",
+     "hi": "पुराना काँच मैं कंटेनर में डालती हूँ, लेकिन रात को नहीं।",
+     "en": "I take used glass to the container, but not at night."
+    },
+    {
+     "v": "👴😊",
+     "de": "Mein Nachbar lacht: Jetzt können Sie Müll trennen wie eine Deutsche!",
+     "ur": "میرے پڑوسی ہنستے ہیں: اب آپ جرمنوں کی طرح کچرا الگ کر سکتی ہیں!",
+     "hi": "मेरे पड़ोसी हँसते हैं: अब आप जर्मनों की तरह कचरा अलग कर सकती हैं!",
+     "en": "My neighbour laughs: Now you can sort rubbish like a German!"
+    }
+   ],
+   "words": {
+    "In welche Tonne gehört das": "recycling:In welche Tonne gehört das?",
+    "Mülltonnen": "recycling:die Mülltonne",
+    "Verpackung": "recycling:die Verpackung",
+    "gelbe Tonne": "recycling:die gelbe Tonne",
+    "Biomüll": "recycling:der Biomüll",
+    "Altglas": "recycling:das Altglas",
+    "Nachbar": "family:der Nachbar",
+    "Müll trennen": "recycling:Müll trennen",
+    "Nacht": {
+     "de": "die Nacht",
+     "ur": "رات",
+     "hi": "रात",
+     "en": "the night"
+    }
+   }
+  },
+  {
+   "id": "haircut",
+   "level": "A2",
+   "cover": "💇",
+   "title": "Beim Friseur",
+   "t": {
+    "ur": "حجام کے پاس",
+    "hi": "नाई के पास",
+    "en": "At the hairdresser"
+   },
+   "panels": [
+    {
+     "v": "💇📞",
+     "de": "Ich rufe beim Friseur an: Haben Sie heute einen Termin frei?",
+     "ur": "میں حجام کو فون کرتی ہوں: کیا آج کوئی وقت ملے گا؟",
+     "hi": "मैं नाई को फ़ोन करती हूँ: क्या आज कोई समय मिलेगा?",
+     "en": "I call the hairdresser: Do you have an appointment today?"
+    },
+    {
+     "v": "🕓✅",
+     "de": "Ja, um vier Uhr. Perfekt!",
+     "ur": "جی، چار بجے۔ بہترین!",
+     "hi": "हाँ, चार बजे। बढ़िया!",
+     "en": "Yes, at four o'clock. Perfect!"
+    },
+    {
+     "v": "💺✂️",
+     "de": "Der Friseur fragt: Wie möchten Sie die Haare?",
+     "ur": "حجام پوچھتا ہے: بال کیسے چاہئیں؟",
+     "hi": "नाई पूछता है: बाल कैसे चाहिए?",
+     "en": "The hairdresser asks: How would you like your hair?"
+    },
+    {
+     "v": "📏🙂",
+     "de": "Nur ein bisschen kürzer, bitte.",
+     "ur": "بس تھوڑا سا چھوٹا کر دیں۔",
+     "hi": "बस थोड़ा सा छोटा कर दीजिए।",
+     "en": "Just a little shorter, please."
+    },
+    {
+     "v": "💶🤔",
+     "de": "Was kostet das ungefähr? Fünfundzwanzig Euro.",
+     "ur": "اس کی کتنی قیمت ہو گی؟ پچیس یورو۔",
+     "hi": "इसकी कितनी क़ीमत होगी? पच्चीस यूरो।",
+     "en": "How much will it cost? Twenty-five euros."
+    },
+    {
+     "v": "🪞😍",
+     "de": "Das gefällt mir! Vielen Dank.",
+     "ur": "مجھے یہ پسند ہے! بہت شکریہ۔",
+     "hi": "मुझे यह पसंद है! बहुत धन्यवाद।",
+     "en": "I like it! Thank you very much."
+    }
+   ],
+   "words": {
+    "Friseur": "services:der Friseur",
+    "Haben Sie heute einen Termin frei": "services:Haben Sie heute einen Termin frei?",
+    "vier": "numbers:vier",
+    "Haare": {
+     "de": "die Haare",
+     "ur": "بال",
+     "hi": "बाल",
+     "en": "the hair"
+    },
+    "Nur ein bisschen kürzer, bitte": "services:Nur ein bisschen kürzer, bitte",
+    "Was kostet das ungefähr": "services:Was kostet das ungefähr?",
+    "Vielen Dank": "greet:Vielen Dank",
+    "gefällt mir": {
+     "de": "gefallen",
+     "ur": "پسند آنا",
+     "hi": "पसंद आना",
+     "en": "to like"
+    }
+   }
+  },
+  {
+   "id": "shoes",
+   "level": "A2",
+   "cover": "👟",
+   "title": "Neue Schuhe",
+   "t": {
+    "ur": "نئے جوتے",
+    "hi": "नए जूते",
+    "en": "New shoes"
+   },
+   "panels": [
+    {
+     "v": "🏷️👟",
+     "de": "Im Geschäft sind die Schuhe reduziert.",
+     "ur": "دکان میں جوتے کم قیمت پر ہیں۔",
+     "hi": "दुकान में जूते सस्ते हैं।",
+     "en": "In the shop the shoes are reduced."
+    },
+    {
+     "v": "🙋🪞",
+     "de": "Kann ich das anprobieren?",
+     "ur": "کیا میں اسے پہن کر دیکھ سکتی ہوں؟",
+     "hi": "क्या मैं इसे पहनकर देख सकती हूँ?",
+     "en": "Can I try this on?"
+    },
+    {
+     "v": "😣👟",
+     "de": "Oh, das ist zu eng. Haben Sie das eine Nummer größer?",
+     "ur": "اوہ، یہ بہت تنگ ہے۔ کیا یہ بڑے سائز میں ہے؟",
+     "hi": "ओह, यह बहुत तंग है। क्या यह बड़े साइज़ में है?",
+     "en": "Oh, that's too tight. Do you have this in a bigger size?"
+    },
+    {
+     "v": "👟😊",
+     "de": "Die Größe passt. Das gefällt mir, ich nehme es!",
+     "ur": "سائز ٹھیک ہے۔ مجھے پسند ہے، میں لے لوں گی!",
+     "hi": "साइज़ ठीक है। मुझे पसंद है, मैं ले लूँगी!",
+     "en": "The size fits. I like it, I'll take it!"
+    },
+    {
+     "v": "🧾❓",
+     "de": "Kann ich das zurückgeben? Ja, mit dem Kassenbon.",
+     "ur": "کیا میں اسے واپس کر سکتی ہوں؟ جی، رسید کے ساتھ۔",
+     "hi": "क्या मैं इसे वापस कर सकती हूँ? हाँ, रसीद के साथ।",
+     "en": "Can I return it? Yes, with the receipt."
+    }
+   ],
+   "words": {
+    "Schuhe": "clothesshop:die Schuhe",
+    "reduziert": "clothesshop:reduziert",
+    "Kann ich das anprobieren": "clothesshop:Kann ich das anprobieren?",
+    "das ist zu eng": "clothesshop:Das ist zu eng",
+    "Haben Sie das eine Nummer größer": "clothesshop:Haben Sie das eine Nummer größer?",
+    "Größe": "clothesshop:die Größe",
+    "Das gefällt mir, ich nehme es": "clothesshop:Das gefällt mir, ich nehme es",
+    "Kann ich das zurückgeben": "clothesshop:Kann ich das zurückgeben?",
+    "Kassenbon": "supermarket:der Kassenbon",
+    "Geschäft": {
+     "de": "das Geschäft",
+     "ur": "دکان",
+     "hi": "दुकान",
+     "en": "the shop"
+    }
+   }
+  },
+  {
+   "id": "parents",
+   "level": "B1",
+   "cover": "🧒",
+   "title": "Der Elternabend",
+   "t": {
+    "ur": "والدین کی میٹنگ",
+    "hi": "अभिभावक बैठक",
+    "en": "The parents' evening"
+   },
+   "panels": [
+    {
+     "v": "📨🎒",
+     "de": "In der Schultasche finde ich einen Brief: Elternabend am Donnerstag.",
+     "ur": "اسکول بیگ میں مجھے ایک خط ملتا ہے: جمعرات کو والدین کی میٹنگ۔",
+     "hi": "स्कूल बैग में मुझे एक पत्र मिलता है: गुरुवार को अभिभावक बैठक।",
+     "en": "In the school bag I find a letter: parents' evening on Thursday."
+    },
+    {
+     "v": "😰🗣️",
+     "de": "Obwohl ich nervös bin, gehe ich hin.",
+     "ur": "اگرچہ میں گھبرائی ہوئی ہوں، میں جاتی ہوں۔",
+     "hi": "हालाँकि मैं घबराई हुई हूँ, मैं जाती हूँ।",
+     "en": "Although I'm nervous, I go."
+    },
+    {
+     "v": "👩‍🏫📊",
+     "de": "Die Klassenlehrerin erklärt die Noten und den Ausflug.",
+     "ur": "کلاس ٹیچر نمبروں اور اسکول ٹرپ کے بارے میں بتاتی ہیں۔",
+     "hi": "क्लास टीचर अंकों और स्कूल ट्रिप के बारे में बताती हैं।",
+     "en": "The class teacher explains the marks and the school trip."
+    },
+    {
+     "v": "🙋📚",
+     "de": "Danach frage ich: Wie läuft es bei meiner Tochter in der Schule?",
+     "ur": "پھر میں پوچھتی ہوں: میری بیٹی کیسی پڑھ رہی ہے؟",
+     "hi": "फिर मैं पूछती हूँ: मेरी बेटी कैसी पढ़ रही है?",
+     "en": "Afterwards I ask: How is my daughter doing at school?"
+    },
+    {
+     "v": "😊🌟",
+     "de": "Sehr gut! Gibt es Deutschförderung? Ja, zweimal pro Woche.",
+     "ur": "بہت اچھی! کیا جرمن کی اضافی کلاس ہے؟ جی، ہفتے میں دو بار۔",
+     "hi": "बहुत अच्छी! क्या जर्मन की अतिरिक्त क्लास है? हाँ, हफ़्ते में दो बार।",
+     "en": "Very well! Is there extra German support? Yes, twice a week."
+    },
+    {
+     "v": "✍️🏠",
+     "de": "Ich unterschreibe das Formular für den Ausflug und gehe stolz nach Hause.",
+     "ur": "میں ٹرپ کے فارم پر دستخط کرتی ہوں اور خوشی سے گھر جاتی ہوں۔",
+     "hi": "मैं ट्रिप के फ़ॉर्म पर हस्ताक्षर करती हूँ और गर्व से घर जाती हूँ।",
+     "en": "I sign the form for the trip and go home proudly."
+    }
+   ],
+   "words": {
+    "Brief": "b1office:der Brief",
+    "Elternabend": "b1parents:der Elternabend",
+    "Donnerstag": {
+     "de": "der Donnerstag",
+     "ur": "جمعرات",
+     "hi": "गुरुवार",
+     "en": "Thursday"
+    },
+    "Obwohl": "b1connect:obwohl",
+    "nervös": "b1feel:nervös",
+    "Klassenlehrerin": "b1parents:die Klassenlehrerin",
+    "Noten": "b1parents:die Note",
+    "Ausflug": "b1parents:der Ausflug",
+    "Wie läuft es bei meiner Tochter in der Schule": "b1parents:Wie läuft es bei meiner Tochter in der Schule?",
+    "Gibt es Deutschförderung": "b1parents:Gibt es Deutschförderung?",
+    "Ich unterschreibe das Formular": "b1parents:Ich unterschreibe das Formular",
+    "stolz": {
+     "de": "stolz",
+     "ur": "فخر سے",
+     "hi": "गर्व से",
+     "en": "proud"
+    }
+   }
+  },
+  {
+   "id": "latetrain",
+   "level": "B1",
+   "cover": "🚆",
+   "title": "Zwei Stunden Verspätung",
+   "t": {
+    "ur": "دو گھنٹے کی تاخیر",
+    "hi": "दो घंटे की देरी",
+    "en": "Two hours late"
+   },
+   "panels": [
+    {
+     "v": "🚉⏰",
+     "de": "Mein Zug nach München hat Verspätung. Schon wieder!",
+     "ur": "میونخ جانے والی میری ٹرین لیٹ ہے۔ پھر سے!",
+     "hi": "म्यूनिख जाने वाली मेरी ट्रेन लेट है। फिर से!",
+     "en": "My train to Munich is late. Again!"
+    },
+    {
+     "v": "😤📱",
+     "de": "Der Zug hatte zwei Stunden Verspätung. Ich verpasse meinen Termin.",
+     "ur": "ٹرین دو گھنٹے لیٹ تھی۔ میری ملاقات رہ گئی۔",
+     "hi": "ट्रेन दो घंटे लेट थी। मेरी मुलाक़ात छूट गई।",
+     "en": "The train was two hours late. I miss my appointment."
+    },
+    {
+     "v": "💡💶",
+     "de": "Deshalb fordere ich eine Entschädigung.",
+     "ur": "اس لیے میں معاوضے کا مطالبہ کرتی ہوں۔",
+     "hi": "इसलिए मैं मुआवज़े की माँग करती हूँ।",
+     "en": "So I ask for compensation."
+    },
+    {
+     "v": "📝🧾",
+     "de": "Ich fülle das Formular aus und schicke den Nachweis.",
+     "ur": "میں فارم بھرتی ہوں اور ثبوت بھیجتی ہوں۔",
+     "hi": "मैं फ़ॉर्म भरती हूँ और सबूत भेजती हूँ।",
+     "en": "I fill in the form and send the proof."
+    },
+    {
+     "v": "📅😐",
+     "de": "Ich warte seit zwei Wochen auf eine Antwort.",
+     "ur": "میں دو ہفتے سے جواب کا انتظار کر رہی ہوں۔",
+     "hi": "मैं दो हफ़्ते से जवाब का इंतज़ार कर रही हूँ।",
+     "en": "I've been waiting two weeks for an answer."
+    },
+    {
+     "v": "📩🎉",
+     "de": "Endlich: Wir überweisen Ihnen 25 Prozent des Fahrpreises. Trotzdem fahre ich nächstes Mal früher!",
+     "ur": "آخرکار: ہم آپ کو کرایے کا پچیس فیصد بھیج رہے ہیں۔ پھر بھی اگلی بار میں جلدی نکلوں گی!",
+     "hi": "आख़िरकार: हम आपको किराए का पच्चीस प्रतिशत भेज रहे हैं। फिर भी अगली बार मैं जल्दी निकलूँगी!",
+     "en": "Finally: we're transferring 25 percent of the fare. Still, next time I'll leave earlier!"
+    }
+   ],
+   "words": {
+    "Zug": {
+     "de": "der Zug",
+     "ur": "ٹرین",
+     "hi": "ट्रेन",
+     "en": "the train"
+    },
+    "Verspätung": "b1complaint:die Verspätung",
+    "Der Zug hatte zwei Stunden Verspätung": "b1complaint:Der Zug hatte zwei Stunden Verspätung",
+    "Termin": "b1office:der Termin",
+    "Deshalb": "b1connect:deshalb",
+    "Entschädigung": "b1complaint:die Entschädigung",
+    "Formular": "b1office:das Formular",
+    "Nachweis": "b1complaint:der Nachweis",
+    "Ich warte seit zwei Wochen auf eine Antwort": "b1complaint:Ich warte seit zwei Wochen auf eine Antwort",
+    "Trotzdem": "b1connect:trotzdem",
+    "überweisen": {
+     "de": "überweisen",
+     "ur": "رقم بھیجنا",
+     "hi": "पैसे भेजना",
+     "en": "to transfer money"
+    }
+   }
   }
  ]
 }
