@@ -1,7 +1,7 @@
 /* © 2026 Fizza Mubeen. All rights reserved. See LICENSE. */
 /* Wortzi offline support.
    After you change any file, raise VERSION so phones fetch the new files. */
-const VERSION = "wortzi-1.9.0";
+const VERSION = "wortzi-1.10.0";
 const AUDIO_CACHE = "wortzi-audio";
 const STT_CACHE = "wortzi-stt";   // offline listening engine and German model (about 45 MB), downloaded only when the learner asks // recordings: kept across updates, filled as words are played
 const CORE = [

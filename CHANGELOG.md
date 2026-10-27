@@ -3,6 +3,13 @@
 The version shown in the app (Me → bottom of the page) matches the tags in this repository.
 Phones that installed the app update themselves; learners keep all their progress.
 
+## 1.10.0 — 2026-10-28
+- **Stories are now little books:** one page at a time with a big picture, book-style German text, swipe or arrows to turn pages, "Page 2 of 6"
+- **Tap any word** (not only highlighted ones): a bubble right above it shows the meaning in Urdu, Hindi or English, with Listen, ☆ want to learn and ✓ I know it. Inside a phrase it also shows what the whole phrase means
+- **Read aloud** each page with the natural voice; **Translate** shows the sentence in your language under the text
+- Last page: your score for the story, "I've read this story" (+15 XP), practise its words, next story
+- Licence changed to **All rights reserved** (replaces MIT)
+
 ## 1.9.0 — 2026-10-28
 - **Speak practice fixed and much better:** uses the offline engine with Wortzi's own vocabulary, so it understands learners far better. A green ring moves with your voice so you can see it hears you, it stops by itself when you pause, and **My voice** plays your recording next to the correct one. Without the engine: download it right there, use the phone's service, or "Just record me"
 - **154 new cards in 10 new units:** At the supermarket (Pfand!), Asking the way, In the German course, Rubbish & recycling, Sport & fitness, Hairdresser & repairs, Buying clothes, Complaints & refunds, Parents/Kita/school, Neighbours & house rules. Now 1,334 cards in 76 units

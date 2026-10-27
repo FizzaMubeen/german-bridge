@@ -1,6 +1,6 @@
 # Wortzi
 
-**Live:** https://wortzi.fizzamubeen.com · **Version:** 1.9.0 · [Changelog](CHANGELOG.md)
+**Live:** https://wortzi.fizzamubeen.com · **Version:** 1.10.0 · [Changelog](CHANGELOG.md)
 
 **Learn everyday German from Urdu, Hindi or English.** Picture flashcards, your own word lists, daily practice that adapts to you, and printable PDFs of everything you learn. Private by design: no account, no tracking, all data stays on the learner's phone.
 

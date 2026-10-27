@@ -6,7 +6,7 @@
  */
 (() => {
 "use strict";
-const APP_VERSION = "1.9.0";
+const APP_VERSION = "1.10.0";
 const KEY = "gb-v1";
 
 /* =====================================================================
@@ -403,7 +403,7 @@ let session = null;
 let words = {q:"", sort:"new"};
 function setNav(nav){ $$("[data-nav]").forEach(a => a.dataset.nav===nav ? a.setAttribute("aria-current","page") : a.removeAttribute("aria-current")); }
 function route(){
-  stopConfetti(); speakCleanup(true); SPK.rec = null;
+  stopConfetti(); speakCleanup(true); SPK.rec = null; if(typeof closeTip === "function") closeTip();
   if(typeof stopListening === "function") stopListening(true);
   session = null; document.body.classList.remove("in-session");
   const h = (location.hash||"#today").slice(1);
@@ -1618,6 +1618,7 @@ function storyTodayCard(){
   return `<div class="section-title"><h2>Story for you</h2><a class="small muted" href="#stories">All stories</a></div>${storyTile(st)}`;
 }
 function viewStories(){
+  RD = {st:null, i:0};
   app.innerHTML = `<a class="back" href="#learn-${esc(curLevel())}-stories">${ic("left")}Learn</a><h1>Stories</h1>
     <p class="muted" style="margin:6px 0 16px;max-width:60ch">Short scenes from life in Berlin. The more words you learn, the more of each story you understand. Tap any underlined word to see what it means.</p>
     <div class="stories">${storiesSorted().map(storyTile).join("")}</div>`;
@@ -1642,40 +1643,152 @@ function panelTr(p){
   if(b!=="en" && shown("en")) parts.push(`<span class="muted">${esc(p.en)}</span>`);
   return parts.join("");
 }
+/* =====================================================================
+   STORY READER — a little book: one page at a time, tap ANY word for its meaning
+   ===================================================================== */
+let RD = {st:null, i:0};
+document.addEventListener("click", e => { if(!e.target.closest(".wtip") && !e.target.closest(".bw")) closeTip(); });
+function storyHue(id){ let h = 0; for(const ch of id) h = (h*31 + ch.charCodeAt(0)) % 360; return h; }
+function phraseRanges(st, text){
+  const keys = Object.keys(st.words||{}).sort((a,b) => b.length - a.length);
+  if(!keys.length) return [];
+  const rx = new RegExp(`(?<![\\p{L}])(${keys.map(k => k.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")).join("|")})(?![\\p{L}])`, "giu");
+  const es = new Map(storyEntries(st).map(e => [e.key.toLowerCase(), e]));
+  const out = []; let m;
+  while((m = rx.exec(text))){ const e = es.get(m[1].toLowerCase()); if(e) out.push({a: m.index, b: m.index + m[1].length, e}); }
+  return out;
+}
+const wordsIn = t => (String(t).replace(/^(der|die|das)\s+/i, "").match(/[\p{L}ß]+/gu) || []);
+function singleCard(w){
+  const lw = w.toLowerCase();
+  const cs = lookupWord(w).filter(c => wordsIn(c.de).length <= 2).sort((a,b) => wordsIn(a.de).length - wordsIn(b.de).length);
+  return cs.find(c => wordsIn(c.de).some(x => x.toLowerCase() === lw)) || cs.find(c => wordsIn(c.de).length === 1) || null;
+}
+/* what one tapped word means: its own card, a story dictionary entry, or the phrase it belongs to */
+function wordInfo(st, word, pos, ranges){
+  const ph = ranges.find(r => pos >= r.a && pos < r.b);
+  const single = ph && wordsIn(ph.e.key).length === 1 ? ph.e : null;
+  const card = (single && single.card) || singleCard(word);
+  const gloss = !card && single && single.gloss ? single : null;
+  const phrase = ph && wordsIn(ph.e.key).length > 1 ? ph.e : null;
+  return {card, gloss, phrase};
+}
+function bookText(st, p, pi){
+  const ranges = phraseRanges(st, p.de);
+  const parts = p.de.split(/([\p{L}ß]+(?:-[\p{L}ß]+)*)/u);
+  let pos = 0, out = "";
+  parts.forEach((t, i) => {
+    if(i % 2 === 1){
+      const inf = wordInfo(st, t, pos, ranges), c = inf.card;
+      const st8 = c ? (isLearned(c) ? "known" : (isWanted(c) || seen(c)) ? "learning" : "new") : inf.gloss || inf.phrase ? "new" : "plain";
+      out += `<button type="button" class="bw ${st8}" data-bw="${pi}:${pos}">${esc(t)}</button>`;
+    } else out += esc(t);
+    pos += t.length;
+  });
+  return out;
+}
+function myOf(g){ const b = S.settings.base; return b==="ur" ? `<span class="ur">${esc(g.ur)}</span>` : b==="hi" ? `<span class="hi">${esc(g.hi)}</span>` : esc(g.en); }
+function closeTip(){ $$(".wtip").forEach(x => x.remove()); $$(".bw.on").forEach(x => x.classList.remove("on")); }
+function openTip(btn){
+  closeTip();
+  const st = RD.st, [pi, pos] = btn.dataset.bw.split(":").map(Number), p = st.panels[pi];
+  const word = btn.textContent, inf = wordInfo(st, word, pos, phraseRanges(st, p.de));
+  const c = inf.card, b = S.settings.base;
+  let head = "", mean = "", extra = "";
+  if(c){ head = colorDe(c.de); mean = c.custom ? esc(c.my||c.en) : myHTML(c); if(!c.custom && b!=="en" && shown("en")) extra = `<span class="muted">${esc(c.en)}</span>`; }
+  else if(inf.gloss){ const g = inf.gloss.gloss; head = colorDe(g.de); mean = myOf(g); if(b!=="en" && shown("en")) extra = `<span class="muted">${esc(g.en)}</span>`; }
+  else { head = esc(word); mean = inf.phrase ? "" : `<span class="muted">Not in Wortzi yet</span>`; }
+  const ph = inf.phrase ? (inf.phrase.card ? `<div class="tph"><span class="label">In this sentence</span><b lang="de">${colorDe(inf.phrase.card.de)}</b>${myHTML(inf.phrase.card)}</div>`
+    : inf.phrase.gloss ? `<div class="tph"><span class="label">In this sentence</span><b lang="de">${esc(inf.phrase.gloss.de)}</b>${myOf(inf.phrase.gloss)}</div>` : "") : "";
+  const target = c || null, k = target && isLearned(target), w = target && isWanted(target);
+  const tip = document.createElement("div");
+  tip.className = "wtip"; tip.setAttribute("role","dialog"); tip.setAttribute("aria-label","Meaning of " + word);
+  tip.innerHTML = `<div class="tw"><b lang="de">${head}</b><span class="tm">${mean}</span>${extra}</div>${ph}
+    <div class="tb">${spk(c ? c.de : inf.gloss ? inf.gloss.gloss.de : word, c ? c.id : "")}
+      ${target || inf.gloss ? `<button type="button" class="iconbtn w" data-tw="want" aria-pressed="${!!w}" aria-label="Want to learn">${ic("star", w?"fill":"")}</button>
+      <button type="button" class="iconbtn k" data-tw="known" aria-pressed="${!!k}" aria-label="I know it">${ic("check")}</button>` : `<a class="btn sm" href="#words-add" data-addw="${esc(word)}">${ic("plus")}Add</a>`}</div>`;
+  document.body.appendChild(tip); btn.classList.add("on");
+  const br = btn.getBoundingClientRect(), tw = tip.offsetWidth, th = tip.offsetHeight, W = innerWidth;
+  let left = br.left + br.width/2 - tw/2; left = Math.max(8, Math.min(left, W - tw - 8));
+  const up = br.top - th - 12 > 8;
+  tip.style.left = left + "px"; tip.style.top = (up ? br.top - th - 12 : br.bottom + 12) + "px";
+  tip.style.setProperty("--ax", (br.left + br.width/2 - left) + "px");
+  tip.classList.toggle("below", !up);
+  tip.addEventListener("click", ev => {
+    const tb = ev.target.closest("[data-tw]");
+    if(tb){ const card = c || adoptGloss(st, inf.gloss.key); if(!card) return;
+      if(tb.dataset.tw === "want"){ const on = toggleWant(card); toast(on ? `<b>${esc(card.de)}</b> added to I want to learn` : "Removed from I want to learn", {html:true, kind: on?"want":"info"}); }
+      else { const on = !isLearned(card); markKnown(card, on); toast(on ? `<b>${esc(card.de)}</b> moved to I learned` : "Removed from I learned", {html:true, kind: on?"ok":"info"}); }
+      checkBadges(); renderStats(); redrawPageText(pi); }
+    const ad = ev.target.closest("[data-addw]"); if(ad){ addPrefill = {de: ad.dataset.addw}; }
+    ev.stopPropagation();
+  });
+}
+function redrawPageText(pi){ const el = $(`.bpage[data-pi="${pi}"] .bde`); if(el) el.innerHTML = bookText(RD.st, RD.st.panels[pi], pi); closeTip(); }
+function readerGo(i){
+  const st = RD.st, n = st.panels.length + 1; RD.i = Math.max(0, Math.min(n-1, i));
+  const pages = $("#bpages"); if(pages) pages.scrollTo({left: RD.i * pages.clientWidth, behavior: "smooth"});
+  readerUI();
+}
+function readerUI(){
+  const n = RD.st.panels.length + 1, i = RD.i;
+  const pn = $("#bpn"); if(pn) pn.textContent = i < n-1 ? `Page ${i+1} of ${n-1}` : "The end";
+  $$(".bdots i").forEach((d, k) => d.classList.toggle("on", k === i));
+  const pv = $("#bprev"), nx = $("#bnext"); if(pv) pv.disabled = i === 0; if(nx) nx.disabled = i === n-1;
+  const rd = $("#bread"); if(rd) rd.hidden = i === n-1;
+}
 function viewStory(st){
-  const x = storyStats(st), es = storyEntries(st);
-  app.innerHTML = `<a class="back" href="#stories">${ic("left")}All stories</a>
-    <div class="storyhead"><span class="cover" aria-hidden="true">${esc(st.cover)}</span>
-      <div class="stack" style="gap:4px"><span class="label">${esc(st.level)} · Story</span><h1>${esc(st.title)}</h1><span class="muted">${storyTitleTr(st)}</span></div></div>
-    <div class="panel storyknow">
-      <div class="row between"><b>You know ${x.known} of ${x.total} words</b><span class="small muted">${x.pct}%</span></div>
-      <div class="bar"><i style="width:${x.pct}%"></i></div>
-      <div class="row small muted" style="gap:14px"><span><span class="sw known demo">green</span> you know it</span><span><span class="sw new demo">dotted</span> tap to learn it</span></div>
+  const keep = RD.st && RD.st.id === st.id ? RD.i : 0;   // stay on the same page after marking a word
+  RD = {st, i:keep};
+  const x = storyStats(st), es = storyEntries(st), hue = storyHue(st.id);
+  document.body.classList.add("in-session");
+  const pagesHTML = st.panels.map((p, i) => `<section class="bpage" data-pi="${i}" aria-label="Page ${i+1}">
+      <div class="bpic" style="--h:${hue + i*14}" aria-hidden="true"><span>${esc(p.v)}</span></div>
+      <div class="btext"><p class="bde" lang="de">${bookText(st, p, i)}</p>
+        <p class="btr" ${storyTr?"":"hidden"}>${panelTr(p)}</p></div>
+    </section>`).join("");
+  const endHTML = `<section class="bpage bend" data-pi="end" aria-label="The end">
+      <div class="bendin">
+        <span class="bcover" style="--h:${hue}" aria-hidden="true">${esc(st.cover)}</span>
+        <h2>Ende!</h2>
+        <p class="muted" style="margin:0">You know <b>${x.known}</b> of <b>${x.total}</b> words in this story (${x.pct}%).</p>
+        <div class="bar" style="width:100%"><i style="width:${x.pct}%"></i></div>
+        <button class="btn primary big block" type="button" id="stDone">${ic("check")}${S.storiesRead[st.id]?"Read again":"I've read this story · +15 XP"}</button>
+        ${es.some(e=>e.card)?`<button class="btn block" data-start="story" data-id="${esc(st.id)}">${ic("cards")}Practise these ${es.filter(e=>e.card).length} words</button>`:""}
+        <details class="bwords"><summary>Words in this story</summary><div class="words">${es.map(e => e.card ? wordRow(e.card) : glossRow(e)).join("")}</div></details>
+      </div></section>`;
+  app.innerHTML = `<div class="reader">
+    <div class="rbar"><a class="iconbtn" href="#stories" aria-label="Close the book">${ic("x")}</a>
+      <div class="rt"><b>${esc(st.title)}</b><span class="small muted" id="bpn"></span></div>
+      <button class="chip" type="button" id="stTr" aria-pressed="${storyTr}">${storyTr?"Hide":"Translate"}</button></div>
+    <div class="bpages" id="bpages">${pagesHTML}${endHTML}</div>
+    <div class="rfoot">
+      <button class="iconbtn" id="bprev" type="button" aria-label="Previous page">${ic("left")}</button>
+      <div class="bdots" aria-hidden="true">${st.panels.map(()=>"<i></i>").join("")}<i class="end"></i></div>
+      <button class="btn" id="bread" type="button">${ic("volume")}Read aloud</button>
+      <button class="iconbtn" id="bnext" type="button" aria-label="Next page">${ic("right")}</button>
     </div>
-    <div class="row" style="margin:12px 0"><button class="chip" type="button" id="stTr" aria-pressed="${storyTr}">${storyTr?"Hide":"Show"} translations</button></div>
-    <div class="spanels">${st.panels.map((p,i) => `<figure class="spanel">
-      <div class="scene" aria-hidden="true">${esc(p.v)}</div>
-      <figcaption><span class="snum">${i+1}</span><p class="sde" lang="de">${storyLine(st, p.de)}</p>
-        ${canSpeak?`<button class="speak" type="button" data-say="${esc(p.de)}">${ic("volume")}Listen</button>`:""}
-        <p class="str" ${storyTr?"":"hidden"}>${panelTr(p)}</p></figcaption>
-    </figure>`).join("")}</div>
-    <div class="section-title"><h2>Words in this story</h2><span class="small muted">${x.known}/${x.total} known</span></div>
-    <div class="words">${es.map(e => e.card ? wordRow(e.card) : glossRow(e)).join("")}</div>
-    <div class="row" style="margin-top:16px">
-      <button class="btn primary big" type="button" id="stDone">${ic("check")}${S.storiesRead[st.id]?"Read again":"I've read this story"}</button>
-      ${es.some(e=>e.card)?`<button class="btn" data-start="story" data-id="${esc(st.id)}">${ic("cards")}Practise these words</button>`:""}
-    </div>`;
-  $("#stTr").onclick = () => { storyTr = !storyTr; $$(".str", app).forEach(el => el.hidden = !storyTr); $("#stTr").setAttribute("aria-pressed", storyTr); $("#stTr").textContent = (storyTr?"Hide":"Show")+" translations"; };
+    <p class="small muted rhint">Tap any word to see what it means · swipe for the next page</p>
+  </div>`;
+  const pages = $("#bpages");
+  let t = 0; pages.addEventListener("scroll", () => { closeTip(); clearTimeout(t); t = setTimeout(() => { const i = Math.round(pages.scrollLeft / Math.max(1, pages.clientWidth)); if(i !== RD.i){ RD.i = i; readerUI(); } }, 60); }, {passive:true});
+  pages.addEventListener("click", e => { const bw = e.target.closest(".bw"); if(bw){ e.stopPropagation(); return bw.classList.contains("on") ? closeTip() : openTip(bw); } if(!e.target.closest(".wtip")) closeTip(); });
+  $("#bprev").onclick = () => readerGo(RD.i - 1);
+  $("#bnext").onclick = () => readerGo(RD.i + 1);
+  $("#bread").onclick = () => { const p = st.panels[RD.i]; if(p) say(p.de); };
+  $("#stTr").onclick = () => { storyTr = !storyTr; $$(".btr", app).forEach(el => el.hidden = !storyTr); $("#stTr").setAttribute("aria-pressed", storyTr); $("#stTr").textContent = storyTr ? "Hide" : "Translate"; closeTip(); };
+  document.onkeydown = e => { if(!$("#bpages")) { document.onkeydown = null; return; } if(e.key === "ArrowRight") readerGo(RD.i + 1); if(e.key === "ArrowLeft") readerGo(RD.i - 1); if(e.key === "Escape") closeTip(); };
   $("#stDone").onclick = () => {
     const first = !S.storiesRead[st.id];
     S.storiesRead[st.id] = Date.now(); if(first){ S.xp += 15; S.days[today()] = S.days[today()] || 0; }
     save(); const fresh = checkBadges(); renderStats();
-    toast(first ? `📖 Story read. +15 XP${fresh.length?` · New badge: ${fresh[0].t}`:""}` : "✓ Nice, read again");
+    toast(first ? `Story read · +15 XP${fresh.length?` · New badge: ${fresh[0].t}`:""}` : "Nice, read again", {kind:"ok"});
     if(first) confetti();
     const nx = storiesSorted().find(y => !S.storiesRead[y.id]);
-    $("#stDone").outerHTML = nx ? `<a class="btn primary big" href="#story-${esc(nx.id)}">Next story: ${esc(nx.title)}${ic("right")}</a>` : `<a class="btn primary big" href="#stories">All stories</a>`;
+    $("#stDone").outerHTML = nx ? `<a class="btn primary big block" href="#story-${esc(nx.id)}">Next story: ${esc(nx.title)}${ic("right")}</a>` : `<a class="btn primary big block" href="#stories">All stories</a>`;
   };
-  app.querySelectorAll("[data-sw]").forEach(b => b.addEventListener("click", () => openWordSheet(st, b.dataset.sw)));
+  if(keep) requestAnimationFrame(() => { pages.scrollLeft = keep * pages.clientWidth; });
+  readerUI();
 }
 function glossRow(e){
   const g = e.gloss, b = S.settings.base;
@@ -1728,7 +1841,7 @@ function openWordSheet(st, key){
     const card = c || adoptGloss(st, key); if(!card) return;
     if(btn.dataset.ws === "want"){ const on = toggleWant(card); toast(on?`☆ “${card.de}” added to I want to learn`:"Removed from I want to learn"); }
     else { const on = !isLearned(card); markKnown(card, on); toast(on?`✓ “${card.de}” is in I learned`:"Removed from I learned"); }
-    checkBadges(); closeWordSheet(); const y = window.scrollY; viewStory(st); window.scrollTo(0,y); renderStats();
+    checkBadges(); closeWordSheet(); renderStats();
   });
 }
 function closeWordSheet(){ $$(".wsheet").forEach(x => x.remove()); }
