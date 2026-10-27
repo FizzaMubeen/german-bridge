@@ -425,3 +425,8 @@ body.in-session main{padding-block:max(10px,env(safe-area-inset-top,0px)) max(10
   .session .card .hint{display:none}
   .session .card{padding-top:26px}
 }
+
+/* ---------- update bar + install card ---------- */
+.updatebar{position:fixed;left:50%;transform:translateX(-50%);top:calc(64px + env(safe-area-inset-top,0px));z-index:45;display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:center;background:var(--ink);color:var(--bg);padding:10px 14px;border-radius:14px;font-weight:700;font-size:14px;width:max-content;max-width:min(94vw,560px);box-shadow:0 8px 28px rgb(0 0 0 / .25);text-align:center}
+body.in-session .updatebar{top:calc(12px + env(safe-area-inset-top,0px))}
+.installcard{margin-bottom:14px;border-color:var(--accent);background:var(--accent-soft)}

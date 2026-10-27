@@ -5,7 +5,7 @@
  */
 (() => {
 "use strict";
-const APP_VERSION = "1.0.1";
+const APP_VERSION = "1.0.2";
 const KEY = "gb-v1";
 
 /* =====================================================================
@@ -96,7 +96,7 @@ const DEFAULTS = () => ({
   format:1, created: Date.now(),
   cards:{}, known:{}, want:{}, custom:[],
   xp:0, days:{}, badges:{}, sessions:0, perfect:0, quizzes:0, listens:0, reports:0,
-  settings:{name:"", base:"ur", front:"de", mode:"flip", goal:20, theme:"system", autoplay:false, extra:{rom:true, en:true, ur:false, hi:false}}
+  settings:{name:"", base:"ur", front:"de", mode:"flip", goal:20, theme:"system", autoplay:false, hideInstall:0, extra:{rom:true, en:true, ur:false, hi:false}}
 });
 let S = null;
 function sanitize(raw){
@@ -115,7 +115,7 @@ function sanitize(raw){
   out.settings = {
     name: clip(s.name,60), base: ["ur","hi","en"].includes(s.base)?s.base:"ur", front: s.front==="base"?"base":"de",
     mode: s.mode==="quiz"?"quiz":"flip", goal: [10,20,40].includes(+s.goal)?+s.goal:20, theme: ["light","dark"].includes(s.theme)?s.theme:"system",
-    autoplay: !!s.autoplay, extra: {rom: s.extra?.rom!==false, en: s.extra?.en!==false, ur: !!s.extra?.ur, hi: !!s.extra?.hi}
+    autoplay: !!s.autoplay, hideInstall: Math.max(0, num(s.hideInstall,0)), extra: {rom: s.extra?.rom!==false, en: s.extra?.en!==false, ur: !!s.extra?.ur, hi: !!s.extra?.hi}
   };
   return out;
 }
@@ -372,11 +372,32 @@ function todayPlan(){
   const fresh = nu.cards.filter(c => !seen(c) && !isLearned(c));
   return {due, want, nu, fresh};
 }
+/* ---------- install reminder + keeping data safe ---------- */
+const isStandalone = () => matchMedia("(display-mode: standalone)").matches || navigator.standalone === true;
+const isIOS = () => /iphone|ipad|ipod/i.test(navigator.userAgent) || (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
+function installCard(){
+  if(SANDBOX || isStandalone() || S.sessions < 1) return "";
+  if(S.settings.hideInstall && Date.now() - S.settings.hideInstall < 14*DAY) return "";
+  const how = installEvt ? `<button class="btn primary sm" type="button" id="doInstall">📲 Install</button>`
+    : isIOS() ? `<span class="small">In Safari tap <b>Share</b> <span aria-hidden="true">⬆︎</span> then <b>Add to Home Screen</b>.</span>`
+    : `<span class="small">Open your browser menu <b>⋮</b> and choose <b>Add to Home screen</b> or <b>Install app</b>.</span>`;
+  return `<div class="panel installcard" role="note">
+    <div class="stack" style="gap:6px"><b>📲 Put German Bridge on your home screen</b>
+    <span class="small muted">It opens like an app, works offline${isIOS()?", and iPhone keeps your progress safe (Safari can delete website data after a week without visits)":", and keeps your progress safe"}.</span>
+    <div class="row">${how}<button class="btn ghost sm" type="button" id="hideInstall">Not now</button></div></div></div>`;
+}
+function wireInstallCard(){
+  const i = $("#doInstall"); if(i) i.onclick = async () => { try{ installEvt.prompt(); await installEvt.userChoice; }catch(e){} installEvt = null; route(); };
+  const h = $("#hideInstall"); if(h) h.onclick = () => { S.settings.hideInstall = Date.now(); save(); route(); };
+}
+async function askPersist(){
+  try{ if(navigator.storage && navigator.storage.persist && !(await navigator.storage.persisted())) await navigator.storage.persist(); }catch(e){}
+}
 function viewToday(){
   const p = todayPlan(), left = Math.max(0, S.settings.goal - todayCount());
   const w = wordOfDay(), L = levelInfo();
   const nDue = Math.min(p.due.length, 15), nWant = Math.min(p.want.length, 5), nNew = Math.min(p.fresh.length, Math.max(3, 10 - nDue - nWant));
-  app.innerHTML = `${greeting()}
+  app.innerHTML = `${greeting()}${installCard()}
     <div class="panel plan">
       <div class="row between"><span class="label">Today's plan · about 10 minutes</span><span class="small muted">${left ? `${left} cards to your goal` : "🎯 Goal done today"}</span></div>
       <ol class="steps">
@@ -404,6 +425,7 @@ function viewToday(){
       <button class="btn" data-start="weak" ${allCards().some(c=>seen(c)&&!isLearned(c))?"":"disabled"}>🔁 Weak cards</button>
       <a class="btn" href="#guide-method">How this app teaches</a>
     </div>`;
+  wireInstallCard();
 }
 
 /* =====================================================================
@@ -709,6 +731,7 @@ function finishSession(early){
   session = null; document.body.classList.remove("in-session");
   if(s.done===0) return route();
   S.sessions++; if(s.mode==="quiz") S.quizzes++;
+  askPersist();
   const perfect = !early && s.wrong===0 && s.right>=5;
   if(perfect){ S.perfect++; S.xp += 20; s.xp += 20; }
   save();
@@ -764,7 +787,8 @@ function confetti(){
    ===================================================================== */
 let confirmReset = false, backupMsg = "", importState = {text:"", needPw:false, err:""};
 let installEvt = null;
-addEventListener("beforeinstallprompt", e => { e.preventDefault(); installEvt = e; });
+addEventListener("beforeinstallprompt", e => { e.preventDefault(); installEvt = e; if(!session && (location.hash==="" || location.hash==="#today")) route(); });
+addEventListener("appinstalled", () => { installEvt = null; askPersist(); toast("✓ Installed. Find German Bridge on your home screen."); });
 function viewMe(){
   const L = levelInfo(), st = S.settings;
   const days = []; const d = new Date(); d.setDate(d.getDate()-13);
@@ -1158,6 +1182,14 @@ const FILL = {
 /* =====================================================================
    BOOT
    ===================================================================== */
+function showUpdateBar(){
+  if($(".updatebar")) return;
+  const b = document.createElement("div");
+  b.className = "updatebar"; b.setAttribute("role","status");
+  b.innerHTML = `<span>✨ A new version of German Bridge is ready. Your progress stays as it is.</span><button class="btn primary sm" type="button">Update now</button>`;
+  b.querySelector("button").onclick = () => { if(session) finishSession(true); location.reload(); };
+  document.body.appendChild(b);
+}
 async function boot(){
   load(); applyPrefs();
   try{
@@ -1171,7 +1203,11 @@ async function boot(){
   if(!location.hash) history.replaceState(null,"","#today");
   route();
   if("serviceWorker" in navigator && location.protocol==="https:" && !SANDBOX){
-    navigator.serviceWorker.register("sw.js").catch(()=>{});
+    const hadController = !!navigator.serviceWorker.controller;
+    navigator.serviceWorker.register("sw.js").then(reg => {
+      document.addEventListener("visibilitychange", () => { if(document.visibilityState === "visible") reg.update().catch(()=>{}); });
+    }).catch(()=>{});
+    navigator.serviceWorker.addEventListener("controllerchange", () => { if(hadController) showUpdateBar(); });
   }
 }
 boot();
