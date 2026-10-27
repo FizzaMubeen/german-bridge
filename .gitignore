@@ -3,3 +3,4 @@ node_modules/
 .DS_Store
 wordpress-plugin/wortzi/app/
 out/
+__pycache__/
