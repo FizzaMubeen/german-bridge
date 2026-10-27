@@ -10,12 +10,14 @@ js = (root/"assets/js/app.js").read_text(encoding="utf-8")
 deck = (root/"data/deck.txt").read_text(encoding="utf-8")
 guide = (root/"data/guide.html").read_text(encoding="utf-8")
 stories = (root/"data/stories.json").read_text(encoding="utf-8")
+extras = (root/"data/extras.json").read_text(encoding="utf-8")
 mode = sys.argv[1] if len(sys.argv) > 1 else "standalone"
 
 def safe(s): return s.replace("</script", "<\\/script")
 inline = (f'<script type="text/plain" id="deck-src">{safe(deck)}</script>\n'
           f'<script type="text/plain" id="guide-src">{safe(guide)}</script>\n'
           f'<script type="text/plain" id="stories-src">{safe(stories)}</script>\n'
+          f'<script type="text/plain" id="extras-src">{safe(extras)}</script>\n'
           f'<script>{safe(js)}</script>')
 html = html.replace('<script src="assets/js/app.js" defer></script>', inline)
 html = html.replace('<link rel="stylesheet" href="assets/css/app.css">', f"<style>{css}</style>")

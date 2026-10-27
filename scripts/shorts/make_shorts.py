@@ -79,7 +79,7 @@ def caption(p):
     words = ", ".join(c["de"] for c in p["cards"])
     tags = "#learngerman #deutschlernen #germanforbeginners #urdu #pakistanisingermany #berlin #languagelearning #germanbridge"
     return (f"{p['hook']} 🇩🇪\n\n{words}\n\n"
-            f"Practise these and 370 more for free (works offline, no sign-up): {SITE}\n"
+            f"Practise these and 1,000 more for free (works offline, no sign-up): {SITE}\n"
             f"Which word should be next? Comment below 👇\n\n{tags}")
 
 # ---------------------------------------------------------------- visuals
@@ -163,7 +163,7 @@ def slide_card(p, idx, reveal):
 
 def slide_cta(p):
     items = "".join(f'<div>✓ {de_html(c["de"])}</div>' for c in p["cards"])
-    return page(f'{brand()}<div class="main"><div class="cta">Practise these + 370 more</div>'
+    return page(f'{brand()}<div class="main"><div class="cta">Practise these + 1,000 more</div>'
                 f'<div class="list">{items}</div>'
                 f'<div class="sub">Free · works offline · no sign-up</div>'
                 f'<div class="pill">{SITE}</div></div><div class="sub">Follow for a new word every day</div>')

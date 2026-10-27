@@ -465,3 +465,21 @@ body.in-session .updatebar{top:calc(12px + env(safe-area-inset-top,0px))}
 .ws-de{font-size:26px;font-weight:700}
 .ws-my{font-size:20px;font-weight:700}
 .ws-my .ur{font-size:24px;line-height:1.9;font-weight:400}
+
+/* ---------- fun & tricks ---------- */
+.dyk{display:grid;gap:8px}
+.dyk-t{font-size:18px;line-height:1.35}
+.dyk-d{margin:0;color:var(--ink);font-size:15px}
+.funtiles{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px}
+.funtile{display:grid;gap:2px;text-decoration:none;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:12px}
+.funtile span{font-size:26px}
+.funtile b{font-size:15px}
+.funtile small{color:var(--muted);font-size:12px}
+.funlist{display:grid;gap:10px}
+@media (min-width:760px){ .funlist{grid-template-columns:1fr 1fr} }
+.funcard{display:grid;grid-template-columns:44px minmax(0,1fr);gap:12px;align-items:start}
+.funcard .fe{font-size:28px;width:44px;height:44px;display:grid;place-items:center;border-radius:12px;background:var(--sunk)}
+.funcard b{font-size:16px;line-height:1.4}
+.funcard p{margin:6px 0 0;font-size:15px;color:var(--muted)}
+.funcard .punch{color:var(--ink);font-weight:700;font-size:17px}
+.funcard .ur{font-size:17px;line-height:1.9}

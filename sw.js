@@ -1,10 +1,10 @@
 /* German Bridge offline support.
    After you change any file, raise VERSION so phones fetch the new files. */
-const VERSION = "gb-1.1.0";
+const VERSION = "gb-1.2.0";
 const CORE = [
   "./", "index.html", "manifest.webmanifest",
   "assets/css/app.css", "assets/css/fonts.css", "assets/js/app.js",
-  "data/deck.txt", "data/guide.html", "data/stories.json",
+  "data/deck.txt", "data/guide.html", "data/stories.json", "data/extras.json",
   "assets/icons/icon-192.png", "assets/icons/icon-512.png", "assets/icons/favicon-32.png"
 ];
 self.addEventListener("install", e => {

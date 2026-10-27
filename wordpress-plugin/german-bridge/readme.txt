@@ -9,7 +9,7 @@ License: MIT
 Learn everyday German from Urdu, Hindi or English, right on your website.
 
 == Description ==
-* 22 units in daily-life order (A1 and A2), 370 picture flashcards
+* 54 units in daily-life order (A1 and A2), 1,000 picture flashcards, tricks, facts, idioms and jokes
 * Two personal lists: "I learned" and "I want to learn", plus learners' own words and sentences
 * Spaced repetition, daily goal, streaks, XP and badges
 * Printable PDFs: progress report, word book, cut-out flashcards, course book

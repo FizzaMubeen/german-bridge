@@ -1,0 +1,212 @@
+{
+ "_help": "Tricks, facts and jokes shown in German Bridge (Fun tab and 'Did you know?' on Today). Idioms live in deck.txt (unit 'idioms') so they can be practised as flashcards.",
+ "tricks": [
+  {
+   "e": "🎨",
+   "t": "Learn every noun with its colour",
+   "d": "Never learn just 'Tisch'. Learn 'der Tisch' and picture it blue. Blue = der, red = die, green = das, purple = plural. Your brain remembers colours better than rules."
+  },
+  {
+   "e": "🔚",
+   "t": "Endings that tell you the article",
+   "d": "Words ending in -ung, -heit, -keit, -schaft, -tät and -ion are always die: die Wohnung, die Freiheit, die Information. Words ending in -chen and -lein are always das: das Mädchen, das Brötchen."
+  },
+  {
+   "e": "🔠",
+   "t": "Capital letter = noun",
+   "d": "Every German noun starts with a capital letter: das Haus, die Liebe, der Termin. When you read, capital letters in the middle of a sentence show you where the things are."
+  },
+  {
+   "e": "2️⃣",
+   "t": "The verb is always in slot 2",
+   "d": "In a normal sentence the conjugated verb is the second piece: Ich trinke Tee. Heute trinke ich Tee. Morgen trinke ich Tee. Change the start, and the verb stays where it is."
+  },
+  {
+   "e": "🌉",
+   "t": "Use your Urdu or Hindi brain",
+   "d": "After weil, dass and wenn the verb goes to the end, just like in Urdu and Hindi: …weil ich müde bin = …kyunke main thaki hui hoon. And mujhe works like mir: Mir ist kalt = Mujhe sardi lag rahi hai."
+  },
+  {
+   "e": "🧩",
+   "t": "Big words are just small words glued together",
+   "d": "Handschuh = Hand + Schuh (hand shoe = glove). Kühlschrank = kühl + Schrank (cool cupboard = fridge). Krankenhaus = kranken + Haus (house for the sick = hospital). Split long words and they get easy."
+  },
+  {
+   "e": "🇬🇧",
+   "t": "You already know hundreds of words",
+   "d": "Many German words look like English: Hand, Finger, Name, Butter, Winter, Hotel, Problem, Information, Computer. Start with these and you'll feel progress on day one."
+  },
+  {
+   "e": "🗣️",
+   "t": "Shadow the audio",
+   "d": "Tap Listen, pause, and say the sentence out loud three times, copying the speed and melody. Speaking trains your ear and your mouth at the same time."
+  },
+  {
+   "e": "⏱️",
+   "t": "Ten minutes every day beats two hours on Sunday",
+   "d": "Your memory needs sleep between repetitions. Short daily practice with spaced reviews is how the app is built. Keep your streak, not your stress."
+  },
+  {
+   "e": "📱",
+   "t": "Switch your phone to German",
+   "d": "Change your phone's language to German for one week. You already know where everything is, so you'll learn words like Einstellungen (settings), Speichern (save) and Löschen (delete) for free."
+  },
+  {
+   "e": "🍽️",
+   "t": "Say 'Mahlzeit!' at lunch",
+   "d": "At many German workplaces people greet each other at lunchtime with 'Mahlzeit!' (literally 'meal time'). Use it and you'll sound like a local."
+  },
+  {
+   "e": "🤝",
+   "t": "Du or Sie?",
+   "d": "Use Sie with strangers, older people, shops and offices. Use du with friends, family, children and on most apps and websites. If someone says 'Wir können uns duzen', you can switch to du."
+  },
+  {
+   "e": "✍️",
+   "t": "Write your own sentences",
+   "d": "Add sentences from your real day in My words: your job, your street, your doctor. A sentence about your own life is remembered far better than one from a textbook."
+  },
+  {
+   "e": "🔊",
+   "t": "W, V and Z sound different",
+   "d": "W sounds like English V (Wasser = 'vasser'). V usually sounds like F (Vater = 'fater'). Z sounds like TS (Zeit = 'tsait'). Get these three right and your accent improves a lot."
+  },
+  {
+   "e": "🧠",
+   "t": "ie or ei? Say the second letter",
+   "d": "In 'ie' you say the long E: Liebe ('leebe'). In 'ei' you say the English I: mein ('mine'). Just read the second letter out loud."
+  }
+ ],
+ "facts": [
+  {
+   "e": "🔤",
+   "t": "Four extra letters",
+   "d": "German has four letters English doesn't: ä, ö, ü and ß. If your keyboard can't type them, write ae, oe, ue and ss: Strasse = Straße."
+  },
+  {
+   "e": "🌍",
+   "t": "Not only Germany",
+   "d": "German is an official language in Germany, Austria, Switzerland, Liechtenstein, Luxembourg and Belgium, and it is the most widely spoken mother tongue in the European Union."
+  },
+  {
+   "e": "📏",
+   "t": "Very long words",
+   "d": "Because German glues words together, words can get very long: Donaudampfschifffahrtsgesellschaft means 'Danube steamship company'. You'll mostly meet shorter ones like Krankenversicherung (health insurance)."
+  },
+  {
+   "e": "🛒",
+   "t": "Shops close on Sundays",
+   "d": "Almost all shops and supermarkets are closed on Sundays and public holidays. Bakeries, petrol stations and shops at big train stations are often the exception."
+  },
+  {
+   "e": "♻️",
+   "t": "Pfand: money back for bottles",
+   "d": "Many bottles and cans have a deposit called Pfand, usually 25 cents for single-use plastic bottles and cans. Return them at the machine in the supermarket and you get a voucher."
+  },
+  {
+   "e": "🤫",
+   "t": "Quiet time",
+   "d": "In most apartment buildings there is Ruhezeit (quiet time), usually from 22:00 to 6:00 and all day on Sundays. No drilling, loud music or washing machines then."
+  },
+  {
+   "e": "⏰",
+   "t": "Punctual means on time",
+   "d": "Pünktlich is a big word in Germany. For appointments, interviews and offices, arrive a few minutes early. For a party at a friend's home, 10–15 minutes late is fine."
+  },
+  {
+   "e": "🥖",
+   "t": "A country of bread",
+   "d": "Germany has more than 3,000 registered kinds of bread, and German bread culture is on Germany's national list of intangible cultural heritage. Try a Brötchen (bread roll) for breakfast."
+  },
+  {
+   "e": "🎁",
+   "t": "False friends",
+   "d": "Some German words look English but mean something else: Gift = poison, Handy = mobile phone, Chef = boss, bekommen = to get (not to become), Rat = advice."
+  },
+  {
+   "e": "🇬🇧",
+   "t": "German words in English",
+   "d": "English borrowed many German words: Kindergarten, Angst, Rucksack, Zeitgeist, Wanderlust and Delicatessen. You already speak a little German!"
+  },
+  {
+   "e": "🌉",
+   "t": "City of bridges",
+   "d": "Berlin has more bridges than Venice. Spree, Havel and many canals run through the city."
+  },
+  {
+   "e": "📨",
+   "t": "Letters still matter",
+   "d": "Offices, banks and landlords in Germany still send many important things by post. Check your Briefkasten (letter box) every day, and keep every letter from an Amt."
+  },
+  {
+   "e": "💶",
+   "t": "Cash is still popular",
+   "d": "Card payments are common now, but some small cafés, bakeries and kiosks still prefer cash. 'Nur Barzahlung' means cash only."
+  }
+ ],
+ "jokes": [
+  {
+   "q": "Was ist orange und läuft durch den Wald?",
+   "a": "Eine Wanderine!",
+   "en": "A mix of wandern (to hike) and Mandarine (tangerine): a hiking tangerine.",
+   "ur": "وانڈرن (پیدل سفر) اور منڈارین (کینو) کا ملاپ: پیدل چلنے والا کینو۔",
+   "hi": "वांडर्न (पैदल घूमना) और मंदारिन (संतरा) का मेल: घूमने वाला संतरा।"
+  },
+  {
+   "q": "Treffen sich zwei Kerzen. Fragt die eine: „Ist Wasser gefährlich?“",
+   "a": "Sagt die andere: „Davon kannst du ausgehen!“",
+   "en": "Two candles meet. 'Is water dangerous?' 'You can assume so!' — ausgehen means both 'to assume' and 'to go out' (like a flame).",
+   "ur": "دو موم بتیاں ملتی ہیں۔ 'کیا پانی خطرناک ہے؟' 'یقیناً!' — ausgehen کا مطلب 'سمجھ لینا' بھی ہے اور 'بجھ جانا' بھی۔",
+   "hi": "दो मोमबत्तियाँ मिलती हैं। 'क्या पानी ख़तरनाक है?' 'बिल्कुल!' — ausgehen का मतलब 'मान लेना' भी है और 'बुझ जाना' भी।"
+  },
+  {
+   "q": "Warum können Seeräuber keinen Kreis berechnen?",
+   "a": "Weil sie Pi raten!",
+   "en": "Why can't pirates calculate a circle? Because they guess pi — 'Pi raten' sounds exactly like Piraten (pirates).",
+   "ur": "بحری قزاق دائرہ کیوں نہیں ناپ سکتے؟ کیونکہ وہ 'پائی کا اندازہ لگاتے ہیں' — Pi raten بالکل Piraten (قزاق) جیسا سنائی دیتا ہے۔",
+   "hi": "समुद्री डाकू वृत्त क्यों नहीं नाप सकते? क्योंकि वे 'पाई का अंदाज़ा लगाते हैं' — Pi raten बिल्कुल Piraten (डाकू) जैसा सुनाई देता है।"
+  },
+  {
+   "q": "Was ist grün und klopft an die Tür?",
+   "a": "Ein Klopfsalat!",
+   "en": "What's green and knocks on the door? A 'knock lettuce' — Kopfsalat is lettuce, klopfen means to knock.",
+   "ur": "ہرا کیا ہے اور دروازہ کھٹکھٹاتا ہے؟ 'کھٹکھٹانے والا سلاد' — Kopfsalat سلاد ہے اور klopfen کا مطلب کھٹکھٹانا۔",
+   "hi": "हरा क्या है और दरवाज़ा खटखटाता है? 'खटखटाने वाला सलाद' — Kopfsalat सलाद है और klopfen का मतलब खटखटाना।"
+  },
+  {
+   "q": "Was ist ein Keks unter einem Baum?",
+   "a": "Ein schattiges Plätzchen!",
+   "en": "What is a biscuit under a tree? A shady spot — Plätzchen means both 'biscuit' and 'little place'.",
+   "ur": "درخت کے نیچے بسکٹ کیا ہے؟ سایہ دار جگہ — Plätzchen کا مطلب بسکٹ بھی ہے اور چھوٹی جگہ بھی۔",
+   "hi": "पेड़ के नीचे बिस्किट क्या है? छायादार जगह — Plätzchen का मतलब बिस्किट भी है और छोटी जगह भी।"
+  },
+  {
+   "q": "Wie nennt man einen Bumerang, der nicht zurückkommt?",
+   "a": "Einen Stock.",
+   "en": "What do you call a boomerang that doesn't come back? A stick.",
+   "ur": "اس بومرینگ کو کیا کہتے ہیں جو واپس نہ آئے؟ ایک چھڑی۔",
+   "hi": "उस बूमरैंग को क्या कहते हैं जो वापस न आए? एक छड़ी।"
+  },
+  {
+   "q": "Was macht ein Pirat am Computer?",
+   "a": "Er drückt die Enter-Taste.",
+   "en": "What does a pirate do at the computer? He presses the Enter key — entern means to board a ship.",
+   "ur": "قزاق کمپیوٹر پر کیا کرتا ہے؟ وہ Enter کا بٹن دباتا ہے — entern کا مطلب جہاز پر قبضہ کرنا ہے۔",
+   "hi": "डाकू कंप्यूटर पर क्या करता है? वह Enter बटन दबाता है — entern का मतलब जहाज़ पर क़ब्ज़ा करना है।"
+  },
+  {
+   "q": "Was liegt am Strand und spricht undeutlich?",
+   "a": "Eine Nuschel!",
+   "en": "What lies on the beach and mumbles? A 'mumble shell' — Muschel is a shell, nuscheln means to mumble.",
+   "ur": "ساحل پر کیا پڑا ہے جو صاف نہیں بولتا؟ 'بڑبڑانے والی سیپی' — Muschel سیپی ہے اور nuscheln کا مطلب بڑبڑانا۔",
+   "hi": "समुद्र तट पर क्या पड़ा है जो साफ़ नहीं बोलता? 'बड़बड़ाने वाली सीपी' — Muschel सीपी है और nuscheln का मतलब बड़बड़ाना।"
+  },
+  {
+   "q": "Lehrer: „Wer kann mir drei Tage der Woche nennen, ohne Montag, Mittwoch oder Freitag zu sagen?“",
+   "a": "Schüler: „Gestern, heute und morgen!“",
+   "en": "Teacher: 'Who can name three days without saying Monday, Wednesday or Friday?' Pupil: 'Yesterday, today and tomorrow!'",
+   "ur": "استاد: 'کون پیر، بدھ یا جمعہ کہے بغیر تین دن بتا سکتا ہے؟' شاگرد: 'کل، آج اور کل!'",
+   "hi": "टीचर: 'कौन सोमवार, बुधवार या शुक्रवार कहे बिना तीन दिन बता सकता है?' छात्र: 'कल, आज और कल!'"
+  }
+ ]
+}

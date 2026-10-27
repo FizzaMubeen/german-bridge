@@ -189,6 +189,11 @@
 ⚫|کالا|kaala|काला|black|schwarz
 ⚪|سفید|safaid|सफ़ेद|white|weiß
 🟡|پیلا|peela|पीला|yellow|gelb
+🟠|نارنجی|naaranji|नारंगी|orange|orange
+🩷|گلابی|gulaabi|गुलाबी|pink|rosa
+🟣|جامنی|jaamni|बैंगनी|purple|lila
+🟤|بھورا|bhoora|भूरा|brown|braun
+🩶|سرمئی|surmai|स्लेटी|grey|grau
 ## time|A1|📅|Days & time
 Mo|پیر|peer|सोमवार|Monday|der Montag
 Di|منگل|mangal|मंगलवार|Tuesday|der Dienstag
@@ -257,6 +262,326 @@ So|اتوار|itwaar|रविवार|Sunday|der Sonntag
 🤏|میں تھوڑی سی جرمن بولتی ہوں|main thori si German bolti hoon|मैं थोड़ी सी जर्मन बोलती हूँ|I speak a little German|Ich spreche ein bisschen Deutsch
 💬|اس کا مطلب کیا ہے؟|is ka matlab kya hai?|इसका मतलब क्या है?|What does that mean?|Was bedeutet das?
 🆘|مدد!|madad!|मदद!|Help!|Hilfe!
+## small|A1|🔤|Small important words
+👤|میں|main|मैं|I|ich
+👤|تم|tum|तुम|you (informal)|du
+👨|وہ (مرد)|woh|वह (पुरुष)|he|er
+👩|وہ (عورت)|woh|वह (स्त्री)|she|sie
+👥|ہم|hum|हम|we|wir
+🙇|آپ|aap|आप|you (formal)|Sie
+👥|وہ لوگ|woh log|वे लोग|they|sie (plural)
+🏠|میرا / میری|mera / meri|मेरा / मेरी|my|mein / meine
+🎁|تمہارا / تمہاری|tumhaara / tumhaari|तुम्हारा / तुम्हारी|your (informal)|dein / deine
+🚫|نہیں (فعل کے ساتھ)|nahin|नहीं (क्रिया के साथ)|not|nicht
+🚫|کوئی نہیں|koi nahin|कोई नहीं|no / not a|kein / keine
+➕|بھی|bhi|भी|also / too|auch
+💯|بہت|bohat|बहुत|very|sehr
+🤏|تھوڑا سا|thora sa|थोड़ा सा|a little|ein bisschen
+📦|سب کچھ|sab kuch|सब कुछ|everything|alles
+🧍|کوئی|koi|कोई|someone|jemand
+🙅|کوئی نہیں (شخص)|koi nahin|कोई नहीं (व्यक्ति)|nobody|niemand
+❓|کچھ|kuch|कुछ|something|etwas
+❌|کچھ نہیں|kuch nahin|कुछ नहीं|nothing|nichts
+🔁|دوبارہ|dobaara|दोबारा|again|wieder
+⏳|ابھی بھی|abhi bhi|अभी भी|still|noch
+✅|پہلے ہی|pehle hi|पहले ही|already|schon
+🔜|جلد|jald|जल्द|soon|bald
+🙂|شاید|shaayad|शायद|maybe|vielleicht
+👌|ٹھیک ہے|theek hai|ठीक है|OK / all right|in Ordnung
+## numbers2|A1|💶|Numbers, prices & age
+0|صفر|sifar|शून्य|zero|null
+25|پچیس|pachees|पच्चीस|twenty-five|fünfundzwanzig
+40|چالیس|chaalees|चालीस|forty|vierzig
+60|ساٹھ|saath|साठ|sixty|sechzig
+70|ستر|sattar|सत्तर|seventy|siebzig
+80|اسی|assi|अस्सी|eighty|achtzig
+90|نوے|nawway|नब्बे|ninety|neunzig
+99|ننانوے|ninanway|निन्यानवे|ninety-nine|neunundneunzig
+200|دو سو|do sau|दो सौ|two hundred|zweihundert
+500|پانچ سو|paanch sau|पाँच सौ|five hundred|fünfhundert
+1 Mio.|دس لاکھ|das laakh|दस लाख|one million|eine Million
+💶|یورو|euro|यूरो|the euro|der Euro
+🪙|سینٹ|cent|सेंट|the cent|der Cent
+💰|پیسے|paise|पैसे|the money|das Geld
+🏷️|قیمت|qeemat|क़ीमत|the price|der Preis
+€2,50|دو یورو پچاس سینٹ|do euro pachaas cent|दो यूरो पचास सेंट|two euros fifty|zwei Euro fünfzig
+💸|یہ بہت مہنگا ہے|ye bohat mehenga hai|यह बहुत महँगा है|That's too expensive|Das ist zu teuer
+🏷️|کیا یہ سیل میں ہے؟|kya ye sale mein hai?|क्या यह सेल में है?|Is this on offer?|Ist das im Angebot?
+🔢|آپ کا فون نمبر کیا ہے؟|aap ka phone number kya hai?|आपका फ़ोन नंबर क्या है?|What is your phone number?|Wie ist Ihre Telefonnummer?
+🎂|میری عمر تیس سال ہے|meri umar tees saal hai|मेरी उम्र तीस साल है|I am thirty years old|Ich bin dreißig Jahre alt
+❓|آپ کی عمر کتنی ہے؟|aap ki umar kitni hai?|आपकी उम्र कितनी है?|How old are you?|Wie alt sind Sie?
+## months|A1|🗓️|Months & dates
+Jan|جنوری|janwari|जनवरी|January|der Januar
+Feb|فروری|farwari|फ़रवरी|February|der Februar
+Mär|مارچ|march|मार्च|March|der März
+Apr|اپریل|april|अप्रैल|April|der April
+Mai|مئی|mai|मई|May|der Mai
+Jun|جون|joon|जून|June|der Juni
+Jul|جولائی|julaai|जुलाई|July|der Juli
+Aug|اگست|agast|अगस्त|August|der August
+Sep|ستمبر|sitambar|सितंबर|September|der September
+Okt|اکتوبر|aktoobar|अक्टूबर|October|der Oktober
+Nov|نومبر|navambar|नवंबर|November|der November
+Dez|دسمبر|disambar|दिसंबर|December|der Dezember
+🗓️|تاریخ|taareekh|तारीख़|the date|das Datum
+🎊|سرکاری چھٹی|sarkaari chhutti|सरकारी छुट्टी|the public holiday|der Feiertag
+📅|آج کیا تاریخ ہے؟|aaj kya taareekh hai?|आज क्या तारीख़ है?|What's the date today?|Welches Datum ist heute?
+3.|آج تین نومبر ہے|aaj teen november hai|आज तीन नवंबर है|Today is the third of November|Heute ist der dritte November
+🎂|میری سالگرہ مئی میں ہے|meri saalgirah mai mein hai|मेरा जन्मदिन मई में है|My birthday is in May|Mein Geburtstag ist im Mai
+🎉|سالگرہ مبارک!|saalgirah mubaarak!|जन्मदिन मुबारक!|Happy birthday!|Alles Gute zum Geburtstag!
+⏳|اگلے مہینے|aglay maheenay|अगले महीने|next month|nächsten Monat
+## routine|A1|🌅|My daily routine
+⏰|میں جلدی اٹھتی ہوں|main jaldi uthti hoon|मैं जल्दी उठती हूँ|I get up early|Ich stehe früh auf
+🚿|میں نہاتی ہوں|main nahaati hoon|मैं नहाती हूँ|I take a shower|Ich dusche
+🪥|میں دانت صاف کرتی ہوں|main daant saaf karti hoon|मैं दाँत साफ़ करती हूँ|I brush my teeth|Ich putze mir die Zähne
+👗|میں کپڑے پہنتی ہوں|main kapre pehenti hoon|मैं कपड़े पहनती हूँ|I get dressed|Ich ziehe mich an
+🍳|میں ناشتہ کرتی ہوں|main naashta karti hoon|मैं नाश्ता करती हूँ|I have breakfast|Ich frühstücke
+🚇|میں یو باہن سے کام پر جاتی ہوں|main U-Bahn se kaam par jaati hoon|मैं मेट्रो से काम पर जाती हूँ|I go to work by underground|Ich fahre mit der U-Bahn zur Arbeit
+💼|میں نو سے پانچ بجے تک کام کرتی ہوں|main nau se paanch baje tak kaam karti hoon|मैं नौ से पाँच बजे तक काम करती हूँ|I work from nine to five|Ich arbeite von neun bis fünf Uhr
+🥪|میں بارہ بجے دوپہر کا کھانا کھاتی ہوں|main baarah baje dopehar ka khaana khaati hoon|मैं बारह बजे दोपहर का खाना खाती हूँ|I have lunch at twelve|Ich esse um zwölf Uhr zu Mittag
+🏠|میں چھ بجے گھر آتی ہوں|main chhe baje ghar aati hoon|मैं छह बजे घर आती हूँ|I come home at six|Ich komme um sechs Uhr nach Hause
+🍲|میں رات کا کھانا پکاتی ہوں|main raat ka khaana pakaati hoon|मैं रात का खाना पकाती हूँ|I cook dinner|Ich koche das Abendessen
+📺|شام کو میں ٹی وی دیکھتی ہوں|shaam ko main TV dekhti hoon|शाम को मैं टीवी देखती हूँ|In the evening I watch TV|Am Abend sehe ich fern
+😴|میں گیارہ بجے سوتی ہوں|main gyaarah baje soti hoon|मैं ग्यारह बजे सोती हूँ|I go to bed at eleven|Ich gehe um elf Uhr ins Bett
+🕌|میں نماز پڑھتی ہوں|main namaaz parhti hoon|मैं नमाज़ पढ़ती हूँ|I pray|Ich bete
+📖|میں ہر روز جرمن سیکھتی ہوں|main har roz German seekhti hoon|मैं हर रोज़ जर्मन सीखती हूँ|I learn German every day|Ich lerne jeden Tag Deutsch
+🛒|ہفتے کو میں خریداری کرتی ہوں|hafte ko main khareedaari karti hoon|शनिवार को मैं ख़रीदारी करती हूँ|On Saturday I go shopping|Am Samstag gehe ich einkaufen
+🧺|میں کپڑے دھوتی ہوں|main kapre dhoti hoon|मैं कपड़े धोती हूँ|I do the laundry|Ich wasche Wäsche
+⏱️|مجھے دیر ہو گئی ہے|mujhe der ho gayi hai|मुझे देर हो गई है|I'm late|Ich bin spät dran
+🏃‍♀️|میں جلدی میں ہوں|main jaldi mein hoon|मैं जल्दी में हूँ|I'm in a hurry|Ich habe es eilig
+## body|A1|🧍|Body
+🙂|چہرہ|chehra|चेहरा|the face|das Gesicht
+👃|ناک|naak|नाक|the nose|die Nase
+👄|منہ|munh|मुँह|the mouth|der Mund
+👂|کان|kaan|कान|the ear|das Ohr
+💇|بال|baal|बाल|the hair|die Haare
+💪|بازو|baazu|बाँह|the arm|der Arm
+🦵|ٹانگ|taang|टाँग|the leg|das Bein
+🦶|پاؤں|paaon|पैर|the foot|der Fuß
+👆|انگلی|ungli|उँगली|the finger|der Finger
+❤️|دل|dil|दिल|the heart|das Herz
+🗣️|گلا|gala|गला|the throat / neck|der Hals
+🤷|کندھا|kandha|कंधा|the shoulder|die Schulter
+🦿|گھٹنا|ghutna|घुटना|the knee|das Knie
+🩸|خون|khoon|ख़ून|the blood|das Blut
+🧍|جسم|jism|शरीर|the body|der Körper
+🤕|میرے پیٹ میں درد ہے|mere pait mein dard hai|मेरे पेट में दर्द है|I have a stomach ache|Ich habe Bauchschmerzen
+🤧|مجھے زکام ہے|mujhe zukaam hai|मुझे ज़ुकाम है|I have a cold|Ich habe eine Erkältung
+🦷|میرے دانت میں درد ہے|mere daant mein dard hai|मेरे दाँत में दर्द है|I have toothache|Ich habe Zahnschmerzen
+🩹|مجھے چوٹ لگی ہے|mujhe chot lagi hai|मुझे चोट लगी है|I'm hurt|Ich habe mich verletzt
+## clothes|A1|👕|Clothes
+👕|ٹی شرٹ|t-shirt|टी-शर्ट|the T-shirt|das T-Shirt
+👔|شرٹ|shirt|शर्ट|the shirt|das Hemd
+👖|پتلون|patloon|पतलून|the trousers|die Hose
+👗|لباس|libaas|ड्रेस|the dress|das Kleid
+🧥|جیکٹ|jacket|जैकेट|the jacket|die Jacke
+🧥|کوٹ|coat|कोट|the coat|der Mantel
+🧶|سویٹر|sweater|स्वेटर|the jumper|der Pullover
+👟|جوتا|joota|जूता|the shoe|der Schuh
+🧦|موزے|moze|मोज़े|the socks|die Socken
+🧣|مفلر|muffler|मफ़लर|the scarf|der Schal
+🧤|دستانے|dastaane|दस्ताने|the gloves|die Handschuhe
+🧢|ٹوپی|topi|टोपी|the hat|die Mütze
+🧕|دوپٹہ / حجاب|dupatta / hijaab|दुपट्टा / हिजाब|the headscarf|das Kopftuch
+👜|ہینڈ بیگ|handbag|हैंडबैग|the handbag|die Handtasche
+👓|عینک|ainak|चश्मा|the glasses|die Brille
+📏|سائز|size|साइज़|the size|die Größe
+🪞|کیا میں یہ پہن کر دیکھ سکتی ہوں؟|kya main ye pehen kar dekh sakti hoon?|क्या मैं यह पहनकर देख सकती हूँ?|Can I try this on?|Kann ich das anprobieren?
+🔁|کیا آپ کے پاس اس کا بڑا سائز ہے؟|kya aap ke paas is ka bara size hai?|क्या आपके पास इसका बड़ा साइज़ है?|Do you have this in a bigger size?|Haben Sie das eine Nummer größer?
+🚪|ٹرائی روم کہاں ہے؟|trial room kahan hai?|ट्रायल रूम कहाँ है?|Where is the fitting room?|Wo ist die Umkleidekabine?
+👍|یہ مجھے فٹ ہے|ye mujhe fit hai|यह मुझे फ़िट है|It fits me|Das passt mir
+## fruitveg|A1|🥕|Fruit & vegetables
+🍊|مالٹا|maalta|संतरा|the orange|die Orange
+🍇|انگور|angoor|अंगूर|the grapes|die Trauben
+🍓|اسٹرابیری|strawberry|स्ट्रॉबेरी|the strawberry|die Erdbeere
+🍋|لیموں|leemoon|नींबू|the lemon|die Zitrone
+🍉|تربوز|tarbooz|तरबूज़|the watermelon|die Wassermelone
+🥭|آم|aam|आम|the mango|die Mango
+🍐|ناشپاتی|naashpaati|नाशपाती|the pear|die Birne
+🍒|چیری|cherry|चेरी|the cherry|die Kirsche
+🥕|گاجر|gaajar|गाजर|the carrot|die Karotte
+🥒|کھیرا|kheera|खीरा|the cucumber|die Gurke
+🥬|سلاد|salaad|सलाद|the lettuce|der Salat
+🥬|بند گوبھی|band gobhi|पत्ता गोभी|the cabbage|der Kohl
+🫑|شملہ مرچ|shimla mirch|शिमला मिर्च|the bell pepper|die Paprika
+🍆|بینگن|baingan|बैंगन|the aubergine|die Aubergine
+🫘|دال|daal|दाल|the lentils|die Linsen
+🌽|مکئی|makai|मक्का|the sweetcorn|der Mais
+🍄|کھمبی|khumbi|मशरूम|the mushroom|der Pilz
+🌿|دھنیا|dhaniya|धनिया|the coriander|der Koriander
+🥗|کیا یہ تازہ ہے؟|kya ye taaza hai?|क्या यह ताज़ा है?|Is this fresh?|Ist das frisch?
+## kitchen|A1|🍳|Kitchen & cooking
+🍽️|پلیٹ|plate|प्लेट|the plate|der Teller
+🥣|پیالہ|pyaala|कटोरी|the bowl|die Schüssel
+🥄|چمچ|chammach|चम्मच|the spoon|der Löffel
+🍴|کانٹا|kaanta|काँटा|the fork|die Gabel
+🔪|چھری|chhuri|छुरी|the knife|das Messer
+🥛|گلاس|glass|गिलास|the glass|das Glas
+☕|کپ|cup|कप|the cup|die Tasse
+🍳|فرائی پین|frying pan|फ़्राइंग पैन|the frying pan|die Pfanne
+🍲|دیگچی|degchi|पतीला|the pot|der Topf
+🫒|تیل|tel|तेल|the oil|das Öl
+🌶️|کالی مرچ|kaali mirch|काली मिर्च|the black pepper|der Pfeffer
+🧄|لہسن|lehsan|लहसुन|the garlic|der Knoblauch
+🫚|ادرک|adrak|अदरक|the ginger|der Ingwer
+🍯|شہد|shehad|शहद|the honey|der Honig
+🧈|مکھن|makkhan|मक्खन|the butter|die Butter
+🥣|دہی|dahi|दही|the yoghurt|der Joghurt
+🌾|آٹا|aata|आटा|the flour|das Mehl
+✂️|کاٹنا|kaatna|काटना|to cut|schneiden
+🍳|تلنا|talna|तलना|to fry|braten
+🧂|کھانا نمکین ہے|khaana namkeen hai|खाना नमकीन है|The food is salty|Das Essen ist salzig
+🌶️|کیا یہ تیکھا ہے؟|kya ye teekha hai?|क्या यह तीखा है?|Is it spicy?|Ist das scharf?
+## furniture|A1|🛋️|Around the house
+🛋️|صوفہ|sofa|सोफ़ा|the sofa|das Sofa
+🗄️|الماری|almaari|अलमारी|the cupboard|der Schrank
+💡|لیمپ|lamp|लैंप|the lamp|die Lampe
+🧱|دیوار|deewaar|दीवार|the wall|die Wand
+🪜|سیڑھیاں|seerhiyaan|सीढ़ियाँ|the stairs|die Treppe
+🛗|لفٹ|lift|लिफ़्ट|the lift|der Aufzug
+🌿|بالکونی|balcony|बालकनी|the balcony|der Balkon
+🧺|واشنگ مشین|washing machine|वॉशिंग मशीन|the washing machine|die Waschmaschine
+❄️|فریج|fridge|फ़्रिज|the fridge|der Kühlschrank
+🔥|چولہا|choolha|चूल्हा|the cooker|der Herd
+🚿|شاور|shower|शावर|the shower|die Dusche
+🚽|ٹوائلٹ|toilet|टॉयलेट|the toilet|die Toilette
+🛏️|تکیہ|takiya|तकिया|the pillow|das Kissen
+🧹|جھاڑو|jhaaroo|झाड़ू|the broom|der Besen
+📺|ٹی وی|TV|टीवी|the TV|der Fernseher
+🌡️|ہیٹنگ|heating|हीटिंग|the heating|die Heizung
+🔔|گھنٹی|ghanti|घंटी|the doorbell|die Klingel
+📬|لیٹر باکس|letter box|लेटर बॉक्स|the letter box|der Briefkasten
+🧽|میں صفائی کرتی ہوں|main safaai karti hoon|मैं सफ़ाई करती हूँ|I'm cleaning|Ich putze
+🥶|ہیٹنگ کام نہیں کر رہی|heating kaam nahin kar rahi|हीटिंग काम नहीं कर रही|The heating isn't working|Die Heizung funktioniert nicht
+## jobs|A1|👩‍🔧|Jobs & people
+👩‍🏫|استاد|ustaad|अध्यापक|the teacher|der Lehrer / die Lehrerin
+👩‍⚕️|نرس|nurse|नर्स|the nurse|die Pflegekraft
+👨‍🍳|باورچی|bawarchi|रसोइया|the cook|der Koch / die Köchin
+👷|مزدور|mazdoor|मज़दूर|the worker|der Arbeiter / die Arbeiterin
+🚕|ڈرائیور|driver|ड्राइवर|the driver|der Fahrer / die Fahrerin
+💇|نائی|naai|नाई|the hairdresser|der Friseur / die Friseurin
+🛒|کیشیئر|cashier|कैशियर|the cashier|der Kassierer / die Kassiererin
+🧑‍💻|انجینئر|engineer|इंजीनियर|the engineer|der Ingenieur / die Ingenieurin
+🎓|طالب علم|taalib-e-ilm|छात्र|the student|der Student / die Studentin
+⚖️|وکیل|wakeel|वकील|the lawyer|der Anwalt / die Anwältin
+🛍️|سیلز پرسن|salesperson|सेल्सपर्सन|the salesperson|der Verkäufer / die Verkäuferin
+🧹|صفائی کرنے والا|safaai karne wala|सफ़ाईकर्मी|the cleaner|die Reinigungskraft
+🔧|مستری|mistri|मिस्त्री|the mechanic|der Mechaniker / die Mechanikerin
+📦|ڈیلیوری والا|delivery wala|डिलीवरी वाला|the courier|der Kurier
+👩‍💼|مینیجر|manager|मैनेजर|the manager|der Manager / die Managerin
+👥|لوگ|log|लोग|the people|die Leute
+🧒|لڑکا|larka|लड़का|the boy|der Junge
+👧|لڑکی|larki|लड़की|the girl|das Mädchen
+👨|آدمی|aadmi|आदमी|the man|der Mann
+👩|عورت|aurat|औरत|the woman|die Frau
+❓|آپ کیا کام کرتے ہیں؟|aap kya kaam karte hain?|आप क्या काम करते हैं?|What do you do for work?|Was sind Sie von Beruf?
+🏢|میں ایک کمپنی میں کام کرتی ہوں|main aik company mein kaam karti hoon|मैं एक कंपनी में काम करती हूँ|I work at a company|Ich arbeite bei einer Firma
+## countries|A1|🌍|Countries & languages
+🇩🇪|جرمنی|germany|जर्मनी|Germany|Deutschland
+🇵🇰|پاکستان|pakistan|पाकिस्तान|Pakistan|Pakistan
+🇮🇳|ہندوستان|hindustan|भारत|India|Indien
+🇬🇧|برطانیہ|bartaania|ब्रिटेन|Great Britain|Großbritannien
+🇹🇷|ترکی|turkey|तुर्की|Turkey|die Türkei
+🇸🇦|سعودی عرب|saudi arab|सऊदी अरब|Saudi Arabia|Saudi-Arabien
+🇦🇫|افغانستان|afghanistan|अफ़ग़ानिस्तान|Afghanistan|Afghanistan
+🇧🇩|بنگلہ دیش|bangladesh|बांग्लादेश|Bangladesh|Bangladesch
+🇺🇸|امریکہ|amreeka|अमेरिका|the USA|die USA
+🇪🇺|یورپ|europe|यूरोप|Europe|Europa
+🗣️|جرمن زبان|german zabaan|जर्मन भाषा|German (language)|Deutsch
+🗣️|انگریزی|angrezi|अंग्रेज़ी|English (language)|Englisch
+🗣️|اردو|urdu|उर्दू|Urdu (language)|Urdu
+🗣️|ہندی|hindi|हिन्दी|Hindi (language)|Hindi
+🗣️|عربی|arabi|अरबी|Arabic (language)|Arabisch
+🗣️|زبان|zabaan|भाषा|the language|die Sprache
+🧑|میں پاکستانی ہوں|main pakistani hoon|मैं पाकिस्तानी हूँ|I'm Pakistani (woman)|Ich bin Pakistanerin
+🧑|میں ہندوستانی ہوں|main hindustani hoon|मैं भारतीय हूँ|I'm Indian (woman)|Ich bin Inderin
+❓|آپ کون سی زبانیں بولتے ہیں؟|aap kaun si zabaanein bolte hain?|आप कौन सी भाषाएँ बोलते हैं?|Which languages do you speak?|Welche Sprachen sprechen Sie?
+🏠|میں دو سال سے جرمنی میں ہوں|main do saal se germany mein hoon|मैं दो साल से जर्मनी में हूँ|I've been in Germany for two years|Ich bin seit zwei Jahren in Deutschland
+## hobbies|A1|⚽|Free time & hobbies
+⚽|فٹ بال|football|फ़ुटबॉल|football|Fußball
+🏏|کرکٹ|cricket|क्रिकेट|cricket|Kricket
+🏊|تیرنا|tairna|तैरना|to swim|schwimmen
+🚴|سائیکل چلانا|cycle chalaana|साइकिल चलाना|to cycle|Fahrrad fahren
+🚶|سیر کرنا|sair karna|सैर करना|to go for a walk|spazieren gehen
+🎵|موسیقی|mauseeqi|संगीत|the music|die Musik
+🎨|تصویر بنانا|tasveer banaana|चित्र बनाना|to paint|malen
+🎮|کھیلنا|khelna|खेलना|to play|spielen
+💃|ناچنا|naachna|नाचना|to dance|tanzen
+🎤|گانا|gaana|गाना|to sing|singen
+📸|تصویر کھینچنا|tasveer kheenchna|फ़ोटो खींचना|to take photos|fotografieren
+🏋️|ورزش کرنا|warzish karna|कसरत करना|to work out|trainieren
+✈️|سفر کرنا|safar karna|यात्रा करना|to travel|reisen
+👫|دوستوں سے ملنا|doston se milna|दोस्तों से मिलना|to meet friends|Freunde treffen
+🎉|پارٹی|party|पार्टी|the party|die Party
+🏛️|عجائب گھر|ajaib ghar|संग्रहालय|the museum|das Museum
+🎟️|سینما|cinema|सिनेमा|the cinema|das Kino
+❤️|آپ کا شوق کیا ہے؟|aap ka shauq kya hai?|आपका शौक़ क्या है?|What's your hobby?|Was ist Ihr Hobby?
+👍|مجھے پڑھنا پسند ہے|mujhe parhna pasand hai|मुझे पढ़ना पसंद है|I like reading|Ich lese gern
+🗓️|ہفتے کے آخر میں آپ کیا کرتے ہیں؟|hafte ke aakhir mein aap kya karte hain?|वीकेंड पर आप क्या करते हैं?|What do you do at the weekend?|Was machen Sie am Wochenende?
+## phone|A1|📱|Phone & messages
+📞|فون کرنا|phone karna|फ़ोन करना|to make a phone call|telefonieren
+📲|میسج|message|मैसेज|the message|die Nachricht
+🔢|نمبر|number|नंबर|the number|die Nummer
+🎙️|وائس میسج|voice message|वॉइस मैसेज|the voice message|die Sprachnachricht
+🔌|چارجر|charger|चार्जर|the charger|das Ladegerät
+🔋|بیٹری ختم ہے|battery khatam hai|बैटरी ख़त्म है|The battery is dead|Der Akku ist leer
+📶|کیا یہاں وائی فائی ہے؟|kya yahan wifi hai?|क्या यहाँ वाई-फ़ाई है?|Is there Wi-Fi here?|Gibt es hier WLAN?
+🔑|پاس ورڈ کیا ہے؟|password kya hai?|पासवर्ड क्या है?|What's the password?|Wie ist das Passwort?
+👋|ہیلو، میں آمنہ بول رہی ہوں|hello, main amna bol rahi hoon|हैलो, मैं आमना बोल रही हूँ|Hello, this is Amna|Hallo, hier ist Amna
+🔇|میں آپ کی آواز نہیں سن سکتی|main aap ki aawaaz nahin sun sakti|मैं आपकी आवाज़ नहीं सुन सकती|I can't hear you|Ich kann Sie nicht hören
+🔁|میں بعد میں فون کروں گی|main baad mein phone karoon gi|मैं बाद में फ़ोन करूँगी|I'll call back later|Ich rufe später zurück
+✍️|مجھے میسج کرو|mujhe message karo|मुझे मैसेज करो|Text me|Schreib mir eine Nachricht
+📵|غلط نمبر|ghalat number|ग़लत नंबर|Wrong number|Falsch verbunden
+⏳|ایک منٹ، پلیز|aik minute, please|एक मिनट, प्लीज़|One moment, please|Einen Moment, bitte
+🗣️|کیا میں شمٹ صاحب سے بات کر سکتی ہوں؟|kya main schmidt sahib se baat kar sakti hoon?|क्या मैं श्मिट जी से बात कर सकती हूँ?|Can I speak to Mr Schmidt?|Kann ich bitte mit Herrn Schmidt sprechen?
+📸|میں تمہیں تصویر بھیجتی ہوں|main tumhein tasveer bhejti hoon|मैं तुम्हें फ़ोटो भेजती हूँ|I'll send you a photo|Ich schicke dir ein Foto
+📞|مجھے فون کرو!|mujhe phone karo!|मुझे फ़ोन करो!|Call me!|Ruf mich an!
+📧|تمہارا ای میل ایڈریس کیا ہے؟|tumhaara email address kya hai?|तुम्हारा ईमेल पता क्या है?|What's your email address?|Wie ist deine E-Mail-Adresse?
+📵|میرے پاس سگنل نہیں ہے|mere paas signal nahin hai|मेरे पास सिग्नल नहीं है|I have no signal|Ich habe kein Netz
+💔|میرا فون خراب ہے|mera phone kharaab hai|मेरा फ़ोन ख़राब है|My phone is broken|Mein Handy ist kaputt
+## animals|A1|🐕|Animals & nature
+🐕|کتا|kutta|कुत्ता|the dog|der Hund
+🐈|بلی|billi|बिल्ली|the cat|die Katze
+🐦|پرندہ|parinda|पक्षी|the bird|der Vogel
+🐄|گائے|gaaye|गाय|the cow|die Kuh
+🐎|گھوڑا|ghora|घोड़ा|the horse|das Pferd
+🐑|بھیڑ|bhair|भेड़|the sheep|das Schaf
+🐐|بکری|bakri|बकरी|the goat|die Ziege
+🐓|مرغی|murghi|मुर्गी|the hen|das Huhn
+🦆|بطخ|batakh|बत्तख|the duck|die Ente
+🐭|چوہا|chooha|चूहा|the mouse|die Maus
+🌳|درخت|darakht|पेड़|the tree|der Baum
+🌸|پھول|phool|फूल|the flower|die Blume
+🌱|گھاس|ghaas|घास|the grass|das Gras
+🌲|جنگل|jangal|जंगल|the forest|der Wald
+🏞️|دریا|darya|नदी|the river|der Fluss
+🏊|جھیل|jheel|झील|the lake|der See
+🌊|سمندر|samundar|समुद्र|the sea|das Meer
+⛰️|پہاڑ|pahaar|पहाड़|the mountain|der Berg
+🌞|سورج|sooraj|सूरज|the sun|die Sonne
+🌙|چاند|chaand|चाँद|the moon|der Mond
+⭐|ستارہ|sitaara|तारा|the star|der Stern
+## opposites|A1|↔️|Opposites
+🔆|روشن / اندھیرا|roshan / andhera|रोशन / अँधेरा|light / dark|hell / dunkel
+💪|مضبوط / کمزور|mazboot / kamzor|मज़बूत / कमज़ोर|strong / weak|stark / schwach
+🧓|بوڑھا / جوان|boorha / jawaan|बूढ़ा / जवान|old / young|alt / jung
+📏|لمبا / چھوٹا|lamba / chhota|लंबा / छोटा|long / short|lang / kurz
+🎈|ہلکا / بھاری|halka / bhaari|हल्का / भारी|light / heavy|leicht / schwer
+🧼|صاف / گندا|saaf / ganda|साफ़ / गंदा|clean / dirty|sauber / schmutzig
+🥛|بھرا / خالی|bhara / khaali|भरा / ख़ाली|full / empty|voll / leer
+😊|خوش / اداس|khush / udaas|ख़ुश / उदास|happy / sad|glücklich / traurig
+🔊|اونچی / دھیمی آواز|oonchi / dheemi aawaaz|ऊँची / धीमी आवाज़|loud / quiet|laut / leise
+💰|امیر / غریب|ameer / ghareeb|अमीर / ग़रीब|rich / poor|reich / arm
+⬆️|اوپر / نیچے|oopar / neeche|ऊपर / नीचे|up / down|oben / unten
+⬅️|آگے / پیچھے|aage / peeche|आगे / पीछे|at the front / at the back|vorne / hinten
+🚪|اندر / باہر|andar / baahar|अंदर / बाहर|inside / outside|drinnen / draußen
+✅|صحیح / غلط|sahi / ghalat|सही / ग़लत|right / wrong|richtig / falsch
+🕐|جلدی / دیر سے|jaldi / der se|जल्दी / देर से|early / late|früh / spät
+💧|گیلا / خشک|geela / khushk|गीला / सूखा|wet / dry|nass / trocken
+📅|مصروف / فارغ|masroof / faarigh|व्यस्त / ख़ाली|busy / free|beschäftigt / frei
+🍬|میٹھا / کڑوا|meetha / karwa|मीठा / कड़वा|sweet / bitter|süß / bitter
+🏁|شروع / آخر|shuru / aakhir|शुरुआत / अंत|the beginning / the end|der Anfang / das Ende
+🔓|کھولنا / بند کرنا|kholna / band karna|खोलना / बंद करना|to open / to close|aufmachen / zumachen
 ## feelings|A2|😊|Feelings
 😄|میں خوش ہوں|main khush hoon|मैं ख़ुश हूँ|I'm happy|Ich bin froh
 🥱|میں تھکی ہوئی ہوں|main thaki hui hoon|मैं थकी हुई हूँ|I'm tired|Ich bin müde
@@ -406,3 +731,340 @@ So|اتوار|itwaar|रविवार|Sunday|der Sonntag
 🤒|میں نہیں آ سکتی کیونکہ میں بیمار ہوں|main nahin aa sakti kyunke main bimaar hoon|मैं नहीं आ सकती क्योंकि मैं बीमार हूँ|I can't come because I'm sick|Ich kann nicht kommen, weil ich krank bin
 ⏳|اگر وقت ملا تو میں آؤں گی|agar waqt mila to main aaoon gi|अगर समय मिला तो मैं आऊँगी|If I have time, I'll come|Wenn ich Zeit habe, komme ich
 🤝|میں متفق ہوں|main muttafiq hoon|मैं सहमत हूँ|I agree|Ich bin einverstanden
+## housing|A2|🔑|Renting a flat
+🏢|کرائے کا فلیٹ|kiraaye ka flat|किराए का फ़्लैट|the rented flat|die Mietwohnung
+👤|مالک مکان|maalik-e-makaan|मकान मालिक|the landlord|der Vermieter / die Vermieterin
+📝|کرائے کا معاہدہ|kiraaye ka muaahida|किराए का अनुबंध|the rental contract|der Mietvertrag
+💶|ضمانت کی رقم|zamaanat ki raqam|ज़मानत राशि|the deposit|die Kaution
+💡|اضافی اخراجات|izaafi akhraajaat|अतिरिक्त ख़र्च|the extra costs (utilities)|die Nebenkosten
+🧊|اخراجات کے بغیر کرایہ|akhraajaat ke baghair kiraaya|ख़र्च के बिना किराया|rent without utilities|die Kaltmiete
+🔥|اخراجات سمیت کرایہ|akhraajaat samet kiraaya|ख़र्च सहित किराया|rent including utilities|die Warmmiete
+📐|مربع میٹر|murabba meter|वर्ग मीटर|the square metre|der Quadratmeter
+🧑‍🤝‍🧑|مشترکہ فلیٹ|mushtarka flat|शेयर्ड फ़्लैट|the flat share|die WG
+🏠|میں فلیٹ ڈھونڈ رہی ہوں|main flat dhoond rahi hoon|मैं फ़्लैट ढूँढ रही हूँ|I'm looking for a flat|Ich suche eine Wohnung
+❓|کیا فلیٹ ابھی خالی ہے؟|kya flat abhi khaali hai?|क्या फ़्लैट अभी ख़ाली है?|Is the flat still available?|Ist die Wohnung noch frei?
+💶|کرایہ کتنا ہے؟|kiraaya kitna hai?|किराया कितना है?|How much is the rent?|Wie hoch ist die Miete?
+👀|کیا میں فلیٹ دیکھ سکتی ہوں؟|kya main flat dekh sakti hoon?|क्या मैं फ़्लैट देख सकती हूँ?|Can I view the flat?|Kann ich die Wohnung besichtigen?
+📅|میں کب منتقل ہو سکتی ہوں؟|main kab muntaqil ho sakti hoon?|मैं कब शिफ़्ट हो सकती हूँ?|When can I move in?|Wann kann ich einziehen?
+📦|گھر بدلنا|ghar badalna|घर बदलना|to move house|umziehen
+🔑|نئے گھر میں آنا|naye ghar mein aana|नए घर में आना|to move in|einziehen
+🚪|گھر خالی کرنا|ghar khaali karna|घर ख़ाली करना|to move out|ausziehen
+🧾|مالک مکان کی تصدیق|maalik-e-makaan ki tasdeeq|मकान मालिक की पुष्टि|the landlord's confirmation|die Wohnungsgeberbestätigung
+💧|پانی ٹپک رہا ہے|paani tapak raha hai|पानी टपक रहा है|Something is leaking|Es tropft
+🛠️|کیا آپ یہ ٹھیک کر سکتے ہیں؟|kya aap ye theek kar sakte hain?|क्या आप इसे ठीक कर सकते हैं?|Can you repair this?|Können Sie das reparieren?
+🔇|رات دس بجے کے بعد خاموشی|raat das baje ke baad khaamoshi|रात दस बजे के बाद शांति|Quiet time from 10 pm|Ab 22 Uhr ist Ruhezeit
+♻️|کچرا الگ الگ کرنا|kachra alag alag karna|कूड़ा अलग-अलग करना|to separate the rubbish|den Müll trennen
+🟡|پلاسٹک کا پیلا ڈبہ|plastic ka peela dabba|प्लास्टिक का पीला डिब्बा|the yellow recycling bin|die Gelbe Tonne
+## bank|A2|🏦|Bank & money
+🏦|اکاؤنٹ کھولنا|account kholna|खाता खोलना|to open an account|ein Konto eröffnen
+💳|بینک کارڈ|bank card|बैंक कार्ड|the bank card|die Bankkarte
+🏧|اے ٹی ایم|ATM|एटीएम|the cash machine|der Geldautomat
+💸|پیسے نکالنا|paise nikaalna|पैसे निकालना|to withdraw money|Geld abheben
+💶|پیسے جمع کرنا|paise jama karna|पैसे जमा करना|to pay money in|Geld einzahlen
+🔁|رقم کی منتقلی|raqam ki muntaqili|पैसे ट्रांसफ़र|the bank transfer|die Überweisung
+🔢|پن کوڈ|PIN code|पिन कोड|the PIN|die PIN
+🐷|بچت|bachat|बचत|the savings|die Ersparnisse
+📈|سود|sood|ब्याज|the interest|die Zinsen
+🧾|بل|bill|बिल|the invoice|die Rechnung
+💼|تنخواہ کی پرچی|tankhwaah ki parchi|सैलरी स्लिप|the payslip|die Gehaltsabrechnung
+📊|اکاؤنٹ بیلنس|account balance|खाते का बैलेंस|the account balance|der Kontostand
+🌍|بیرون ملک پیسے بھیجنا|beroon-e-mulk paise bhejna|विदेश पैसे भेजना|to send money abroad|Geld ins Ausland schicken
+💵|نقد رقم|naqd raqam|नक़द राशि|the cash|das Bargeld
+🏷️|آئی بین|IBAN|आईबैन|the IBAN|die IBAN
+🧮|فیس کتنی ہے؟|fees kitni hai?|फ़ीस कितनी है?|How much is the fee?|Wie hoch ist die Gebühr?
+🏦|میں اکاؤنٹ کھولنا چاہتی ہوں|main account kholna chahti hoon|मैं खाता खोलना चाहती हूँ|I'd like to open an account|Ich möchte ein Konto eröffnen
+🔒|میرا کارڈ بلاک ہو گیا ہے|mera card block ho gaya hai|मेरा कार्ड ब्लॉक हो गया है|My card has been blocked|Meine Karte ist gesperrt
+🚨|میرا کارڈ گم ہو گیا ہے|mera card gum ho gaya hai|मेरा कार्ड खो गया है|I've lost my card|Ich habe meine Karte verloren
+📅|ہر مہینے|har maheene|हर महीने|every month|jeden Monat
+## jobsearch|A2|📑|Job search & applications
+📢|نوکری کا اشتہار|naukri ka ishtihaar|नौकरी का विज्ञापन|the job advert|die Stellenanzeige
+✉️|درخواست کا خط|darkhwaast ka khat|आवेदन पत्र|the cover letter|das Anschreiben
+🎓|سرٹیفکیٹ|certificate|प्रमाणपत्र|the certificate / reference|das Zeugnis
+🏛️|جاب سینٹر|job center|जॉब सेंटर|the Jobcenter|das Jobcenter
+🏢|روزگار کا دفتر|rozgaar ka daftar|रोज़गार कार्यालय|the employment agency|die Arbeitsagentur
+🔍|نوکری کی تلاش|naukri ki talaash|नौकरी की तलाश|the job search|die Jobsuche
+🧪|آزمائشی مدت|aazmaaishi muddat|प्रोबेशन अवधि|the probation period|die Probezeit
+📋|معلومات اور مہارتیں|maaloomaat aur mahaartein|ज्ञान और कौशल|the knowledge and skills|die Kenntnisse
+🗣️|زبان کا کورس|zabaan ka course|भाषा कोर्स|the language course|der Sprachkurs
+🏷️|انضمام کا کورس|inzimaam ka course|इंटीग्रेशन कोर्स|the integration course|der Integrationskurs
+💼|بے روزگار|be-rozgaar|बेरोज़गार|unemployed|arbeitslos
+⏰|کام کے اوقات|kaam ke auqaat|काम के घंटे|the working hours|die Arbeitszeit
+💪|میری خوبیاں|meri khoobiyaan|मेरी ख़ूबियाँ|my strengths|meine Stärken
+🧑‍💻|مجھے ویب ڈویلپمنٹ کا تجربہ ہے|mujhe web development ka tajurba hai|मुझे वेब डेवलपमेंट का अनुभव है|I have experience in web development|Ich habe Erfahrung in der Webentwicklung
+🗓️|میں اگلے مہینے سے کام کر سکتی ہوں|main aglay maheene se kaam kar sakti hoon|मैं अगले महीने से काम कर सकती हूँ|I can start next month|Ich kann ab nächstem Monat arbeiten
+❓|آپ ہمارے ساتھ کیوں کام کرنا چاہتے ہیں؟|aap hamaare saath kyun kaam karna chahte hain?|आप हमारे साथ क्यों काम करना चाहते हैं?|Why do you want to work for us?|Warum möchten Sie bei uns arbeiten?
+🤝|مجھے ٹیم میں کام کرنا پسند ہے|mujhe team mein kaam karna pasand hai|मुझे टीम में काम करना पसंद है|I like working in a team|Ich arbeite gern im Team
+📩|ہمیں آپ کی درخواست مل گئی ہے|hamein aap ki darkhwaast mil gayi hai|हमें आपका आवेदन मिल गया है|We have received your application|Wir haben Ihre Bewerbung erhalten
+📞|ہم آپ سے رابطہ کریں گے|hum aap se raabta karenge|हम आपसे संपर्क करेंगे|We'll get back to you|Wir melden uns bei Ihnen
+🎉|مبارک ہو، آپ کو نوکری مل گئی!|mubaarak ho, aap ko naukri mil gayi!|बधाई हो, आपको नौकरी मिल गई!|Congratulations, you got the job!|Herzlichen Glückwunsch, Sie haben die Stelle!
+## post|A2|📦|Post office & parcels
+📮|ڈاک خانہ|daak khaana|डाकघर|the post office|die Post
+📦|پارسل|parcel|पार्सल|the parcel|das Paket
+✉️|لفافہ|lifaafa|लिफ़ाफ़ा|the envelope|der Umschlag
+🏷️|ڈاک ٹکٹ|daak ticket|डाक टिकट|the stamp|die Briefmarke
+📍|پتہ|pata|पता|the address|die Adresse
+🔢|پوسٹ کوڈ|post code|पिन कोड|the postcode|die Postleitzahl
+📬|پارسل اسٹیشن|parcel station|पार्सल स्टेशन|the parcel locker|die Packstation
+🚚|ترسیل|tarseel|डिलीवरी|the delivery|die Lieferung
+📝|بھیجنا|bhejna|भेजना|to send|schicken
+📥|ملنا|milna|मिलना|to receive|bekommen
+🧾|رجسٹرڈ خط|registered khat|रजिस्टर्ड चिट्ठी|the registered letter|das Einschreiben
+📦|میں ایک پارسل پاکستان بھیجنا چاہتی ہوں|main aik parcel pakistan bhejna chahti hoon|मैं एक पार्सल पाकिस्तान भेजना चाहती हूँ|I'd like to send a parcel to Pakistan|Ich möchte ein Paket nach Pakistan schicken
+⚖️|اس کا وزن کتنا ہے؟|is ka wazan kitna hai?|इसका वज़न कितना है?|How heavy is it?|Wie schwer ist das?
+⏱️|اس میں کتنا وقت لگے گا؟|is mein kitna waqt lagega?|इसमें कितना समय लगेगा?|How long will it take?|Wie lange dauert das?
+🚪|پارسل پڑوسی کے پاس ہے|parcel parosi ke paas hai|पार्सल पड़ोसी के पास है|The parcel is with a neighbour|Das Paket ist beim Nachbarn
+❗|میرا پارسل نہیں پہنچا|mera parcel nahin pohancha|मेरा पार्सल नहीं पहुँचा|My parcel hasn't arrived|Mein Paket ist nicht angekommen
+## travel|A2|🚆|Travel & trains
+🎒|سفر|safar|यात्रा|the journey|die Reise
+🧳|سوٹ کیس|suitcase|सूटकेस|the suitcase|der Koffer
+🛂|سرحد|sarhad|सीमा|the border|die Grenze
+🛤️|پلیٹ فارم|platform|प्लेटफ़ॉर्म|the platform|das Gleis
+⏳|تاخیر|taakheer|देरी|the delay|die Verspätung
+❌|منسوخ ہے|mansookh hai|रद्द है|is cancelled|fällt aus
+🔁|ٹرین بدلنا|train badalna|ट्रेन बदलना|to change trains|umsteigen
+🎫|ڈوئچ لینڈ ٹکٹ|deutschland ticket|डॉयचलैंड टिकट|the Deutschland-Ticket|das Deutschlandticket
+💺|نشست|nishast|सीट|the seat|der Sitzplatz
+🔖|ریزرویشن|reservation|आरक्षण|the reservation|die Reservierung
+🏨|ہوٹل|hotel|होटल|the hotel|das Hotel
+🛏️|کمرہ بک کرنا|kamra book karna|कमरा बुक करना|to book a room|ein Zimmer buchen
+🗺️|نقشہ|naqsha|नक्शा|the map|der Stadtplan
+🚏|بس اسٹاپ|bus stop|बस स्टॉप|the stop|die Haltestelle
+✈️|پرواز|parwaaz|उड़ान|the flight|der Flug
+🛫|روانگی|rawaangi|प्रस्थान|the departure|die Abfahrt
+🛬|آمد|aamad|आगमन|the arrival|die Ankunft
+❓|برلن کی اگلی ٹرین کب ہے؟|berlin ki agli train kab hai?|बर्लिन की अगली ट्रेन कब है?|When is the next train to Berlin?|Wann fährt der nächste Zug nach Berlin?
+🛤️|ٹرین کس پلیٹ فارم سے جاتی ہے؟|train kis platform se jaati hai?|ट्रेन किस प्लेटफ़ॉर्म से जाती है?|Which platform does the train leave from?|Von welchem Gleis fährt der Zug?
+🎟️|ایک ٹکٹ ہیمبرگ کے لیے، پلیز|aik ticket hamburg ke liye, please|एक टिकट हैम्बर्ग के लिए, प्लीज़|One ticket to Hamburg, please|Eine Fahrkarte nach Hamburg, bitte
+⏳|ٹرین بیس منٹ لیٹ ہے|train bees minute late hai|ट्रेन बीस मिनट लेट है|The train is twenty minutes late|Der Zug hat zwanzig Minuten Verspätung
+## restaurant|A2|🍽️|At the restaurant
+🪑|کیا یہ میز خالی ہے؟|kya ye mez khaali hai?|क्या यह मेज़ ख़ाली है?|Is this table free?|Ist dieser Tisch frei?
+📅|میں نے میز بک کی ہے|main ne mez book ki hai|मैंने मेज़ बुक की है|I have a reservation|Ich habe einen Tisch reserviert
+📖|مینو، پلیز|menu, please|मेनू, प्लीज़|The menu, please|Die Speisekarte, bitte
+🤔|آپ کیا تجویز کرتے ہیں؟|aap kya tajweez karte hain?|आप क्या सुझाव देते हैं?|What do you recommend?|Was empfehlen Sie?
+🥗|کیا آپ کے پاس سبزی والے کھانے ہیں؟|kya aap ke paas sabzi wale khaane hain?|क्या आपके पास शाकाहारी खाना है?|Do you have vegetarian dishes?|Haben Sie vegetarische Gerichte?
+🌙|کیا یہ حلال ہے؟|kya ye halaal hai?|क्या यह हलाल है?|Is this halal?|Ist das halal?
+🚫|بغیر الکحل کے|baghair alcohol ke|बिना शराब के|without alcohol|ohne Alkohol
+🥜|مجھے میوے سے الرجی ہے|mujhe mewe se allergy hai|मुझे मेवे से एलर्जी है|I'm allergic to nuts|Ich bin allergisch gegen Nüsse
+🍛|میں لوں گی…|main loon gi…|मैं लूँगी…|I'll have …|Ich nehme …
+😋|بہت مزیدار تھا|bohat mazedaar tha|बहुत स्वादिष्ट था|It was delicious|Es war sehr lecker
+💶|ہم الگ الگ ادائیگی کریں گے|hum alag alag adaaigi karenge|हम अलग-अलग पेमेंट करेंगे|We'll pay separately|Wir zahlen getrennt
+🤝|سب ایک ساتھ، پلیز|sab aik saath, please|सब एक साथ, प्लीज़|All together, please|Zusammen, bitte
+💁|ٹپ|tip|टिप|the tip|das Trinkgeld
+🥖|شروع کا کھانا|shuru ka khaana|स्टार्टर|the starter|die Vorspeise
+🍝|اصل کھانا|asal khaana|मुख्य भोजन|the main course|das Hauptgericht
+🍰|میٹھا|meetha|मिठाई|the dessert|der Nachtisch
+🧑‍🍳|بیرا|bera|वेटर|the waiter|der Kellner / die Kellnerin
+🧂|کیا مجھے نمک مل سکتا ہے؟|kya mujhe namak mil sakta hai?|क्या मुझे नमक मिल सकता है?|Could I have the salt?|Könnte ich das Salz haben?
+🥡|کیا میں یہ ساتھ لے جا سکتی ہوں؟|kya main ye saath le ja sakti hoon?|क्या मैं यह साथ ले जा सकती हूँ?|Can I take this away?|Kann ich das mitnehmen?
+🥤|پینے کے لیے پانی، پلیز|peene ke liye paani, please|पीने के लिए पानी, प्लीज़|Some water to drink, please|Zum Trinken ein Wasser, bitte
+## pharmacy|A2|💊|At the pharmacy
+💊|گولی|goli|गोली|the tablet|die Tablette
+🧴|مرہم|marham|मरहम|the ointment|die Salbe
+💧|قطرے|qatre|बूँदें|the drops|die Tropfen
+🩹|پٹی|patti|पट्टी|the plaster|das Pflaster
+🌡️|تھرمامیٹر|thermometer|थर्मामीटर|the thermometer|das Fieberthermometer
+🤧|کھانسی|khaansi|खाँसी|the cough|der Husten
+🍯|کھانسی کا شربت|khaansi ka sharbat|खाँसी की दवाई|the cough syrup|der Hustensaft
+😣|درد|dard|दर्द|the pain|der Schmerz
+💊|درد کی گولی|dard ki goli|दर्द की गोली|the painkiller|die Schmerztablette
+❓|کیا اس کے لیے نسخہ ضروری ہے؟|kya is ke liye nuskha zaroori hai?|क्या इसके लिए पर्चा ज़रूरी है?|Do I need a prescription for this?|Ist das verschreibungspflichtig?
+⏰|دن میں تین بار|din mein teen baar|दिन में तीन बार|three times a day|dreimal täglich
+🍽️|کھانے کے بعد|khaane ke baad|खाने के बाद|after meals|nach dem Essen
+🥺|میرے گلے میں درد ہے|mere gale mein dard hai|मेरे गले में दर्द है|I have a sore throat|Ich habe Halsschmerzen
+🤢|مجھے متلی ہو رہی ہے|mujhe matli ho rahi hai|मुझे मतली हो रही है|I feel sick|Mir ist übel
+💤|مجھے ٹھیک سے نیند نہیں آتی|mujhe theek se neend nahin aati|मुझे ठीक से नींद नहीं आती|I can't sleep well|Ich kann nicht gut schlafen
+🤧|میری ناک بہہ رہی ہے|meri naak beh rahi hai|मेरी नाक बह रही है|I have a runny nose|Ich habe Schnupfen
+🪪|صحت بیمہ کارڈ|sehat beema card|स्वास्थ्य बीमा कार्ड|the health insurance card|die Versichertenkarte
+## school|A2|🎒|School & childcare
+🏫|اسکول|school|स्कूल|the school|die Schule
+🧸|ڈے کیئر|day care|डे केयर|the nursery (Kita)|die Kita
+👩‍🏫|کلاس ٹیچر|class teacher|क्लास टीचर|the class teacher|der Klassenlehrer / die Klassenlehrerin
+📚|کلاس|class|कक्षा|the class|die Klasse
+📝|ہوم ورک|home work|होमवर्क|the homework|die Hausaufgaben
+✏️|پنسل|pencil|पेंसिल|the pencil|der Bleistift
+📓|کاپی|copy|कॉपी|the exercise book|das Heft
+🎒|اسکول بیگ|school bag|स्कूल बैग|the school bag|der Schulranzen
+🧮|حساب|hisaab|गणित|maths|Mathe
+🧪|امتحان|imtihaan|परीक्षा|the exam|die Prüfung
+⚽|وقفہ|waqfa|ब्रेक|the break|die Pause
+🏖️|اسکول کی چھٹیاں|school ki chhuttiyaan|स्कूल की छुट्टियाँ|the school holidays|die Ferien
+👪|والدین کی میٹنگ|waalidain ki meeting|पैरेंट्स मीटिंग|the parents' evening|der Elternabend
+🤒|میرا بیٹا بیمار ہے|mera beta bimaar hai|मेरा बेटा बीमार है|My son is ill|Mein Sohn ist krank
+🏠|آج وہ گھر پر رہے گا|aaj woh ghar par rahega|आज वह घर पर रहेगा|He's staying at home today|Er bleibt heute zu Hause
+⏰|اسکول کب شروع ہوتا ہے؟|school kab shuru hota hai?|स्कूल कब शुरू होता है?|When does school start?|Wann fängt die Schule an?
+🚸|میں اسے تین بجے لے جاؤں گی|main use teen baje le jaaoon gi|मैं उसे तीन बजे ले जाऊँगी|I'll pick him up at three|Ich hole ihn um drei Uhr ab
+📩|بیماری کی اطلاع|bimaari ki ittilaa|बीमारी की सूचना|the sick note|die Krankmeldung
+🗣️|میری بیٹی تھوڑی جرمن بولتی ہے|meri beti thori German bolti hai|मेरी बेटी थोड़ी जर्मन बोलती है|My daughter speaks a little German|Meine Tochter spricht ein bisschen Deutsch
+👍|وہ اسکول میں اچھا ہے|woh school mein achha hai|वह स्कूल में अच्छा है|He's doing well at school|Er ist gut in der Schule
+## emergency|A2|🚨|Emergencies & safety
+🚓|پولیس|police|पुलिस|the police|die Polizei
+🚒|فائر بریگیڈ|fire brigade|फ़ायर ब्रिगेड|the fire brigade|die Feuerwehr
+☎️|112 پر فون کریں!|112 par phone karein!|112 पर फ़ोन करें!|Call 112!|Rufen Sie die 112 an!
+🔥|آگ لگ گئی ہے!|aag lag gayi hai!|आग लग गई है!|There's a fire!|Es brennt!
+🚗|حادثہ|haadsa|दुर्घटना|the accident|der Unfall
+🤕|کوئی زخمی ہے|koi zakhmi hai|कोई घायल है|Someone is injured|Jemand ist verletzt
+👜|میرا بیگ چوری ہو گیا ہے|mera bag chori ho gaya hai|मेरा बैग चोरी हो गया है|My bag has been stolen|Meine Tasche wurde gestohlen
+🧭|میں راستہ بھول گئی ہوں|main raasta bhool gayi hoon|मैं रास्ता भूल गई हूँ|I'm lost|Ich habe mich verlaufen
+🆘|براہ کرم میری مدد کریں!|baraah-e-karam meri madad karein!|कृपया मेरी मदद करें!|Please help me!|Bitte helfen Sie mir!
+⚠️|خطرہ|khatra|ख़तरा|the danger|die Gefahr
+✋|احتیاط!|ehtiyaat!|सावधान!|Careful!|Vorsicht!
+🏥|ایمرجنسی وارڈ|emergency ward|इमरजेंसी वार्ड|the emergency department|die Notaufnahme
+💊|ایمرجنسی فارمیسی|emergency pharmacy|इमरजेंसी फ़ार्मेसी|the emergency pharmacy|die Notapotheke
+🔑|میں باہر بند ہو گئی ہوں|main baahar band ho gayi hoon|मैं बाहर बंद हो गई हूँ|I've locked myself out|Ich habe mich ausgesperrt
+🛠️|تالا کھولنے والی سروس|taala kholne wali service|ताला खोलने वाली सर्विस|the locksmith service|der Schlüsseldienst
+📍|میرا پتہ یہ ہے…|mera pata ye hai…|मेरा पता यह है…|My address is …|Meine Adresse ist …
+## workplace|A2|🗂️|At work: useful phrases
+☕|کیا ہم وقفہ کریں؟|kya hum waqfa karein?|क्या हम ब्रेक लें?|Shall we take a break?|Machen wir eine Pause?
+📅|میری ایک میٹنگ ہے|meri aik meeting hai|मेरी एक मीटिंग है|I have a meeting|Ich habe ein Meeting
+📧|میں آپ کو ای میل لکھوں گی|main aap ko email likhoon gi|मैं आपको ईमेल लिखूँगी|I'll write you an email|Ich schreibe Ihnen eine E-Mail
+✅|ہو گیا|ho gaya|हो गया|Done|Erledigt
+📌|آخری تاریخ کب ہے؟|aakhri taareekh kab hai?|डेडलाइन कब है?|When is the deadline?|Wann ist die Deadline?
+🤝|کیا آپ کے پاس ایک منٹ ہے؟|kya aap ke paas aik minute hai?|क्या आपके पास एक मिनट है?|Do you have a minute?|Haben Sie kurz Zeit?
+❓|میرا ایک سوال ہے|mera aik sawaal hai|मेरा एक सवाल है|I have a question|Ich habe eine Frage
+🔁|کیا آپ دوبارہ سمجھا سکتے ہیں؟|kya aap dobaara samjha sakte hain?|क्या आप दोबारा समझा सकते हैं?|Can you explain that again?|Können Sie das noch einmal erklären?
+💡|میں سمجھ گئی|main samajh gayi|मैं समझ गई|I've got it|Alles klar, verstanden
+🧑‍💻|میں اس پر کام کر رہی ہوں|main is par kaam kar rahi hoon|मैं इस पर काम कर रही हूँ|I'm working on it|Ich arbeite daran
+🤒|میں آج بیمار ہوں|main aaj bimaar hoon|मैं आज बीमार हूँ|I'm ill today|Ich bin heute krank
+🏠|میں کل گھر سے کام کروں گی|main kal ghar se kaam karoon gi|मैं कल घर से काम करूँगी|I'll work from home tomorrow|Ich arbeite morgen im Homeoffice
+🏖️|میں چھٹی لینا چاہتی ہوں|main chhutti lena chahti hoon|मैं छुट्टी लेना चाहती हूँ|I'd like to take time off|Ich möchte Urlaub nehmen
+🎉|اچھا ویک اینڈ گزاریں!|achha weekend guzaarein!|अच्छा वीकेंड बिताइए!|Have a nice weekend!|Schönes Wochenende!
+🥳|کام ختم، چھٹی!|kaam khatam, chhutti!|काम ख़त्म, छुट्टी!|Work is over for today!|Feierabend!
+📊|پریزنٹیشن|presentation|प्रेज़ेंटेशन|the presentation|die Präsentation
+🎯|ہدف|hadaf|लक्ष्य|the goal|das Ziel
+🗓️|کیلنڈر|calendar|कैलेंडर|the calendar|der Kalender
+## smalltalk|A2|💬|Small talk
+☀️|آج موسم اچھا ہے، ہے نا؟|aaj mausam achha hai, hai na?|आज मौसम अच्छा है, है ना?|Nice weather today, isn't it?|Schönes Wetter heute, oder?
+🙂|سب ٹھیک ہے؟|sab theek hai?|सब ठीक है?|Everything OK?|Alles gut?
+👌|سب ٹھیک|sab theek|सब ठीक|All good|Alles klar
+🤷|کچھ خاص نہیں|kuch khaas nahin|कुछ ख़ास नहीं|Nothing special|Nichts Besonderes
+🗓️|آپ کا ویک اینڈ کیسا گزرا؟|aap ka weekend kaisa guzra?|आपका वीकेंड कैसा रहा?|How was your weekend?|Wie war Ihr Wochenende?
+🏙️|آپ کب سے برلن میں ہیں؟|aap kab se berlin mein hain?|आप कब से बर्लिन में हैं?|How long have you been in Berlin?|Wie lange sind Sie schon in Berlin?
+😮|واقعی؟|waaqai?|सच में?|Really?|Wirklich?
+👍|بہت اچھا!|bohat achha!|बहुत अच्छा!|Great!|Super!
+👏|زبردست!|zabardast!|ज़बरदस्त!|Awesome!|Toll!
+🤞|امید ہے|umeed hai|उम्मीद है|Hopefully|Hoffentlich
+💯|بالکل|bilkul|बिल्कुल|Exactly|Genau
+🤔|میرا بھی یہی خیال ہے|mera bhi yahi khayaal hai|मेरा भी यही ख़याल है|I think so too|Das finde ich auch
+🙌|آپ کو بھی|aap ko bhi|आपको भी|Same to you|Gleichfalls
+😄|بہت مزہ آیا|bohat maza aaya|बहुत मज़ा आया|It was a lot of fun|Es hat viel Spaß gemacht
+🤝|آپ سے مل کر اچھا لگا|aap se mil kar achha laga|आपसे मिलकर अच्छा लगा|It was nice meeting you|Schön, Sie kennenzulernen
+🔜|جلد ملیں گے!|jald milenge!|जल्द मिलेंगे!|See you soon!|Bis bald!
+🌅|کل ملتے ہیں!|kal milte hain!|कल मिलते हैं!|See you tomorrow!|Bis morgen!
+## polite|A2|🎩|Polite German
+🙏|کیا آپ میری مدد کر سکیں گے؟|kya aap meri madad kar sakenge?|क्या आप मेरी मदद कर सकेंगे?|Could you help me?|Könnten Sie mir helfen?
+☕|کیا مجھے ایک کافی مل سکتی ہے؟|kya mujhe aik coffee mil sakti hai?|क्या मुझे एक कॉफ़ी मिल सकती है?|Could I have a coffee?|Könnte ich einen Kaffee haben?
+💭|میں چاہوں گی کہ…|main chahoon gi ke…|मैं चाहूँगी कि…|I would like to …|Ich würde gern …
+🪟|کیا آپ کھڑکی بند کر دیں گے؟|kya aap khirki band kar denge?|क्या आप खिड़की बंद कर देंगे?|Would you close the window, please?|Würden Sie bitte das Fenster schließen?
+🤔|کیا یہ ممکن ہوگا؟|kya ye mumkin hoga?|क्या यह संभव होगा?|Would that be possible?|Wäre das möglich?
+🙇|تکلیف کے لیے معذرت|takleef ke liye maazrat|तकलीफ़ के लिए माफ़ी|Sorry to disturb you|Entschuldigen Sie die Störung
+⏳|آپ کے صبر کا شکریہ|aap ke sabr ka shukriya|आपके धैर्य के लिए धन्यवाद|Thank you for your patience|Danke für Ihre Geduld
+🙂|کوئی مسئلہ نہیں|koi masla nahin|कोई समस्या नहीं|No problem|Kein Problem
+😔|مجھے افسوس ہے|mujhe afsos hai|मुझे अफ़सोस है|I'm sorry|Es tut mir leid
+🤝|دل سے شکریہ|dil se shukriya|दिल से धन्यवाद|Many thanks|Herzlichen Dank
+☀️|آپ کا دن اچھا گزرے!|aap ka din achha guzre!|आपका दिन अच्छा हो!|Have a nice day!|Einen schönen Tag noch!
+🌙|آپ کی شام اچھی گزرے!|aap ki shaam achhi guzre!|आपकी शाम अच्छी हो!|Have a nice evening!|Schönen Abend noch!
+🍀|اچھی قسمت!|achhi qismat!|गुड लक!|Good luck!|Viel Glück!
+🤒|جلدی ٹھیک ہو جائیں!|jaldi theek ho jaayein!|जल्दी ठीक हो जाइए!|Get well soon!|Gute Besserung!
+🍽️|کھانے کا مزہ لیں!|khaane ka maza lein!|खाने का आनंद लें!|Enjoy your meal!|Guten Appetit!
+✉️|محترم خواتین و حضرات|mohtaram khawaateen-o-hazraat|आदरणीय महोदय / महोदया|Dear Sir or Madam|Sehr geehrte Damen und Herren
+👋|نیک تمناؤں کے ساتھ|nek tamannaon ke saath|शुभकामनाओं के साथ|Kind regards|Mit freundlichen Grüßen
+## compare|A2|📊|Comparing: better, best
+👍|اچھا، بہتر، سب سے اچھا|achha, behtar, sab se achha|अच्छा, बेहतर, सबसे अच्छा|good, better, best|gut, besser, am besten
+🐘|بڑا، زیادہ بڑا|bara, zyada bara|बड़ा, ज़्यादा बड़ा|big, bigger|groß, größer
+🐭|چھوٹا، زیادہ چھوٹا|chhota, zyada chhota|छोटा, ज़्यादा छोटा|small, smaller|klein, kleiner
+❤️|پسند، زیادہ پسند|pasand, zyada pasand|पसंद, ज़्यादा पसंद|like, prefer|gern, lieber
+➕|زیادہ|zyada|ज़्यादा|more|mehr
+➖|کم|kam|कम|less|weniger
+💎|زیادہ مہنگا|zyada mehenga|ज़्यादा महँगा|more expensive|teurer
+🏷️|زیادہ سستا|zyada sasta|ज़्यादा सस्ता|cheaper|billiger
+⚡|زیادہ تیز|zyada tez|ज़्यादा तेज़|faster|schneller
+🧓|عمر میں بڑا|umar mein bara|उम्र में बड़ा|older|älter
+🧒|عمر میں چھوٹا|umar mein chhota|उम्र में छोटा|younger|jünger
+🏙️|برلن میونخ سے بڑا ہے|berlin munich se bara hai|बर्लिन म्यूनिख से बड़ा है|Berlin is bigger than Munich|Berlin ist größer als München
+🍵|مجھے کافی سے زیادہ چائے پسند ہے|mujhe coffee se zyada chai pasand hai|मुझे कॉफ़ी से ज़्यादा चाय पसंद है|I prefer tea to coffee|Ich trinke lieber Tee als Kaffee
+🚆|ٹرین بس سے تیز ہے|train bus se tez hai|ट्रेन बस से तेज़ है|The train is faster than the bus|Der Zug ist schneller als der Bus
+🟰|اتنا ہی… جتنا|utna hi… jitna|उतना ही… जितना|as … as|so … wie
+👫|میں اپنے بھائی جتنی لمبی ہوں|main apne bhai jitni lambi hoon|मैं अपने भाई जितनी लंबी हूँ|I'm as tall as my brother|Ich bin so groß wie mein Bruder
+🏔️|سب سے اونچا پہاڑ|sab se ooncha pahaar|सबसे ऊँचा पहाड़|the highest mountain|der höchste Berg
+⭐|میرا پسندیدہ کھانا بریانی ہے|mera pasandeeda khaana biryani hai|मेरा पसंदीदा खाना बिरयानी है|My favourite food is biryani|Mein Lieblingsessen ist Biryani
+## timewords|A2|⏱️|Time words
+🔁|اکثر|aksar|अक्सर|often|oft
+🙂|عام طور پر|aam taur par|आम तौर पर|usually|normalerweise
+🔄|کبھی کبھی|kabhi kabhi|कभी-कभी|sometimes|manchmal
+🚫|کبھی نہیں|kabhi nahin|कभी नहीं|never|nie
+♾️|ہمیشہ|hamesha|हमेशा|always|immer
+🤏|بہت کم|bohat kam|बहुत कम|rarely|selten
+1️⃣|سب سے پہلے|sab se pehle|सबसे पहले|first of all|zuerst
+⏭️|اس کے بعد|is ke baad|उसके बाद|after that|danach
+🏁|آخر میں|aakhir mein|आख़िर में|finally|zum Schluss
+⏰|وقت پر|waqt par|समय पर|on time|pünktlich
+⌛|ابھی ابھی|abhi abhi|अभी-अभी|just now|gerade
+🕰️|پہلے زمانے میں|pehle zamaane mein|पहले के ज़माने में|in the past|früher
+🔮|بعد میں|baad mein|बाद में|later|später
+⏩|آنے والا پرسوں|aane wala parson|आने वाला परसों|the day after tomorrow|übermorgen
+⏪|گزرا ہوا پرسوں|guzra hua parson|बीता हुआ परसों|the day before yesterday|vorgestern
+🌅|کل صبح|kal subah|कल सुबह|tomorrow morning|morgen früh
+🗓️|ہفتے میں دو بار|hafte mein do baar|हफ़्ते में दो बार|twice a week|zweimal pro Woche
+⏳|دو گھنٹے سے|do ghante se|दो घंटे से|for two hours (until now)|seit zwei Stunden
+⏱️|پانچ منٹ میں|paanch minute mein|पाँच मिनट में|in five minutes|in fünf Minuten
+## tech|A2|💻|Computer & internet
+💻|کمپیوٹر|computer|कंप्यूटर|the computer|der Computer
+⌨️|کی بورڈ|keyboard|कीबोर्ड|the keyboard|die Tastatur
+🖥️|اسکرین|screen|स्क्रीन|the screen|der Bildschirm
+🖨️|پرنٹر|printer|प्रिंटर|the printer|der Drucker
+🌐|انٹرنیٹ|internet|इंटरनेट|the internet|das Internet
+🔗|لنک|link|लिंक|the link|der Link
+📁|فائل|file|फ़ाइल|the file|die Datei
+📱|ایپ|app|ऐप|the app|die App
+👤|یوزر نیم|username|यूज़रनेम|the username|der Benutzername
+💾|محفوظ کرنا|mehfooz karna|सेव करना|to save|speichern
+⬇️|ڈاؤن لوڈ کرنا|download karna|डाउनलोड करना|to download|herunterladen
+⬆️|اپ لوڈ کرنا|upload karna|अपलोड करना|to upload|hochladen
+🔐|لاگ ان کرنا|log in karna|लॉग इन करना|to log in|sich einloggen
+🗑️|مٹانا|mitaana|मिटाना|to delete|löschen
+🔄|دوبارہ شروع کرنا|dobaara shuru karna|रीस्टार्ट करना|to restart|neu starten
+🐞|کمپیوٹر کام نہیں کر رہا|computer kaam nahin kar raha|कंप्यूटर काम नहीं कर रहा|The computer isn't working|Der Computer funktioniert nicht
+📤|میں آپ کو فائل بھیجتی ہوں|main aap ko file bhejti hoon|मैं आपको फ़ाइल भेजती हूँ|I'll send you the file|Ich schicke Ihnen die Datei
+## festivals|A2|🎉|Festivals & invitations
+🌙|عید الفطر|eid-ul-fitr|ईद-उल-फ़ित्र|Eid al-Fitr|das Zuckerfest
+🐑|عید الاضحیٰ|eid-ul-azha|ईद-उल-अज़हा|Eid al-Adha|das Opferfest
+🌙|رمضان|ramzaan|रमज़ान|Ramadan|der Ramadan
+🪔|دیوالی|diwali|दिवाली|Diwali|das Diwali-Fest
+🎄|کرسمس|christmas|क्रिसमस|Christmas|Weihnachten
+🐰|ایسٹر|easter|ईस्टर|Easter|Ostern
+🎆|نئے سال کی رات|naye saal ki raat|नए साल की रात|New Year's Eve|Silvester
+🎡|اکتوبر فیسٹ|october fest|ऑक्टोबरफ़ेस्ट|Oktoberfest|das Oktoberfest
+🎁|تحفہ|tohfa|तोहफ़ा|the present|das Geschenk
+💒|شادی|shaadi|शादी|the wedding|die Hochzeit
+🕯️|کرسمس بازار|christmas bazaar|क्रिसमस बाज़ार|the Christmas market|der Weihnachtsmarkt
+🌙|عید مبارک!|eid mubaarak!|ईद मुबारक!|Eid Mubarak!|Frohes Fest!
+🎄|میری کرسمس!|merry christmas!|मेरी क्रिसमस!|Merry Christmas!|Frohe Weihnachten!
+🎆|نیا سال مبارک!|naya saal mubaarak!|नया साल मुबारक!|Happy New Year!|Frohes neues Jahr!
+🎉|بہت مبارک ہو!|bohat mubaarak ho!|बहुत बधाई हो!|Congratulations!|Herzlichen Glückwunsch!
+🍽️|ہمیں کھانے پر بلایا گیا تھا|hamein khaane par bulaaya gaya tha|हमें खाने पर बुलाया गया था|We were invited to dinner|Wir waren zum Essen eingeladen
+💐|دعوت کا شکریہ|daawat ka shukriya|न्योते के लिए धन्यवाद|Thank you for the invitation|Danke für die Einladung
+🎈|کیا آپ میری پارٹی میں آئیں گے؟|kya aap meri party mein aayenge?|क्या आप मेरी पार्टी में आएँगे?|Will you come to my party?|Kommen Sie zu meiner Party?
+## idioms|A2|🦉|German sayings & idioms
+🐷|میری قسمت اچھی تھی|meri qismat achhi thi|मेरी क़िस्मत अच्छी थी|I was lucky (lit. I had pig)|Ich habe Schwein gehabt
+🚉|مجھے کچھ سمجھ نہیں آیا|mujhe kuch samajh nahin aaya|मुझे कुछ समझ नहीं आया|I don't understand a thing (lit. I only understand "station")|Ich verstehe nur Bahnhof
+🍅|اسے کچھ نظر نہیں آتا|use kuch nazar nahin aata|उसे कुछ नज़र नहीं आता|He doesn't notice anything (lit. tomatoes on the eyes)|Er hat Tomaten auf den Augen
+🌭|مجھے کوئی فرق نہیں پڑتا|mujhe koi farq nahin parta|मुझे कोई फ़र्क़ नहीं पड़ता|I don't care (lit. that's sausage to me)|Das ist mir Wurst
+🤞|میں تمہارے لیے دعا کروں گی|main tumhaare liye dua karoon gi|मैं तुम्हारे लिए दुआ करूँगी|Fingers crossed for you (lit. I press my thumbs)|Ich drücke dir die Daumen
+🧈|سب ٹھیک ہے|sab theek hai|सब ठीक है|Everything's fine (lit. all in butter)|Alles in Butter
+😫|میں بالکل تھک گئی ہوں|main bilkul thak gayi hoon|मैं बिल्कुल थक गई हूँ|I'm completely exhausted|Ich bin fix und fertig
+😴|بہت ہی بورنگ|bohat hi boring|बहुत ही बोरिंग|incredibly boring (lit. stink-boring)|stinklangweilig
+🙅|یہ میرے بس کی بات نہیں|ye mere bas ki baat nahin|यह मेरे बस की बात नहीं|That's not my thing|Das ist nicht mein Ding
+💢|اب میرا صبر ختم ہو گیا|ab mera sabr khatam ho gaya|अब मेरा सब्र ख़त्म हो गया|I've had enough (lit. my collar is bursting)|Mir platzt der Kragen
+🔔|اب سمجھ آئی!|ab samajh aayi!|अब समझ आया!|Now I get it! (lit. now it rang)|Jetzt hat es geklingelt!
+💡|مجھے بات سمجھ آ گئی|mujhe baat samajh aa gayi|मुझे बात समझ आ गई|It dawned on me (lit. a light went on)|Mir ist ein Licht aufgegangen
+👅|زبان کی نوک پر ہے|zabaan ki nok par hai|ज़बान की नोक पर है|It's on the tip of my tongue|Es liegt mir auf der Zunge
+🐘|رائی کا پہاڑ بنانا|raai ka pahaar banaana|राई का पहाड़ बनाना|to make a mountain out of a molehill (lit. an elephant from a mosquito)|aus einer Mücke einen Elefanten machen
+🪟|پیسے برباد کرنا|paise barbaad karna|पैसे बर्बाद करना|to waste money (lit. throw it out of the window)|Geld zum Fenster hinauswerfen
+🏠|گھر جیسا محسوس کرنا|ghar jaisa mehsoos karna|घर जैसा महसूस करना|to feel at home|sich wie zu Hause fühlen
+🐌|بہت آہستہ|bohat aahista|बहुत धीरे|very slowly (lit. at snail's pace)|im Schneckentempo
+🔨|بالکل صحیح بات کہنا|bilkul sahi baat kehna|बिल्कुल सही बात कहना|to hit the nail on the head|den Nagel auf den Kopf treffen
+🕺|وہاں بہت رونق ہے|wahan bohat raunaq hai|वहाँ बहुत रौनक़ है|It's a great party there (lit. the bear dances)|Da steppt der Bär
+🍰|یہ آسان نہیں ہے|ye aasaan nahin hai|यह आसान नहीं है|It's no picnic (lit. no sugar-licking)|Das ist kein Zuckerschlecken
+🌧️|موسلا دھار بارش ہو رہی ہے|moosla dhaar baarish ho rahi hai|मूसलाधार बारिश हो रही है|It's pouring (lit. raining in streams)|Es regnet in Strömen
+🤷|مجھے کوئی اندازہ نہیں|mujhe koi andaaza nahin|मुझे कोई अंदाज़ा नहीं|I have no idea|Keine Ahnung
+🐻|کسی کو بے وقوف بنانا|kisi ko bewaqoof banaana|किसी को बेवक़ूफ़ बनाना|to fool someone (lit. tie a bear on someone)|jemandem einen Bären aufbinden

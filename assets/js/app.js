@@ -5,7 +5,7 @@
  */
 (() => {
 "use strict";
-const APP_VERSION = "1.1.0";
+const APP_VERSION = "1.2.0";
 const KEY = "gb-v1";
 
 /* =====================================================================
@@ -30,7 +30,7 @@ const SANDBOX = (() => {
   return /claudeusercontent|claude\.ai/.test(location.hostname);
 })();
 
-const PLURAL = /^(Bücher|Eltern|Kinder|Geschwister|Leute)$/;
+const PLURAL = /^(Bücher|Eltern|Kinder|Geschwister|Leute|Haare|Socken|Handschuhe|Trauben|Linsen|USA|Nebenkosten|Ersparnisse|Zinsen|Kenntnisse|Hausaufgaben|Ferien|Tropfen|Zähne|Kopfschmerzen)$/;
 function genderOf(de){ const m = /^(der|die|das)\s+([A-ZÄÖÜ]\S*)/.exec(de||""); if(!m) return ""; if(m[1]==="die" && PLURAL.test(m[2])) return "p"; return {der:"m",die:"f",das:"n"}[m[1]]; }
 function colorDe(s){
   return esc(s).replace(/\b(der|die|das)\s+([A-ZÄÖÜ][\wäöüß-]*)/g, (m,a,w) => {
@@ -62,7 +62,7 @@ document.addEventListener("click", e => { const b = e.target.closest("[data-say]
 /* =====================================================================
    CONTENT
    ===================================================================== */
-let UNITS = [], DECK = [], GUIDE = null, STORIES = [];
+let UNITS = [], DECK = [], GUIDE = null, STORIES = [], EXTRAS = {tricks:[], facts:[], jokes:[]};
 async function getText(inlineId, url){
   const el = document.getElementById(inlineId);
   if(el) return el.textContent;
@@ -311,10 +311,11 @@ function route(){
   stopConfetti();
   session = null; document.body.classList.remove("in-session");
   const h = (location.hash||"#today").slice(1);
-  const nav = h.startsWith("learn")||h.startsWith("unit-")||h.startsWith("stor") ? "learn" : h.startsWith("words") ? "words" : h.startsWith("guide") ? "guide" : (h.startsWith("me")||h.startsWith("report")) ? "me" : "today";
+  const nav = h.startsWith("learn")||h.startsWith("unit-")||h.startsWith("stor")||h.startsWith("fun") ? "learn" : h.startsWith("words") ? "words" : h.startsWith("guide") ? "guide" : (h.startsWith("me")||h.startsWith("report")) ? "me" : "today";
   setNav(nav); applyPrefs(); renderStats();
   if(h==="learn") return viewLearn();
   if(h==="stories") return viewStories();
+  if(h==="fun" || h.startsWith("fun-")) return viewFun(h.slice(4) || "tricks");
   if(h.startsWith("story-") && storyById(h.slice(6))) return viewStory(storyById(h.slice(6)));
   if(h.startsWith("unit-") && unitById(h.slice(5))) return viewUnit(unitById(h.slice(5)));
   if(h==="words" || h==="words-want") return viewWords("want");
@@ -417,6 +418,7 @@ function viewToday(){
       <a class="listtile want" href="#words"><span class="label">☆ I want to learn</span><b>${wantList().length}</b><span class="small muted">on your list</span></a>
     </div>
     ${storyTodayCard()}
+    ${didYouKnow()}
     <div class="section-title"><h2>Word of the day</h2><span class="small muted">${fmtDate(Date.now())}</span></div>
     <div class="panel wotd">
       <span class="vis${isTextVisual(w.v)?" txt":""}" aria-hidden="true">${esc(w.v)}</span>
@@ -460,7 +462,7 @@ function viewLearn(){
         return `<a class="unit${u===nu?" next":""}" href="#unit-${u.id}"><span class="ico">${esc(u.emoji)}</span><span class="num">Unit ${u.n}</span><b>${esc(u.title)}</b><span class="meta">${starsHTML(st.stars)}<span>${st.mastered}/${st.total}</span></span></a>`; }).join("")}</div>`;
   };
   app.innerHTML = `<h1>Learn</h1><p class="muted" style="margin:6px 0 0">Units are in the order you need them in daily life. Start at the top or jump to what you need this week.</p>
-    ${practiceChips()}${storiesStrip()}${levels.map(block).join("")}`;
+    ${practiceChips()}${storiesStrip()}${funStrip()}${levels.map(block).join("")}`;
 }
 function viewUnit(u){
   const st = unitStats(u), next = UNITS[UNITS.indexOf(u)+1];
@@ -1246,6 +1248,67 @@ document.addEventListener("keydown", e => { if(e.key === "Escape") closeWordShee
 addEventListener("hashchange", closeWordSheet);
 
 /* =====================================================================
+   FUN & TRICKS — learning tricks, facts, idioms, jokes
+   ===================================================================== */
+let dykOffset = 0, jokeOpen = {};
+const funItems = () => [
+  ...EXTRAS.tricks.map(x => ({...x, kind:"Trick"})),
+  ...EXTRAS.facts.map(x => ({...x, kind:"Fact"})),
+  ...EXTRAS.jokes.map(x => ({e:"😄", kind:"Joke", t:x.q, d:x.a, joke:x}))
+];
+function jokeTr(j){ const b = S.settings.base; return b==="ur" ? `<span class="ur">${esc(j.ur)}</span>` : b==="hi" ? `<span class="hi">${esc(j.hi)}</span>` : esc(j.en); }
+function didYouKnow(){
+  const items = funItems(); if(!items.length) return "";
+  const k = today().split("-").join("") * 1;
+  const it = items[(k + dykOffset) % items.length];
+  return `<div class="section-title"><h2>Did you know?</h2><a class="small muted" href="#fun">Fun &amp; tricks</a></div>
+    <div class="panel dyk">
+      <div class="row between"><span class="pill">${esc(it.e)} ${esc(it.kind)}</span><button class="btn sm ghost" type="button" id="dykNext">Next →</button></div>
+      <b class="dyk-t" ${it.joke?'lang="de"':""}>${esc(it.t)}</b>
+      ${it.joke ? `<p class="dyk-d"><b lang="de">${esc(it.d)}</b></p><p class="small muted" style="margin:0">${jokeTr(it.joke)}</p>` : `<p class="dyk-d">${esc(it.d)}</p>`}
+    </div>`;
+}
+document.addEventListener("click", e => { if(e.target.closest("#dykNext")){ dykOffset++; const y = window.scrollY; route(); window.scrollTo(0,y); } });
+function funStrip(){
+  const idi = unitById("idioms");
+  return `<div class="section-title"><h2>Fun &amp; tricks</h2><a class="btn sm" href="#fun">Open</a></div>
+    <div class="funtiles">
+      <a class="funtile" href="#fun-tricks"><span>💡</span><b>Learning tricks</b><small>${EXTRAS.tricks.length} quick tips</small></a>
+      <a class="funtile" href="#fun-facts"><span>🇩🇪</span><b>Facts</b><small>${EXTRAS.facts.length} things to know</small></a>
+      <a class="funtile" href="#fun-idioms"><span>🦉</span><b>Idioms</b><small>${idi?idi.cards.length:0} sayings</small></a>
+      <a class="funtile" href="#fun-jokes"><span>😄</span><b>Jokes</b><small>${EXTRAS.jokes.length} German jokes</small></a>
+    </div>`;
+}
+function viewFun(tab){
+  if(!["tricks","facts","idioms","jokes"].includes(tab)) tab = "tricks";
+  const idi = unitById("idioms");
+  const tabs = [["tricks","💡 Tricks"],["facts","🇩🇪 Facts"],["idioms","🦉 Idioms"],["jokes","😄 Jokes"]];
+  let body = "";
+  if(tab==="tricks" || tab==="facts"){
+    body = `<div class="funlist">${EXTRAS[tab].map(x => `<div class="panel funcard"><span class="fe" aria-hidden="true">${esc(x.e)}</span><div><b>${esc(x.t)}</b><p>${esc(x.d)}</p></div></div>`).join("")}</div>`;
+  } else if(tab==="idioms"){
+    body = idi ? `<p class="muted small" style="margin:0 0 10px">Germans use these every day. The English shows the meaning, with the word-for-word version in brackets.</p>
+      <div class="row" style="margin-bottom:12px"><button class="btn primary" data-start="unitall" data-id="idioms">🃏 Practise all idioms</button></div>
+      <div class="words">${idi.cards.map(c => wordRow(c)).join("")}</div>` : `<p class="muted">No idioms yet.</p>`;
+  } else {
+    body = `<p class="muted small" style="margin:0 0 10px">Read the question, guess, then tap to see the answer. Most German jokes are word plays, so each one teaches you a word.</p>
+      <div class="funlist">${EXTRAS.jokes.map((j,i) => `<div class="panel funcard joke">
+        <span class="fe" aria-hidden="true">😄</span>
+        <div><b lang="de">${esc(j.q)}</b>
+          ${jokeOpen[i] ? `<p class="punch" lang="de">${esc(j.a)}</p><p class="small">${jokeTr(j)}</p>${S.settings.base!=="en"&&shown("en")?`<p class="small muted">${esc(j.en)}</p>`:""}` : ""}
+          <div class="row" style="margin-top:8px">
+            ${jokeOpen[i] ? "" : `<button class="btn sm" type="button" data-joke="${i}">Show the answer</button>`}
+            ${canSpeak ? `<button class="speak" type="button" data-say="${esc(j.q+" "+j.a)}">🔊 Listen</button>` : ""}
+          </div></div></div>`).join("")}</div>`;
+  }
+  app.innerHTML = `<a class="back" href="#learn">← Learn</a><h1>Fun &amp; tricks</h1>
+    <p class="muted" style="margin:6px 0 14px;max-width:60ch">Small things that make German easier and more fun: memory tricks, facts about life in Germany, idioms and jokes.</p>
+    <nav class="chips" style="margin-bottom:16px" aria-label="Fun sections">${tabs.map(([k,l]) => `<a class="chip" href="#fun-${k}" aria-pressed="${k===tab}" style="text-decoration:none">${l}</a>`).join("")}</nav>
+    ${body}`;
+  $$("[data-joke]", app).forEach(b => b.onclick = () => { jokeOpen[+b.dataset.joke] = true; const y = window.scrollY; viewFun("jokes"); window.scrollTo(0,y); });
+}
+
+/* =====================================================================
    GRAMMAR GUIDE
    ===================================================================== */
 function guideSections(){ if(!GUIDE) return []; const t = document.createElement("template"); t.innerHTML = GUIDE; return [...t.content.querySelectorAll("section")]; }
@@ -1359,8 +1422,9 @@ function showUpdateBar(){
 async function boot(){
   load(); applyPrefs();
   try{
-    const [deckTxt, guideTxt, storyTxt] = await Promise.all([getText("deck-src","data/deck.txt"), getText("guide-src","data/guide.html").catch(()=>""), getText("stories-src","data/stories.json").catch(()=>"")]);
+    const [deckTxt, guideTxt, storyTxt, extraTxt] = await Promise.all([getText("deck-src","data/deck.txt"), getText("guide-src","data/guide.html").catch(()=>""), getText("stories-src","data/stories.json").catch(()=>""), getText("extras-src","data/extras.json").catch(()=>"")]);
     ({units:UNITS, deck:DECK} = parseDeck(deckTxt)); GUIDE = guideTxt;
+    try{ const x = JSON.parse(extraTxt||"{}"); EXTRAS = {tricks: Array.isArray(x.tricks)?x.tricks:[], facts: Array.isArray(x.facts)?x.facts:[], jokes: Array.isArray(x.jokes)?x.jokes:[]}; }catch(e){}
     try{ STORIES = (JSON.parse(storyTxt||"{}").stories||[]).filter(x => x && /^[a-z0-9-]{1,40}$/.test(x.id) && Array.isArray(x.panels)); }catch(e){ STORIES = []; }
   }catch(e){
     app.innerHTML = `<div class="empty"><span class="e">⚠️</span><b>Could not load the lessons</b><span>${esc(e.message)}. If you opened index.html straight from your computer, run it from a web server or GitHub Pages instead.</span></div>`;

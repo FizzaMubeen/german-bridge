@@ -1,6 +1,6 @@
 # German Bridge
 
-**Live:** https://germanbridge.fizzamubeen.com · **Version:** 1.1.0 · [Changelog](CHANGELOG.md)
+**Live:** https://germanbridge.fizzamubeen.com · **Version:** 1.2.0 · [Changelog](CHANGELOG.md)
 
 **Learn everyday German from Urdu, Hindi or English.** Picture flashcards, your own word lists, daily practice that adapts to you, and printable PDFs of everything you learn. Private by design: no account, no tracking, all data stays on the learner's phone.
 
@@ -22,7 +22,7 @@ Built for people who just moved to Germany and need German for real life: the ba
 ## Features
 
 - **Today**: a 10-minute plan (due reviews → wish-list words → new words), word of the day, streak and daily goal
-- **Learn**: 22 units in daily-life order (12 × A1, 10 × A2), 370 cards with pictures and gender colors (der blue, die red, das green, plural purple)
+- **Learn**: 54 units in daily-life order (27 × A1, 27 × A2), 1,000 cards with pictures and gender colors (der blue, die red, das green, plural purple)
 - **Practice**: flip cards or a 4-option quiz; "✓ I already know this" and "☆ Want to learn" on every card; German audio from the device's voice
 - **My words**: search, sort, practise each list, add/edit/delete your own entries, see how often you listened to each word
 - **Me**: level and XP, 14-day chart, 16 badges, reports, settings, backup/restore, delete everything
