@@ -3,6 +3,10 @@
 The version shown in the app (Me → bottom of the page) matches the tags in this repository.
 Phones that installed the app update themselves; learners keep all their progress.
 
+## 1.11.0 — 2026-10-28
+- **Speaker voice setting** (Me → Settings): the speaker buttons can say the **German**, the **English** meaning, or **German, then English**. Works everywhere: cards, practice, stories, grammar
+- Every card and story line is now also recorded in English (free Piper voice en_US-lessac), so English sounds natural too; the phone's English voice is only a fallback
+
 ## 1.10.0 — 2026-10-28
 - **Stories are now little books:** one page at a time with a big picture, book-style German text, swipe or arrows to turn pages, "Page 2 of 6"
 - **Tap any word** (not only highlighted ones): a bubble right above it shows the meaning in Urdu, Hindi or English, with Listen, ☆ want to learn and ✓ I know it. Inside a phrase it also shows what the whole phrase means

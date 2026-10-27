@@ -6,7 +6,7 @@
  */
 (() => {
 "use strict";
-const APP_VERSION = "1.10.0";
+const APP_VERSION = "1.11.0";
 const KEY = "gb-v1";
 
 /* =====================================================================
@@ -73,7 +73,7 @@ const ic = (n, cls="") => `<svg class="ic${cls?" "+cls:""}" viewBox="0 0 24 24" 
    SPEECH — recorded natural voice first (audio/*.mp3, made by scripts/make-audio.py),
    the device's own German voice as a fallback. Nothing is sent anywhere.
    ===================================================================== */
-let voice = null, AUDIO = null;
+let voice = null, voiceEn = null, AUDIO = null, DE2EN = new Map();
 const canTTS = "speechSynthesis" in window;
 const canSpeak = true;                    // recordings play everywhere; the 🔊 buttons always show
 const normTxt = t => String(t||"").normalize("NFC").trim().replace(/\s+/g," ");
@@ -81,41 +81,62 @@ function audioKey(t){ let h = 0x811c9dc5; for(const b of new TextEncoder().encod
 function pickVoice(){
   try{ const vs = speechSynthesis.getVoices().filter(v => /^de([-_]|$)/i.test(v.lang));
     const score = v => (/de[-_]DE/i.test(v.lang)?4:0) + (/google|natural|neural|premium|enhanced|anna|helena|katja|petra|markus/i.test(v.name)?3:0) + (v.localService?1:0);
-    voice = vs.sort((a,b) => score(b)-score(a))[0] || null; }catch(e){}
+    voice = vs.sort((a,b) => score(b)-score(a))[0] || null;
+    const en = speechSynthesis.getVoices().filter(v => /^en([-_]|$)/i.test(v.lang));
+    const se = v => (/en[-_](US|GB)/i.test(v.lang)?4:0) + (/google|natural|neural|premium|enhanced|samantha|daniel|karen|serena/i.test(v.name)?3:0) + (v.localService?1:0);
+    voiceEn = en.sort((a,b) => se(b)-se(a))[0] || null; }catch(e){}
 }
 if(canTTS){ try{ pickVoice(); speechSynthesis.addEventListener("voiceschanged", pickVoice); }catch(e){} }
 const player = typeof Audio !== "undefined" ? new Audio() : null;
 let lastSaid = {t:"", at:0};
 function ttsText(t){ return normTxt(t).replace(/\s*\([^)]*\)/g,"").replace(/\.\.\.|…/g,"").split(" / ").join(", ").replace(/\s+([,.!?])/g,"$1").replace(/^[ ,]+|[ ,]+$/g,""); }
-function speakTTS(text, slow){
+function speakTTS(text, slow, lang, onend){
   if(!canTTS){ toast("This browser has no German voice. Try Chrome or Safari."); return; }
   try{
     speechSynthesis.cancel();
     const u = new SpeechSynthesisUtterance(ttsText(text));
-    u.lang = "de-DE"; if(voice) u.voice = voice; u.rate = slow ? .68 : .88;
+    if(lang === "en"){ u.lang = "en-US"; if(voiceEn) u.voice = voiceEn; } else { u.lang = "de-DE"; if(voice) u.voice = voice; }
+    u.rate = slow ? .68 : .88; if(onend) u.onend = onend;
+    let started = false; u.onstart = () => { started = true; };
     speechSynthesis.resume(); speechSynthesis.speak(u);
-    // Chrome sometimes drops an utterance spoken straight after cancel(): try once more if it never started
-    setTimeout(() => { try{ if(!speechSynthesis.speaking && !speechSynthesis.pending) speechSynthesis.speak(u); }catch(e){} }, 250);
+    // Chrome sometimes drops an utterance spoken straight after cancel(): try once more only if it never started
+    setTimeout(() => { try{ if(!started && !speechSynthesis.speaking && !speechSynthesis.pending) speechSynthesis.speak(u); }catch(e){} }, 400);
   }catch(e){}
 }
-function playRecording(k, slow, text){
-  // play() must run straight from the tap (iPhone/Safari block sound that starts later), so no awaiting before it
-  player.pause();
-  player.src = "audio/"+k+".mp3";
-  player.playbackRate = slow ? .75 : 1;
-  try{ player.preservesPitch = true; player.webkitPreservesPitch = true; }catch(e){}
-  const pr = player.play();
-  if(pr && pr.catch) pr.catch(err => { if(err && err.name !== "AbortError") speakTTS(text, slow); });
+const recKey = (lang, t) => lang === "en" ? audioKey("en:" + normTxt(t)) : audioKey(t);
+/* play one or more parts in a row (German, then English…). The first play() runs inside the tap, as iPhones require. */
+let playToken = 0;
+function playParts(parts, slow){
+  const token = ++playToken;
+  const next = i => {
+    if(token !== playToken || i >= parts.length) return;
+    const {lang, text} = parts[i], k = recKey(lang, text), after = () => setTimeout(() => next(i+1), 350);
+    if(player && AUDIO && AUDIO.has(k)){
+      player.onended = after;
+      player.pause(); player.src = "audio/" + k + ".mp3"; player.playbackRate = slow ? .75 : 1;
+      try{ player.preservesPitch = true; player.webkitPreservesPitch = true; }catch(e){}
+      const pr = player.play();
+      if(pr && pr.catch) pr.catch(err => { if(err && err.name !== "AbortError") speakTTS(text, slow, lang, after); });
+    } else speakTTS(text, slow, lang, after);
+  };
+  next(0);
 }
 function say(text, cardId){
   const t = normTxt(text), now = Date.now();
   const slow = lastSaid.t === t && now - lastSaid.at < 5000;     // tap again = slower
   lastSaid = {t, at: now};
-  const k = audioKey(t);
-  if(player && AUDIO && AUDIO.has(k)) playRecording(k, slow, t);
-  else speakTTS(t, slow);
+  const v = S ? S.settings.voice : "de", en = DE2EN.get(t) || (cardId && BYID.get(cardId) && BYID.get(cardId).en) || "";
+  const parts = v === "en" ? [en ? {lang:"en", text:en} : {lang:"de", text:t}]
+    : v === "both" && en ? [{lang:"de", text:t}, {lang:"en", text:en}] : [{lang:"de", text:t}];
+  playParts(parts, slow);
   if(slow) toast("Slower", {kind:"info"});
   if(cardId && S){ const r = S.cards[cardId] || (S.cards[cardId] = {b:-1}); r.l = (r.l||0) + 1; S.listens = (S.listens||0) + 1; save(); }
+}
+function buildDE2EN(){
+  DE2EN = new Map();
+  const add = (de, en) => { if(de && en && !DE2EN.has(normTxt(de))) DE2EN.set(normTxt(de), String(en).replace(/\s*\([^)]*\)/g, "").trim()); };
+  for(const c of allCards()) add(c.de, c.en);
+  for(const st of STORIES){ for(const p of st.panels || []) add(p.de, p.en); for(const v of Object.values(st.words || {})) if(v && typeof v === "object") add(v.de, v.en); }
 }
 async function saveAllAudio(btn){
   if(!AUDIO) return;
@@ -189,7 +210,7 @@ function sanitize(raw){
   out.settings = {
     level: ["A1","A2","B1"].includes(s.level)?s.level:"A1", name: clip(s.name,60), base: ["ur","hi","en"].includes(s.base)?s.base:"ur", front: s.front==="base"?"base":"de",
     mode: s.mode==="quiz"?"quiz":"flip", goal: [10,20,40].includes(+s.goal)?+s.goal:20, theme: ["light","white","dark"].includes(s.theme)?s.theme:"system",
-    autoplay: !!s.autoplay, listenOk: !!s.listenOk, stt: ["offline","device"].includes(s.stt) ? s.stt : "", sttReady: !!s.sttReady, remind: /^\d{2}:\d{2}$/.test(s.remind||"") ? s.remind : "", hideInstall: Math.max(0, num(s.hideInstall,0)), extra: {rom: s.extra?.rom!==false, en: s.extra?.en!==false, ur: !!s.extra?.ur, hi: !!s.extra?.hi}
+    autoplay: !!s.autoplay, voice: ["de","en","both"].includes(s.voice) ? s.voice : "de", listenOk: !!s.listenOk, stt: ["offline","device"].includes(s.stt) ? s.stt : "", sttReady: !!s.sttReady, remind: /^\d{2}:\d{2}$/.test(s.remind||"") ? s.remind : "", hideInstall: Math.max(0, num(s.hideInstall,0)), extra: {rom: s.extra?.rom!==false, en: s.extra?.en!==false, ur: !!s.extra?.ur, hi: !!s.extra?.hi}
   };
   return out;
 }
@@ -1325,7 +1346,9 @@ function viewMe(){
       <div class="setup">
         <div><span class="label">Daily goal</span><div class="chips" data-set="goal">${[10,20,40].map(g=>`<button class="chip" data-v="${g}" aria-pressed="${st.goal===g}">${g} cards</button>`).join("")}</div></div>
         <div><span class="label">Theme</span><div class="chips" data-set="theme">${[["system","Auto"],["light","Light"],["white","White"],["dark","Dark"]].map(([v,l])=>`<button class="chip" data-v="${v}" aria-pressed="${st.theme===v}">${l}</button>`).join("")}</div></div>
-        <div><span class="label">Audio</span><div class="chips"><button class="chip" id="autoplay" aria-pressed="${!!st.autoplay}">Play German after each answer</button>
+        <div><span class="label">Speaker voice</span><div class="chips" data-set="voice">${[["de","German"],["en","English"],["both","German, then English"]].map(([v,l])=>`<button class="chip" data-v="${v}" aria-pressed="${st.voice===v}">${ic("volume")}${l}</button>`).join("")}</div>
+          <span class="small muted">What the speaker buttons say. English helps if you are learning English, or want to hear the meaning.</span></div>
+        <div><span class="label">Audio</span><div class="chips"><button class="chip" id="autoplay" aria-pressed="${!!st.autoplay}">Play the voice after each answer</button>
           ${AUDIO && !SANDBOX ? `<button class="chip" id="audioAll" type="button">${ic("download")}Save all audio for offline (${AUDIO.size} words, about ${Math.round(AUDIO.size*7/1000)} MB)</button>` : ""}</div>
           <span class="small muted">Words play with a natural recorded voice. Tap 🔊 twice for slow.</span></div>
       </div>
@@ -2352,7 +2375,7 @@ async function boot(){
     app.innerHTML = `<div class="empty"><span class="e">⚠️</span><b>Could not load the lessons</b><span>${esc(e.message)}. If you opened index.html straight from your computer, run it from a web server or GitHub Pages instead.</span></div>`;
     return;
   }
-  rebuildIndex();
+  rebuildIndex(); buildDE2EN();
   if(!SANDBOX) loadAudioIndex();
   if(!location.hash) history.replaceState(null,"","#today");
   route();
