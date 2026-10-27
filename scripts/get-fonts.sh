@@ -8,7 +8,7 @@ mkdir -p assets/fonts
 base="https://cdn.jsdelivr.net/fontsource/fonts"
 get(){ # family file
   if [ ! -s "assets/fonts/$1-$2" ]; then
-    echo "↓ $1 $2"; curl -fsSL "$base/$1@latest/$2" -o "assets/fonts/$1-$2"
+    echo "↓ $1 $2"; curl -fsSL --retry 3 --connect-timeout 15 --max-time 60 "$base/$1@latest/$2" -o "assets/fonts/$1-$2"
   fi
 }
 get noto-nastaliq-urdu arabic-400-normal.woff2
