@@ -24,6 +24,7 @@ jobs:
         run: |
           mkdir _site
           cp -r index.html manifest.webmanifest sw.js .nojekyll assets data _site/
+          if [ -d audio ]; then cp -r audio _site/; fi
       - name: Build WordPress plugin zip (with fonts)
         run: bash scripts/build-wp-plugin.sh
       - name: Keep the WordPress zip as a download

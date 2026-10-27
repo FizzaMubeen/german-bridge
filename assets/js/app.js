@@ -5,7 +5,7 @@
  */
 (() => {
 "use strict";
-const APP_VERSION = "1.6.0";
+const APP_VERSION = "1.7.0";
 const KEY = "gb-v1";
 
 /* =====================================================================
@@ -40,23 +40,89 @@ function colorDe(s){
 }
 const isTextVisual = v => /^[\x00-\x7F½]+$/.test(v||"");
 
+/* ---------- line icons (one consistent set for every control) ---------- */
+const ICONS = {
+  volume:'<path d="M11 5 6 9H3v6h3l5 4z"/><path d="M15.5 8.5a5 5 0 0 1 0 7M18.5 5.5a9 9 0 0 1 0 13"/>',
+  check:'<path d="M20 6 9 17l-5-5"/>',
+  pen:'<path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"/>',
+  download:'<path d="M12 3v12M7 10l5 5 5-5M5 21h14"/>',
+  play:'<path d="M7 4.5v15l12.5-7.5z" fill="currentColor" stroke="none"/>',
+  plus:'<path d="M12 5v14M5 12h14"/>',
+  mic:'<rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/>',
+  quiz:'<rect x="3" y="3" width="8" height="8" rx="2"/><rect x="13" y="3" width="8" height="8" rx="2"/><rect x="3" y="13" width="8" height="8" rx="2"/><rect x="13" y="13" width="8" height="8" rx="2"/>',
+  cards:'<rect x="3" y="6" width="13" height="15" rx="2"/><path d="M8 3h11a2 2 0 0 1 2 2v13"/>',
+  left:'<path d="M19 12H5M12 19l-7-7 7-7"/>',
+  right:'<path d="M5 12h14M12 5l7 7-7 7"/>',
+  printer:'<path d="M6 9V3h12v6M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><path d="M6 14h12v7H6z"/>',
+  x:'<path d="M18 6 6 18M6 6l12 12"/>',
+  copy:'<rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15H4a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v1"/>',
+  trash:'<path d="M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6"/>',
+  star:'<path d="M12 3l2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1-4.4-4.3 6.1-.9z"/>',
+  repeat:'<path d="M17 2l4 4-4 4"/><path d="M3 11V9a3 3 0 0 1 3-3h15M7 22l-4-4 4-4"/><path d="M21 13v2a3 3 0 0 1-3 3H3"/>',
+  undo:'<path d="M9 14 4 9l5-5"/><path d="M4 9h10.5a5.5 5.5 0 0 1 0 11H11"/>',
+  info:'<circle cx="12" cy="12" r="9"/><path d="M12 16v-4M12 8h.01"/>',
+  phone:'<rect x="6" y="2" width="12" height="20" rx="3"/><path d="M11 18h2"/>',
+  gear:'<circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/>',
+};
+const ic = (n, cls="") => `<svg class="ic${cls?" "+cls:""}" viewBox="0 0 24 24" aria-hidden="true">${ICONS[n]||""}</svg>`;
 /* =====================================================================
-   SPEECH (German voice from the device, nothing is sent anywhere)
+   SPEECH — recorded natural voice first (audio/*.mp3, made by scripts/make-audio.py),
+   the device's own German voice as a fallback. Nothing is sent anywhere.
    ===================================================================== */
-let voice = null;
-const canSpeak = "speechSynthesis" in window;
-function pickVoice(){ try{ const vs = speechSynthesis.getVoices(); voice = vs.find(v => /^de(-|_)DE/i.test(v.lang)) || vs.find(v => /^de/i.test(v.lang)) || null; }catch(e){} }
-if(canSpeak){ try{ pickVoice(); speechSynthesis.onvoiceschanged = pickVoice; }catch(e){} }
-function say(text, cardId){
-  if(!canSpeak) return;
+let voice = null, AUDIO = null;
+const canTTS = "speechSynthesis" in window;
+const canSpeak = true;                    // recordings play everywhere; the 🔊 buttons always show
+const normTxt = t => String(t||"").normalize("NFC").trim().replace(/\s+/g," ");
+function audioKey(t){ let h = 0x811c9dc5; for(const b of new TextEncoder().encode(normTxt(t))){ h ^= b; h = Math.imul(h, 0x01000193) >>> 0; } return h.toString(16).padStart(8,"0"); }
+function pickVoice(){
+  try{ const vs = speechSynthesis.getVoices().filter(v => /^de([-_]|$)/i.test(v.lang));
+    const score = v => (/de[-_]DE/i.test(v.lang)?4:0) + (/google|natural|neural|premium|enhanced|anna|helena|katja|petra|markus/i.test(v.name)?3:0) + (v.localService?1:0);
+    voice = vs.sort((a,b) => score(b)-score(a))[0] || null; }catch(e){}
+}
+if(canTTS){ try{ pickVoice(); speechSynthesis.addEventListener("voiceschanged", pickVoice); }catch(e){} }
+const player = typeof Audio !== "undefined" ? new Audio() : null;
+const blobCache = new Map();
+let lastSaid = {t:"", at:0};
+function ttsText(t){ return normTxt(t).replace(/\s*\([^)]*\)/g,"").replace(/\.\.\.|…/g,"").split(" / ").join(", ").replace(/\s+([,.!?])/g,"$1").replace(/^[ ,]+|[ ,]+$/g,""); }
+function speakTTS(text, slow){
+  if(!canTTS){ toast("This browser has no German voice. Try Chrome or Safari."); return; }
   try{
-    const u = new SpeechSynthesisUtterance(String(text).split(" / ")[0]);
-    u.lang = "de-DE"; if(voice) u.voice = voice; u.rate = .9;
-    speechSynthesis.cancel(); speechSynthesis.speak(u);
+    speechSynthesis.cancel();
+    const u = new SpeechSynthesisUtterance(ttsText(text));
+    u.lang = "de-DE"; if(voice) u.voice = voice; u.rate = slow ? .68 : .88;
+    // Chrome sometimes drops an utterance spoken straight after cancel(); a short pause fixes it
+    setTimeout(() => { try{ speechSynthesis.resume(); speechSynthesis.speak(u); }catch(e){} }, 60);
   }catch(e){}
+}
+async function playRecording(k, slow){
+  let url = blobCache.get(k);
+  if(!url){ const r = await fetch("audio/"+k+".mp3"); if(!r.ok) throw new Error("missing"); url = URL.createObjectURL(await r.blob()); blobCache.set(k, url); }
+  player.pause(); player.src = url; player.playbackRate = slow ? .75 : 1;
+  try{ player.preservesPitch = true; player.webkitPreservesPitch = true; }catch(e){}
+  await player.play();
+}
+function say(text, cardId){
+  const t = normTxt(text), now = Date.now();
+  const slow = lastSaid.t === t && now - lastSaid.at < 5000;     // tap again = slower
+  lastSaid = {t, at: now};
+  const k = audioKey(t);
+  if(player && AUDIO && AUDIO.has(k)) playRecording(k, slow).catch(() => speakTTS(t, slow));
+  else speakTTS(t, slow);
+  if(slow) toast("🐢 Slower");
   if(cardId && S){ const r = S.cards[cardId] || (S.cards[cardId] = {b:-1}); r.l = (r.l||0) + 1; S.listens = (S.listens||0) + 1; save(); }
 }
-const spk = (t, id) => canSpeak ? `<button class="speak" type="button" data-say="${esc(t)}" ${id?`data-sid="${esc(id)}"`:""} aria-label="Listen to the German">🔊 Listen</button>` : "";
+async function saveAllAudio(btn){
+  if(!AUDIO) return;
+  const keys = [...AUDIO]; let done = 0, failed = 0; btn.disabled = true;
+  const work = async () => { while(keys.length){ const k = keys.pop(); try{ const r = await fetch("audio/"+k+".mp3"); if(!r.ok) failed++; }catch(e){ failed++; } done++; if(done % 25 === 0) btn.textContent = `Saving audio… ${Math.round(done/AUDIO.size*100)}%`; } };
+  await Promise.all([work(), work(), work(), work(), work(), work()]);
+  btn.textContent = failed ? `Saved ${done-failed} of ${done}. Try again on Wi-Fi.` : "✓ All audio saved. It works offline now.";
+  if(!failed) toast("All audio is saved on this device", {kind:"ok"});
+}
+async function loadAudioIndex(){
+  try{ const r = await fetch("audio/index.json", {cache:"no-cache"}); if(r.ok){ const a = await r.json(); if(Array.isArray(a)) AUDIO = new Set(a); } }catch(e){}
+}
+const spk = (t, id) => canSpeak ? `<button class="speak" type="button" data-say="${esc(t)}" ${id?`data-sid="${esc(id)}"`:""} aria-label="Listen to the German">${ic("volume")}Listen</button>` : "";
 document.addEventListener("click", e => { const b = e.target.closest("[data-say]"); if(b){ e.preventDefault(); e.stopPropagation(); say(b.dataset.say, b.dataset.sid); } }, true);
 
 /* =====================================================================
@@ -265,12 +331,21 @@ const visHTML = (c, cls="visual") => `<span class="${cls}${isTextVisual(c.v)?" t
    UI BITS
    ===================================================================== */
 const app = $("#app");
-let toastTimer = null;
-function toast(msg){
-  let t = $(".toast"); if(!t){ t = document.createElement("div"); t.className = "toast"; t.setAttribute("role","status"); document.body.appendChild(t); }
-  t.textContent = msg; t.hidden = false;
-  clearTimeout(toastTimer); toastTimer = setTimeout(() => { t.hidden = true; }, 2800);
+let toastTimer = null, toastUndo = null;
+/* toast(msg) or toast(msg, {kind:"ok"|"want"|"info", undo: fn}) — a small notice at the top, never over the buttons */
+function toast(msg, o={}){
+  let t = $(".toast");
+  if(!t){ t = document.createElement("div"); t.className = "toast"; t.setAttribute("role","status"); t.setAttribute("aria-live","polite"); document.body.appendChild(t);
+    t.addEventListener("click", e => { if(e.target.closest("[data-undo]") && toastUndo){ const f = toastUndo; toastUndo = null; t.hidden = true; f(); } else if(e.target.closest("[data-tclose]")) t.hidden = true; }); }
+  const kind = o.kind || "info", icon = kind==="ok" ? "check" : kind==="want" ? "star" : "info";
+  toastUndo = o.undo || null;
+  t.className = "toast t-"+kind;
+  t.innerHTML = `<span class="ti">${ic(icon, kind==="want"?"fill":"")}</span><span class="tm">${o.html ? msg : esc(msg)}</span>${o.undo?`<button type="button" class="tundo" data-undo>${ic("undo")}Undo</button>`:""}`;
+  t.hidden = false; t.classList.remove("in"); void t.offsetWidth; t.classList.add("in");
+  clearTimeout(toastTimer); toastTimer = setTimeout(() => { t.hidden = true; toastUndo = null; }, o.undo ? 5000 : 2600);
 }
+const snapWord = id => ({id, card: S.cards[id] ? {...S.cards[id]} : undefined, known: S.known[id], want: S.want[id]});
+function restoreWord(x){ if(x.card) S.cards[x.id] = x.card; else delete S.cards[x.id]; if(x.known) S.known[x.id] = x.known; else delete S.known[x.id]; if(x.want) S.want[x.id] = x.want; else delete S.want[x.id]; save(); }
 const starsHTML = n => `<span class="stars" aria-label="${n} of 3 stars">${[1,2,3].map(i=>`<span class="${i<=n?"on":""}">★</span>`).join("")}</span>`;
 const dotsHTML = c => `<span class="dots" title="${isLearned(c)?"Learned":seen(c)?"Learning":"New"}">${[0,1,2].map(i=>`<i class="${boxOf(c)>i||isLearned(c)?"on":""}"></i>`).join("")}</span>`;
 function ringSVG(frac){
@@ -285,10 +360,10 @@ function renderStats(){
 function wordActions(c, opts={}){
   const k = isLearned(c), w = isWanted(c);
   return `<span class="acts">
-    ${canSpeak ? `<button class="iconbtn" type="button" data-say="${esc(c.de)}" data-sid="${esc(c.id)}" aria-label="Listen">🔊</button>`:""}
-    <button class="iconbtn w" type="button" data-want="${esc(c.id)}" aria-pressed="${w}" aria-label="${w?"Remove from I want to learn":"Add to I want to learn"}" title="I want to learn">${w?"★":"☆"}</button>
-    <button class="iconbtn k" type="button" data-known="${esc(c.id)}" aria-pressed="${!!S.known[c.id] || k}" aria-label="${k?"Remove from I learned":"Mark as learned"}" title="I learned this">✓</button>
-    ${opts.edit && c.custom ? `<a class="iconbtn" href="#words-edit-${esc(c.id)}" aria-label="Edit">✎</a>`:""}
+    ${canSpeak ? `<button class="iconbtn" type="button" data-say="${esc(c.de)}" data-sid="${esc(c.id)}" aria-label="Listen">${ic("volume")}</button>`:""}
+    <button class="iconbtn w" type="button" data-want="${esc(c.id)}" aria-pressed="${w}" aria-label="${w?"Remove from I want to learn":"Add to I want to learn"}" title="I want to learn">${ic("star", w?"fill":"")}</button>
+    <button class="iconbtn k" type="button" data-known="${esc(c.id)}" aria-pressed="${!!S.known[c.id] || k}" aria-label="${k?"Remove from I learned":"Mark as learned"}" title="I learned this">${ic("check")}</button>
+    ${opts.edit && c.custom ? `<a class="iconbtn" href="#words-edit-${esc(c.id)}" aria-label="Edit">${ic("pen")}</a>`:""}
   </span>`;
 }
 function wordRow(c, opts={}){
@@ -352,11 +427,11 @@ app.addEventListener("click", e => {
   const ex = t.closest("[data-extra]");
   if(ex){ const k = ex.dataset.extra; S.settings.extra[k] = !S.settings.extra[k]; save(); return route(); }
   const kw = t.closest("[data-known]");
-  if(kw){ const c = BYID.get(kw.dataset.known); if(!c) return; const on = !isLearned(c); markKnown(c, on);
-    toast(on ? `✓ “${c.de}” is in I learned` : `“${c.de}” removed from I learned`); checkBadges(); return refresh(); }
+  if(kw){ const c = BYID.get(kw.dataset.known); if(!c) return; const snap = snapWord(c.id), on = !isLearned(c); markKnown(c, on);
+    toast(on ? `<b>${esc(c.de)}</b> moved to I learned` : `<b>${esc(c.de)}</b> removed from I learned`, {html:true, kind: on?"ok":"info", undo: () => { restoreWord(snap); refresh(); }}); checkBadges(); return refresh(); }
   const ww = t.closest("[data-want]");
-  if(ww){ const c = BYID.get(ww.dataset.want); if(!c) return; const on = toggleWant(c);
-    toast(on ? `☆ “${c.de}” added to I want to learn` : `“${c.de}” removed from I want to learn`); checkBadges(); return refresh(); }
+  if(ww){ const c = BYID.get(ww.dataset.want); if(!c) return; const snap = snapWord(c.id), on = toggleWant(c);
+    toast(on ? `<b>${esc(c.de)}</b> added to I want to learn` : `<b>${esc(c.de)}</b> removed from I want to learn`, {html:true, kind: on?"want":"info", undo: () => { restoreWord(snap); refresh(); }}); checkBadges(); return refresh(); }
   const st = t.closest("[data-start]"); if(st && !st.disabled) return startSession(st.dataset.start, st.dataset.id, st.dataset.mode);
   if(!session) return;
   if(t.closest("[data-exit]")) return finishSession(true);
@@ -371,7 +446,7 @@ app.addEventListener("click", e => {
   if(t.closest("[data-smic]")) return speakStart();
   if(t.closest("[data-sstop]")) return speakStop();
   if(t.closest("[data-sself]")){ session.result = null; session.state = "back"; return drawSession(); }
-  if(t.closest("[data-swant]")){ const c = session.queue[0]; const on = toggleWant(c); toast(on?"☆ Added to I want to learn":"Removed from I want to learn"); return drawSession(); }
+  if(t.closest("[data-swant]")){ const c = session.queue[0]; const on = toggleWant(c); toast(on?`<b>${esc(c.de)}</b> added to I want to learn`:"Removed from I want to learn", {html:true, kind: on?"want":"info"}); return drawSession(); }
 });
 function refresh(){ if(session) drawSession(); else { const y = window.scrollY; route(); window.scrollTo(0,y); } }
 
@@ -413,7 +488,7 @@ const isIOS = () => /iphone|ipad|ipod/i.test(navigator.userAgent) || (navigator.
 function installCard(){
   if(SANDBOX || isStandalone() || S.sessions < 1) return "";
   if(S.settings.hideInstall && Date.now() - S.settings.hideInstall < 14*DAY) return "";
-  const how = installEvt ? `<button class="btn primary sm" type="button" id="doInstall">📲 Install</button>`
+  const how = installEvt ? `<button class="btn primary sm" type="button" id="doInstall">${ic("phone")}Install</button>`
     : isIOS() ? `<span class="small">In Safari tap <b>Share</b> <span aria-hidden="true">⬆︎</span> then <b>Add to Home Screen</b>.</span>`
     : `<span class="small">Open your browser menu <b>⋮</b> and choose <b>Add to Home screen</b> or <b>Install app</b>.</span>`;
   return `<div class="panel installcard" role="note">
@@ -438,11 +513,11 @@ function viewToday(){
       <ol class="steps">
         <li class="${nDue?"":"complete"}"><span class="n">${nDue?1:"✓"}</span><span>Review cards that are due</span><b>${p.due.length}</b></li>
         <li class="${nWant?"":"complete"}"><span class="n">${nWant?2:"✓"}</span><span>Practise from <a href="#words">I want to learn</a></span><b>${p.want.length}</b></li>
-        <li><span class="n">3</span><span>New from Unit ${p.nu.n}: ${esc(p.nu.title)} <a class="lvl ${esc(p.nu.level)}" href="#learn-${esc(curLevel())}" title="Change level">${esc(curLevel())} · change</a></span><b>${nNew}</b></li>
+        <li><span class="n">3</span><span>New from Unit ${p.nu.n}: ${esc(p.nu.title)} <a class="lvlchange" href="#learn-${esc(curLevel())}" title="Change level">${esc(curLevel())} · change</a></span><b>${nNew}</b></li>
       </ol>
-      <button class="btn primary big block" data-start="today">▶ Start today's practice</button>
+      <button class="btn primary big block" data-start="today">${ic("play")}Start today's practice</button>
     </div>
-    <div class="section-title"><h2>My words</h2><a class="btn sm" href="#words-add">＋ Add a word or sentence</a></div>
+    <div class="section-title"><h2>My words</h2><a class="btn sm" href="#words-add">${ic("plus")}Add a word or sentence</a></div>
     <div class="duo">
       <a class="listtile learned" href="#words-learned"><span class="label">✓ I learned</span><b>${learnedList().length}</b><span class="small muted">words and sentences</span></a>
       <a class="listtile want" href="#words"><span class="label">☆ I want to learn</span><b>${wantList().length}</b><span class="small muted">on your list</span></a>
@@ -459,9 +534,9 @@ function viewToday(){
     <div class="section-title"><h2>Keep going</h2><span class="small muted">Level ${L.lvl} · ${S.xp} XP · 🔥 ${streak()}</span></div>
     <div class="row">
       <a class="btn" href="#unit-${p.nu.id}">${esc(p.nu.emoji)} Unit ${p.nu.n}: ${esc(p.nu.title)}</a>
-      <button class="btn" data-start="weak" ${allCards().some(c=>seen(c)&&!isLearned(c))?"":"disabled"}>🔁 Weak cards</button>
-      <button class="btn" data-start="learned" data-mode="write" ${learnedList().length?"":"disabled"}>✍️ Write what I learned</button>
-      <button class="btn" data-start="learned" data-mode="speak" ${learnedList().length?"":"disabled"}>🗣️ Speak what I learned</button>
+      <button class="btn" data-start="weak" ${allCards().some(c=>seen(c)&&!isLearned(c))?"":"disabled"}>${ic("repeat")}Weak cards</button>
+      <button class="btn" data-start="learned" data-mode="write" ${learnedList().length?"":"disabled"}>${ic("pen")}Write what I learned</button>
+      <button class="btn" data-start="learned" data-mode="speak" ${learnedList().length?"":"disabled"}>${ic("mic")}Speak what I learned</button>
       <a class="btn" href="#guide-method">How this app teaches</a>
     </div>`;
   wireInstallCard();
@@ -477,8 +552,8 @@ function practiceChips(){
       <button class="chip" data-v="de" aria-pressed="${st.front==="de"}">German first</button>
       <button class="chip" data-v="base" aria-pressed="${st.front==="base"}">${LANG_NAME[st.base]} first</button></div></div>
     <div><span class="label">Mode</span><div class="chips" data-set="mode">
-      <button class="chip" data-v="flip" aria-pressed="${st.mode==="flip"}">🃏 Flip cards</button>
-      <button class="chip" data-v="quiz" aria-pressed="${st.mode==="quiz"}">🎲 Quiz</button></div></div>
+      <button class="chip" data-v="flip" aria-pressed="${st.mode==="flip"}">${ic("cards")}Flip cards</button>
+      <button class="chip" data-v="quiz" aria-pressed="${st.mode==="quiz"}">${ic("quiz")}Quiz</button></div></div>
   </div>`;
 }
 const LEVELS = {
@@ -521,32 +596,34 @@ function viewLearn(lv, tab){
       <div class="row between" style="align-items:flex-start"><div class="stack" style="gap:2px"><h2>${esc(lvlName(lv))}</h2><span class="small muted">${esc((LEVELS[lv]||{}).about||"")}</span></div>
         <span class="small muted">${x.done}/${x.units.length} units done</span></div>
       <div class="row">
-        <button class="btn primary" data-start="level" data-id="${esc(lv)}">▶ Practise ${esc(lv)}</button>
+        <button class="btn primary" data-start="level" data-id="${esc(lv)}">${ic("play")}Practise ${esc(lv)}</button>
         ${nu && nu.level===lv ? `<a class="btn" href="#unit-${nu.id}">${esc(nu.emoji)} Continue: ${esc(nu.title)}</a>` : ""}
       </div>
       <nav class="seg seg3" aria-label="${esc(lv)} sections">${tabs.map(([k,t,n])=>`<a href="#learn-${esc(lv)}-${k}" ${k===tab?'aria-current="page"':""}><b>${n}</b>${t}</a>`).join("")}</nav>
       ${body}
     </section>
     ${funStrip()}
-    <details class="panel prefs"><summary><b>Practice settings</b> <span class="small muted">card front and mode</span></summary>${practiceChips()}</details>
+    <details class="panel prefs"><summary>${ic("gear")}<b>Practice settings</b><span class="small muted">card front, flip or quiz</span></summary>${practiceChips()}</details>
     <p class="small" style="margin-top:14px"><a href="#guide">All grammar lessons</a> · <a href="#stories">All stories</a></p>`;
 }
 function viewUnit(u){
-  const st = unitStats(u), next = UNITS[UNITS.indexOf(u)+1];
-  app.innerHTML = `<a class="back" href="#learn-${esc(u.level)}">← ${esc(u.level)} units</a>
+  const st = unitStats(u), next = UNITS[UNITS.indexOf(u)+1], pct = Math.round(st.mastered/st.total*100);
+  app.innerHTML = `<a class="back" href="#learn-${esc(u.level)}">${ic("left")}${esc(u.level)} units</a>
     <div class="unithead"><div class="ico">${esc(u.emoji)}</div>
-      <div class="stack" style="gap:4px"><span class="label">Unit ${u.n} · <span class="lvl ${esc(u.level)}">${esc(u.level)}</span></span><h1>${esc(u.title)}</h1>
-      <span class="muted small">${starsHTML(st.stars)} · ${st.mastered} of ${st.total} learned · ${st.total-st.seen} new</span></div></div>
-    <div class="row">
-      <button class="btn primary big" data-start="unit" data-id="${u.id}">▶ Practise 10 cards</button>
-      <button class="btn" data-start="unitall" data-id="${u.id}">All ${st.total}</button>
-      <button class="btn" data-start="unit" data-id="${u.id}" data-mode="write">✍️ Write</button>
-      <button class="btn" data-start="unit" data-id="${u.id}" data-mode="speak">🗣️ Speak</button>
-      ${next?`<a class="btn ghost" href="#unit-${next.id}">Next: ${esc(next.title)} →</a>`:""}
+      <div class="stack" style="gap:4px;flex:1;min-width:0"><span class="label">Unit ${u.n} · <span class="lvl ${esc(u.level)}">${esc(u.level)}</span></span><h1>${esc(u.title)}</h1>
+      <div class="unitprog"><div class="bar"><i style="width:${pct}%"></i></div><span class="small muted">${st.mastered}/${st.total} learned</span>${starsHTML(st.stars)}</div></div></div>
+    <div class="actionbar">
+      <button class="btn primary big" data-start="unit" data-id="${u.id}">${ic("play")}Practise 10 cards</button>
+      <div class="modes" role="group" aria-label="More ways to practise">
+        <button class="btn" data-start="unitall" data-id="${u.id}">${ic("cards")}All ${st.total}</button>
+        <button class="btn" data-start="unit" data-id="${u.id}" data-mode="write">${ic("pen")}Write</button>
+        <button class="btn" data-start="unit" data-id="${u.id}" data-mode="speak">${ic("mic")}Speak</button>
+      </div>
     </div>
-    ${practiceChips()}
-    <p class="small muted" style="margin:16px 0 8px">Tap ☆ to put a word on your <b>I want to learn</b> list, or ✓ if you already know it. ★★★ = every card learned.</p>
-    <div class="words">${u.cards.map(c => wordRow(c)).join("")}</div>`;
+    <details class="panel prefs"><summary>${ic("gear")}<b>Practice settings</b><span class="small muted">card front, flip or quiz</span></summary>${practiceChips()}</details>
+    <div class="section-title"><h2>${st.total} words</h2><span class="small muted">${ic("star")} want to learn · ${ic("check")} already know</span></div>
+    <div class="words">${u.cards.map(c => wordRow(c)).join("")}</div>
+    ${next?`<a class="nextunit" href="#unit-${next.id}"><span class="small muted">Next unit</span><b>${esc(next.emoji)} ${esc(next.title)}</b>${ic("right")}</a>`:""}`;
 }
 
 /* =====================================================================
@@ -567,8 +644,8 @@ function viewWords(tab){
   const shownList = filterSort(list);
   const empty = tab==="learned"
     ? `<div class="empty"><span class="e">✓</span><b>Nothing here yet</b><span>Words move here when you learn them in practice (3 right answers), or when you tap ✓ on a word you already know.</span><a class="btn" href="#learn">Browse units</a></div>`
-    : `<div class="empty"><span class="e">☆</span><b>Your wish list is empty</b><span>Tap ☆ on any word in a unit, or add your own words and sentences, the ones you need at work, at the doctor or with neighbours.</span><a class="btn primary" href="#words-add">＋ Add my own word</a></div>`;
-  app.innerHTML = `<div class="row between" style="margin-bottom:12px"><h1>My words</h1><a class="btn primary sm" href="#words-add">＋ Add</a></div>
+    : `<div class="empty"><span class="e">☆</span><b>Your wish list is empty</b><span>Tap ☆ on any word in a unit, or add your own words and sentences, the ones you need at work, at the doctor or with neighbours.</span><a class="btn primary" href="#words-add">${ic("plus")}Add my own word</a></div>`;
+  app.innerHTML = `<div class="row between" style="margin-bottom:12px"><h1>My words</h1><a class="btn primary sm" href="#words-add">${ic("plus")}Add</a></div>
     <nav class="seg" aria-label="Lists">
       <a class="want" href="#words" ${tab==="want"?'aria-current="page"':""}><b>${W.length}</b>☆ I want to learn</a>
       <a class="learned" href="#words-learned" ${tab==="learned"?'aria-current="page"':""}><b>${L.length}</b>✓ I learned</a>
@@ -583,10 +660,10 @@ function viewWords(tab){
       </div>
     </div>
     <div class="row" style="margin-bottom:12px">
-      <button class="btn ${tab==="want"?"want":"good"}" data-start="${tab}">${tab==="want"?"▶ Practise my wish list":"🔁 Review"}</button>
-      ${tab==="learned" ? `<button class="btn" data-start="learned" data-mode="write">✍️ Write them</button><button class="btn" data-start="learned" data-mode="speak">🗣️ Say them</button>` : ""}
-      ${S.custom.length?`<button class="btn sm" data-start="mine">✍️ Only my own words (${S.custom.length})</button>`:""}
-      <a class="btn sm ghost" href="#report" id="toReport">🖨️ Make a PDF</a>
+      <button class="btn ${tab==="want"?"want":"good"}" data-start="${tab}">${tab==="want"?ic("play")+"Practise my wish list":ic("repeat")+"Review"}</button>
+      ${tab==="learned" ? `<button class="btn" data-start="learned" data-mode="write">${ic("pen")}Write them</button><button class="btn" data-start="learned" data-mode="speak">${ic("mic")}Say them</button>` : ""}
+      ${S.custom.length?`<button class="btn sm" data-start="mine">${ic("pen")}Only my own words (${S.custom.length})</button>`:""}
+      <a class="btn sm ghost" href="#report" id="toReport">${ic("printer")}Make a PDF</a>
     </div>
     <div class="words" id="wlist">${shownList.map(c=>wordRow(c,{edit:true, showUnit:true})).join("") || `<p class="muted">No match for “${esc(words.q)}”.</p>`}</div>` : `<div style="margin-top:16px">${empty}</div>`}`;
   const q = $("#wq");
@@ -603,7 +680,7 @@ function viewAdd(c){
   if(c && !c.custom) c = null;
   const pre = !c && addPrefill ? addPrefill : null; addPrefill = null;
   const st = S.settings, inWant = c ? !!S.want[c.id] : true;
-  app.innerHTML = `<a class="back" href="#words">← My words</a>
+  app.innerHTML = `<a class="back" href="#words">${ic("left")}My words</a>
     <h1>${c?"Edit my word":"Add a word or sentence"}</h1>
     <p class="muted" style="margin:6px 0 16px">Add what you need in your own life: a sentence for work, your street name, what you say at the doctor. It becomes a flashcard like all the others.</p>
     <form class="panel stack" id="addForm" autocomplete="off" novalidate>
@@ -730,8 +807,8 @@ function drawSession(){
   const dots = `<span class="boxdots">${dotsHTML(c)}</span>`;
   const answer = `<div class="answer">${sideHTML(back,c)}${extrasHTML(c)}${spk(c.de,c.id)}</div>`;
   const tools = `<div class="cardtools">
-      <button class="btn sm ${isWanted(c)?"want":""}" type="button" data-swant>${isWanted(c)?"★ On my list":"☆ Want to learn"}</button>
-      <button class="btn sm" type="button" data-sknow>✓ I already know this</button></div>`;
+      <button class="btn sm ${isWanted(c)?"want":""}" type="button" data-swant>${ic("star", isWanted(c)?"fill":"")}${isWanted(c)?"On my list":"Want to learn"}</button>
+      <button class="btn sm" type="button" data-sknow>${ic("check")}I already know this</button></div>`;
   let body;
   const isBack = s.state==="back";
   if(s.mode==="write") body = writeBody(c, cat, dots, isBack);
@@ -746,7 +823,7 @@ function drawSession(){
       </div>
       ${isBack ? "" : tools}
       <div class="sactions">${isBack
-        ? `<button class="btn bad big" data-ans="0">✗ Not yet</button><button class="btn good big" data-ans="1">✓ Got it</button>`
+        ? `<button class="btn bad big" data-ans="0">${ic("x")}Not yet</button><button class="btn good big" data-ans="1">${ic("check")}Got it</button>`
         : `<button class="btn primary big full" data-flip>Show answer</button>`}</div>`;
   } else {
     if(!s.opts) s.opts = makeOptions(c);
@@ -772,7 +849,7 @@ function drawSession(){
         ${tools}`;
   }
   app.innerHTML = `<div class="session">
-    <div class="sbar"><button class="iconbtn" data-exit aria-label="End practice">✕</button><div class="bar"><i style="width:${pct}%"></i></div><span class="xpchip">${s.done}/${s.done+s.queue.length} · +${s.xp} XP</span></div>
+    <div class="sbar"><button class="iconbtn" data-exit aria-label="End practice">${ic("x")}</button><div class="bar"><i style="width:${pct}%"></i></div><span class="xpchip">${s.done}/${s.done+s.queue.length} · +${s.xp} XP</span></div>
     ${body}
   </div>`;
   if(s.state==="back" && S.settings.autoplay) say(c.de, c.id);
@@ -930,7 +1007,7 @@ function speakBody(c, cat, dots, isBack){
         ${r && r.recorded && SPK.url ? `<audio controls src="${SPK.url}" class="myrec"></audio><span class="small muted">Your voice. Play both and compare.</span>` : ""}</div>
     </div>
     <div class="sactions">${self
-      ? `<button class="btn bad big" data-ans="0">✗ Not yet</button><button class="btn good big" data-ans="1">✓ I said it right</button>`
+      ? `<button class="btn bad big" data-ans="0">${ic("x")}Not yet</button><button class="btn good big" data-ans="1">${ic("check")}I said it right</button>`
       : `<button class="btn ${s.lastOk?"good":"primary"} big full" data-next>Continue</button>`}</div>`;
 }
 function choose(i){ const s = session; s.picked = s.opts.opts[i]; s.state = "back"; drawSession(); }
@@ -951,11 +1028,16 @@ function grade(ok){
   save(); renderStats(); drawSession();
 }
 function sessionKnow(){
-  const s = session, c = s.queue.shift();
+  const s = session, c = s.queue.shift(), snap = snapWord(c.id), qBefore = [c, ...s.queue], movedBefore = [...s.moved];
   const was = isLearned(c); markKnown(c, true); if(!was) s.moved.push(c);
   s.queue = s.queue.filter(x => x.id !== c.id);
-  s.xp += 5; S.xp += 5; tick(); s.done++; s.state = "front"; s.picked = null; s.opts = null;
-  save(); renderStats(); toast(`✓ “${c.de}” moved to I learned`); drawSession();
+  s.xp += 5; S.xp += 5; tick(); s.done++; s.state = "front"; s.picked = null; s.opts = null; s.result = null;
+  save(); renderStats();
+  toast(`<b>${esc(c.de)}</b> moved to I learned`, {html:true, kind:"ok", undo: () => {
+    if(session !== s) { restoreWord(snap); return refresh(); }
+    restoreWord(snap); s.queue = qBefore; s.moved = movedBefore; s.xp -= 5; S.xp -= 5; s.done--;
+    S.days[today()] = Math.max(0, (S.days[today()]||1) - 1); s.state = "front"; save(); renderStats(); drawSession(); }});
+  drawSession();
 }
 document.addEventListener("keydown", e => {
   const s = session; if(!s || e.target.closest("input,textarea,select")) return;
@@ -1082,9 +1164,11 @@ function viewMe(){
       <div class="setup">
         <div><span class="label">Daily goal</span><div class="chips" data-set="goal">${[10,20,40].map(g=>`<button class="chip" data-v="${g}" aria-pressed="${st.goal===g}">${g} cards</button>`).join("")}</div></div>
         <div><span class="label">Theme</span><div class="chips" data-set="theme">${[["system","Auto"],["light","Light"],["dark","Dark"]].map(([v,l])=>`<button class="chip" data-v="${v}" aria-pressed="${st.theme===v}">${l}</button>`).join("")}</div></div>
-        <div><span class="label">Audio</span><div class="chips"><button class="chip" id="autoplay" aria-pressed="${!!st.autoplay}">Play German after each answer</button></div></div>
+        <div><span class="label">Audio</span><div class="chips"><button class="chip" id="autoplay" aria-pressed="${!!st.autoplay}">Play German after each answer</button>
+          ${AUDIO && !SANDBOX ? `<button class="chip" id="audioAll" type="button">${ic("download")}Save all audio for offline (${AUDIO.size} words, about ${Math.round(AUDIO.size*7/1000)} MB)</button>` : ""}</div>
+          <span class="small muted">Words play with a natural recorded voice. Tap 🔊 twice for slow.</span></div>
       </div>
-      ${installEvt?`<div><button class="btn" id="install">📲 Install as an app</button></div>`:`<p class="small muted" style="margin:0">📲 Use it like an app: in your phone's browser menu choose <b>Add to Home screen</b>. It then works offline too.</p>`}
+      ${installEvt?`<div><button class="btn" id="install">${ic("phone")}Install as an app</button></div>`:`<p class="small muted" style="margin:0">📲 Use it like an app: in your phone's browser menu choose <b>Add to Home screen</b>. It then works offline too.</p>`}
     </div>
 
     <div class="section-title"><h2>Your data is safe</h2></div>
@@ -1099,8 +1183,8 @@ function viewMe(){
         <input class="input" id="b-pw" type="password" autocomplete="new-password" maxlength="100" style="max-width:340px" placeholder="Leave empty for no password">
         <span class="help">With a password the file is encrypted (AES-256). Without the password nobody, not even you, can open it.</span></div>
       <div class="row">
-        <button class="btn" id="b-export">⬇️ Download backup</button>
-        <button class="btn" id="b-copy">📋 Copy backup as text</button>
+        <button class="btn" id="b-export">${ic("download")}Download backup</button>
+        <button class="btn" id="b-copy">${ic("copy")}Copy backup as text</button>
       </div>
       ${backupMsg?`<p class="small" style="margin:0">${backupMsg}</p>`:""}
       <details ${importState.text||importState.err?"open":""}><summary style="cursor:pointer;font-weight:700">Restore from a backup</summary>
@@ -1113,13 +1197,14 @@ function viewMe(){
         </div></details>
       <div class="confirm">${confirmReset
         ? `<span>Delete all progress, lists, own words and badges on this device?</span><button class="btn bad" id="r-yes">Yes, delete everything</button><button class="btn" id="r-no">Keep it</button>`
-        : `<button class="btn ghost" id="r-ask">🗑️ Delete all my data</button>`}</div>
+        : `<button class="btn ghost" id="r-ask">${ic("trash")}Delete all my data</button>`}</div>
     </div>
     <p class="small muted" style="margin-top:20px">Wortzi ${APP_VERSION} · open source · works offline once loaded.</p>`;
 
   $$("[data-rep]").forEach(a => a.addEventListener("click", () => { reportOpts.type = a.dataset.rep; }));
   $("#s-name").addEventListener("change", e => { S.settings.name = clip(e.target.value,60); save(); toast("Saved"); });
   $("#autoplay").onclick = () => { st.autoplay = !st.autoplay; save(); route(); };
+  const aa = $("#audioAll"); if(aa) aa.onclick = () => saveAllAudio(aa);
   if($("#install")) $("#install").onclick = async () => { try{ installEvt.prompt(); await installEvt.userChoice; }catch(e){} installEvt = null; route(); };
   if($("#r-ask")) $("#r-ask").onclick = () => { confirmReset = true; route(); };
   if($("#r-no")) $("#r-no").onclick = () => { confirmReset = false; route(); };
@@ -1186,13 +1271,13 @@ function viewReport(){
   const o = reportOpts;
   const chips = (key, arr) => `<div class="chips" data-rset="${key}">${arr.map(([v,l])=>`<button class="chip" data-rv="${v}" aria-pressed="${o[key]===v}">${l}</button>`).join("")}</div>`;
   const levels = [...new Set(UNITS.map(u=>u.level))];
-  app.innerHTML = `<a class="back" href="#me">← Me</a>
+  app.innerHTML = `<a class="back" href="#me">${ic("left")}Me</a>
     <div class="report-bar">
       ${chips("type", [["progress","📈 Progress"],["wordbook","📒 Word book"],["cards","✂️ Flashcards"],["unitbook","📘 Course book"]])}
       ${o.type==="wordbook"||o.type==="cards" ? chips("source", [["want","☆ I want to learn"],["learned","✓ I learned"],["both","Both lists"],["mine","✍️ My own words"]]) : ""}
       ${o.type==="unitbook" || (o.type==="cards" && o.source==="unit") ? chips("level", levels.map(l=>[l,l]).concat([["all","All"]])) : ""}
       ${o.type==="cards" ? chips("layout", [["fold","Fold in half (one-sided)"],["duplex","Double-sided printing"]]) : ""}
-      <button class="btn primary" id="doPrint" ${SANDBOX?"disabled":""}>🖨️ Save as PDF</button>
+      <button class="btn primary" id="doPrint" ${SANDBOX?"disabled":""}>${ic("printer")}Save as PDF</button>
     </div>
     ${SANDBOX?`<p class="small muted">This is a preview. Saving as PDF works when the app runs on your own website or GitHub Pages.</p>`:`<p class="small muted">Tip: in the print window choose <b>Save as PDF</b> as the printer. On a phone: Share → Print → pinch out on the preview → Save.</p>`}
     <div class="paper-wrap"><div class="paper" id="paper">${buildReport()}</div></div>`;
@@ -1369,7 +1454,7 @@ function storyTodayCard(){
   return `<div class="section-title"><h2>Story for you</h2><a class="small muted" href="#stories">All stories</a></div>${storyTile(st)}`;
 }
 function viewStories(){
-  app.innerHTML = `<a class="back" href="#learn-${esc(curLevel())}-stories">← Learn</a><h1>Stories</h1>
+  app.innerHTML = `<a class="back" href="#learn-${esc(curLevel())}-stories">${ic("left")}Learn</a><h1>Stories</h1>
     <p class="muted" style="margin:6px 0 16px;max-width:60ch">Short scenes from life in Berlin. The more words you learn, the more of each story you understand. Tap any underlined word to see what it means.</p>
     <div class="stories">${storiesSorted().map(storyTile).join("")}</div>`;
 }
@@ -1395,7 +1480,7 @@ function panelTr(p){
 }
 function viewStory(st){
   const x = storyStats(st), es = storyEntries(st);
-  app.innerHTML = `<a class="back" href="#stories">← All stories</a>
+  app.innerHTML = `<a class="back" href="#stories">${ic("left")}All stories</a>
     <div class="storyhead"><span class="cover" aria-hidden="true">${esc(st.cover)}</span>
       <div class="stack" style="gap:4px"><span class="label">${esc(st.level)} · Story</span><h1>${esc(st.title)}</h1><span class="muted">${storyTitleTr(st)}</span></div></div>
     <div class="panel storyknow">
@@ -1407,14 +1492,14 @@ function viewStory(st){
     <div class="spanels">${st.panels.map((p,i) => `<figure class="spanel">
       <div class="scene" aria-hidden="true">${esc(p.v)}</div>
       <figcaption><span class="snum">${i+1}</span><p class="sde" lang="de">${storyLine(st, p.de)}</p>
-        ${canSpeak?`<button class="speak" type="button" data-say="${esc(p.de)}">🔊 Listen</button>`:""}
+        ${canSpeak?`<button class="speak" type="button" data-say="${esc(p.de)}">${ic("volume")}Listen</button>`:""}
         <p class="str" ${storyTr?"":"hidden"}>${panelTr(p)}</p></figcaption>
     </figure>`).join("")}</div>
     <div class="section-title"><h2>Words in this story</h2><span class="small muted">${x.known}/${x.total} known</span></div>
     <div class="words">${es.map(e => e.card ? wordRow(e.card) : glossRow(e)).join("")}</div>
     <div class="row" style="margin-top:16px">
-      <button class="btn primary big" type="button" id="stDone">${S.storiesRead[st.id]?"✓ Read again":"✓ I've read this story"}</button>
-      ${es.some(e=>e.card)?`<button class="btn" data-start="story" data-id="${esc(st.id)}">🃏 Practise these words</button>`:""}
+      <button class="btn primary big" type="button" id="stDone">${ic("check")}${S.storiesRead[st.id]?"Read again":"I've read this story"}</button>
+      ${es.some(e=>e.card)?`<button class="btn" data-start="story" data-id="${esc(st.id)}">${ic("cards")}Practise these words</button>`:""}
     </div>`;
   $("#stTr").onclick = () => { storyTr = !storyTr; $$(".str", app).forEach(el => el.hidden = !storyTr); $("#stTr").setAttribute("aria-pressed", storyTr); $("#stTr").textContent = (storyTr?"Hide":"Show")+" translations"; };
   $("#stDone").onclick = () => {
@@ -1424,7 +1509,7 @@ function viewStory(st){
     toast(first ? `📖 Story read. +15 XP${fresh.length?` · New badge: ${fresh[0].t}`:""}` : "✓ Nice, read again");
     if(first) confetti();
     const nx = storiesSorted().find(y => !S.storiesRead[y.id]);
-    $("#stDone").outerHTML = nx ? `<a class="btn primary big" href="#story-${esc(nx.id)}">Next story: ${esc(nx.title)} →</a>` : `<a class="btn primary big" href="#stories">All stories</a>`;
+    $("#stDone").outerHTML = nx ? `<a class="btn primary big" href="#story-${esc(nx.id)}">Next story: ${esc(nx.title)}${ic("right")}</a>` : `<a class="btn primary big" href="#stories">All stories</a>`;
   };
   app.querySelectorAll("[data-sw]").forEach(b => b.addEventListener("click", () => openWordSheet(st, b.dataset.sw)));
 }
@@ -1433,9 +1518,9 @@ function glossRow(e){
   const mine = b==="ur" ? `<span class="ur">${esc(g.ur)}</span>` : b==="hi" ? `<span class="hi">${esc(g.hi)}</span>` : esc(g.en);
   return `<div class="word"><span class="v txt">＋</span>
     <span class="t"><span class="de">${colorDe(g.de)}</span><span class="tr">${mine}${b!=="en"&&shown("en")?`<span>${esc(g.en)}</span>`:""}</span><span class="meta"><span class="pill">not in the units yet</span></span></span>
-    <span class="acts">${canSpeak?`<button class="iconbtn" type="button" data-say="${esc(g.de)}" aria-label="Listen">🔊</button>`:""}
-      <button class="iconbtn w" type="button" data-gloss="${esc(e.key)}" data-to="want" aria-pressed="false" aria-label="Add to I want to learn">☆</button>
-      <button class="iconbtn k" type="button" data-gloss="${esc(e.key)}" data-to="known" aria-pressed="false" aria-label="Mark as learned">✓</button></span></div>`;
+    <span class="acts">${canSpeak?`<button class="iconbtn" type="button" data-say="${esc(g.de)}" aria-label="Listen">${ic("volume")}</button>`:""}
+      <button class="iconbtn w" type="button" data-gloss="${esc(e.key)}" data-to="want" aria-pressed="false" aria-label="Add to I want to learn">${ic("star")}</button>
+      <button class="iconbtn k" type="button" data-gloss="${esc(e.key)}" data-to="known" aria-pressed="false" aria-label="Mark as learned">${ic("check")}</button></span></div>`;
 }
 /* turn a story dictionary word into one of the learner's own cards */
 function adoptGloss(st, key){
@@ -1450,7 +1535,7 @@ app.addEventListener("click", e => {
   const g = e.target.closest("[data-gloss]"); if(!g) return;
   const st = storyById((location.hash||"").replace("#story-","")); if(!st) return;
   const c = adoptGloss(st, g.dataset.gloss); if(!c) return;
-  if(g.dataset.to === "want"){ toggleWant(c); toast(`☆ “${c.de}” added to I want to learn`); } else { markKnown(c, true); toast(`✓ “${c.de}” is in I learned`); }
+  if(g.dataset.to === "want"){ toggleWant(c); toast(`“${c.de}” added to I want to learn`, {kind:"want"}); } else { markKnown(c, true); toast(`“${c.de}” moved to I learned`, {kind:"ok"}); }
   checkBadges(); refresh();
 });
 function openWordSheet(st, key){
@@ -1464,13 +1549,13 @@ function openWordSheet(st, key){
   const sh = document.createElement("div");
   sh.className = "wsheet"; sh.setAttribute("role","dialog"); sh.setAttribute("aria-label","Word");
   sh.innerHTML = `<div class="ws-inner">
-    <button class="iconbtn ws-x" type="button" aria-label="Close">✕</button>
+    <button class="iconbtn ws-x" type="button" aria-label="Close">${ic("x")}</button>
     ${c ? `<span class="ws-v${isTextVisual(c.v)?" txt":""}" aria-hidden="true">${esc(c.v)}</span>` : ""}
     <div class="ws-de">${colorDe(de)}</div>${mine}
     <div class="row" style="justify-content:center">
-      ${canSpeak?`<button class="speak" type="button" data-say="${esc(de)}" ${c?`data-sid="${esc(c.id)}"`:""}>🔊 Listen</button>`:""}
-      <button class="btn sm ${w?"want":""}" type="button" data-ws="want">${w?"★ On my list":"☆ Want to learn"}</button>
-      <button class="btn sm ${k?"good":""}" type="button" data-ws="known">${k?"✓ Learned":"✓ I know it"}</button>
+      ${canSpeak?`<button class="speak" type="button" data-say="${esc(de)}" ${c?`data-sid="${esc(c.id)}"`:""}>${ic("volume")}Listen</button>`:""}
+      <button class="btn sm ${w?"want":""}" type="button" data-ws="want">${ic("star", w?"fill":"")}${w?"On my list":"Want to learn"}</button>
+      <button class="btn sm ${k?"good":""}" type="button" data-ws="known">${ic("check")}${k?"Learned":"I know it"}</button>
     </div></div>`;
   document.body.appendChild(sh);
   sh.querySelector(".ws-x").onclick = closeWordSheet;
@@ -1527,7 +1612,7 @@ function viewFun(tab){
     body = `<div class="funlist">${EXTRAS[tab].map(x => `<div class="panel funcard"><span class="fe" aria-hidden="true">${esc(x.e)}</span><div><b>${esc(x.t)}</b><p>${esc(x.d)}</p></div></div>`).join("")}</div>`;
   } else if(tab==="idioms"){
     body = idi ? `<p class="muted small" style="margin:0 0 10px">Germans use these every day. The English shows the meaning, with the word-for-word version in brackets.</p>
-      <div class="row" style="margin-bottom:12px"><button class="btn primary" data-start="unitall" data-id="idioms">🃏 Practise all idioms</button></div>
+      <div class="row" style="margin-bottom:12px"><button class="btn primary" data-start="unitall" data-id="idioms">${ic("cards")}Practise all idioms</button></div>
       <div class="words">${idi.cards.map(c => wordRow(c)).join("")}</div>` : `<p class="muted">No idioms yet.</p>`;
   } else {
     body = `<p class="muted small" style="margin:0 0 10px">Read the question, guess, then tap to see the answer. Most German jokes are word plays, so each one teaches you a word.</p>
@@ -1537,10 +1622,10 @@ function viewFun(tab){
           ${jokeOpen[i] ? `<p class="punch" lang="de">${esc(j.a)}</p><p class="small">${jokeTr(j)}</p>${S.settings.base!=="en"&&shown("en")?`<p class="small muted">${esc(j.en)}</p>`:""}` : ""}
           <div class="row" style="margin-top:8px">
             ${jokeOpen[i] ? "" : `<button class="btn sm" type="button" data-joke="${i}">Show the answer</button>`}
-            ${canSpeak ? `<button class="speak" type="button" data-say="${esc(j.q+" "+j.a)}">🔊 Listen</button>` : ""}
+            ${canSpeak ? `<button class="speak" type="button" data-say="${esc(j.q+" "+j.a)}">${ic("volume")}Listen</button>` : ""}
           </div></div></div>`).join("")}</div>`;
   }
-  app.innerHTML = `<a class="back" href="#learn">← Learn</a><h1>Fun &amp; tricks</h1>
+  app.innerHTML = `<a class="back" href="#learn">${ic("left")}Learn</a><h1>Fun &amp; tricks</h1>
     <p class="muted" style="margin:6px 0 14px;max-width:60ch">Small things that make German easier and more fun: memory tricks, facts about life in Germany, idioms and jokes.</p>
     <nav class="chips" style="margin-bottom:16px" aria-label="Fun sections">${tabs.map(([k,l]) => `<a class="chip" href="#fun-${k}" aria-pressed="${k===tab}" style="text-decoration:none">${l}</a>`).join("")}</nav>
     ${body}`;
@@ -1724,7 +1809,7 @@ function viewListen(){
   $("#lClear").onclick = () => { LST.lines = []; LST.interim = ""; renderLive(); };
   $("#addNew").onclick = () => {
     const nw = newWordsFrom(LST.lines.join(" ")); nw.forEach(c => { if(!isWanted(c)) toggleWant(c); });
-    checkBadges(); renderStats(); toast(`☆ ${nw.length} word${nw.length===1?"":"s"} added to I want to learn`); renderLive();
+    checkBadges(); renderStats(); toast(`${nw.length} word${nw.length===1?"":"s"} added to I want to learn`, {kind:"want"}); renderLive();
   };
   $("#lCheck").onclick = () => {
     const txt = $("#lText").value.trim(); LST.text = txt;
@@ -1733,8 +1818,8 @@ function viewListen(){
     if(a.total >= 3){ S.listenSessions.unshift({at: Date.now(), w: a.total, k: a.known, src: "text"}); S.listenSessions = S.listenSessions.slice(0,40); save(); }
     $("#lResult").innerHTML = `<div class="row" style="gap:14px;align-items:center"><div class="lscore">${ringBig(a.pct)}<div class="bigpct"><b>${a.pct}%</b><span>${a.known} of ${a.total} words you know</span></div></div></div>
       <p class="ltext" lang="de">${renderTokens(a)}</p>
-      ${nw.length ? `<button class="btn want" type="button" id="addNewT">☆ Add ${nw.length} new word${nw.length===1?"":"s"} from the app to I want to learn</button>` : ""}`;
-    const b = $("#addNewT"); if(b) b.onclick = () => { nw.forEach(c => { if(!isWanted(c)) toggleWant(c); }); renderStats(); toast(`☆ ${nw.length} words added to I want to learn`); b.remove(); };
+      ${nw.length ? `<button class="btn want" type="button" id="addNewT">${ic("star")}Add ${nw.length} new word${nw.length===1?"":"s"} from the app to I want to learn</button>` : ""}`;
+    const b = $("#addNewT"); if(b) b.onclick = () => { nw.forEach(c => { if(!isWanted(c)) toggleWant(c); }); renderStats(); toast(`${nw.length} words added to I want to learn`, {kind:"want"}); b.remove(); };
   };
   renderLive();
 }
@@ -1749,11 +1834,11 @@ function openListenSheet(w){
   sh.className = "wsheet"; sh.setAttribute("role","dialog"); sh.setAttribute("aria-label","Word");
   const list = s.cards.slice(0,3);
   sh.innerHTML = `<div class="ws-inner" style="justify-items:stretch;text-align:left">
-    <button class="iconbtn ws-x" type="button" aria-label="Close">✕</button>
+    <button class="iconbtn ws-x" type="button" aria-label="Close">${ic("x")}</button>
     <div class="ws-de" style="text-align:center">${esc(w)}</div>
     ${list.length ? `<p class="small muted" style="margin:0;text-align:center">Found in ${s.cards.length} card${s.cards.length===1?"":"s"}</p><div class="words">${list.map(c => wordRow(c, {showUnit:true})).join("")}</div>`
       : `<p class="small muted" style="margin:0;text-align:center">This word isn't in the app yet. Add it as your own word with its meaning.</p>
-         <div class="row" style="justify-content:center">${canSpeak?`<button class="speak" type="button" data-say="${esc(w)}">🔊 Listen</button>`:""}<a class="btn primary sm" href="#words-add" id="lsAdd">＋ Add as my word</a></div>`}
+         <div class="row" style="justify-content:center">${canSpeak?`<button class="speak" type="button" data-say="${esc(w)}">${ic("volume")}Listen</button>`:""}<a class="btn primary sm" href="#words-add" id="lsAdd">${ic("plus")}Add as my word</a></div>`}
   </div>`;
   document.body.appendChild(sh);
   sh.querySelector(".ws-x").onclick = closeWordSheet;
@@ -1778,8 +1863,8 @@ function viewLesson(id){
   if(i<0) return viewGuide();
   const nx = secs[i+1];
   const blv = secs[i].dataset.level==="Start" ? "A1" : secs[i].dataset.level;
-  app.innerHTML = `<a class="back" href="#learn-${esc(blv)}-grammar">← ${esc(blv)} grammar</a><div class="guide-body"></div>
-    ${nx?`<div class="row" style="margin-top:22px"><a class="btn" href="#guide-${esc(nx.dataset.id)}">Next: ${esc(nx.dataset.title)} →</a></div>`:""}`;
+  app.innerHTML = `<a class="back" href="#learn-${esc(blv)}-grammar">${ic("left")}${esc(blv)} grammar</a><div class="guide-body"></div>
+    ${nx?`<div class="row" style="margin-top:22px"><a class="btn" href="#guide-${esc(nx.dataset.id)}">Next: ${esc(nx.dataset.title)}${ic("right")}</a></div>`:""}`;
   $(".guide-body", app).appendChild(secs[i]);
   $$("[data-fill]", app).forEach(el => { const f = FILL[el.dataset.fill]; if(f) el.innerHTML = f(); });
 }
@@ -1890,6 +1975,7 @@ async function boot(){
     return;
   }
   rebuildIndex();
+  if(!SANDBOX) loadAudioIndex();
   if(!location.hash) history.replaceState(null,"","#today");
   route();
   if("serviceWorker" in navigator && location.protocol==="https:" && !SANDBOX){

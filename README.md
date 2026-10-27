@@ -1,6 +1,6 @@
 # Wortzi
 
-**Live:** https://wortzi.fizzamubeen.com · **Version:** 1.6.0 · [Changelog](CHANGELOG.md)
+**Live:** https://wortzi.fizzamubeen.com · **Version:** 1.7.0 · [Changelog](CHANGELOG.md)
 
 **Learn everyday German from Urdu, Hindi or English.** Picture flashcards, your own word lists, daily practice that adapts to you, and printable PDFs of everything you learn. Private by design: no account, no tracking, all data stays on the learner's phone.
 
@@ -96,7 +96,7 @@ Raise `VERSION` at the top of `sw.js` (e.g. `wortzi-1.4.1`) so phones that insta
 - All progress, lists and own words are stored in the browser's `localStorage` on the learner's device.
 - The page has a strict Content Security Policy: it can only load its own files.
 - No cookies, analytics, ads, external fonts or CDNs.
-- Speech uses the device's built-in text-to-speech.
+- German audio is pre-recorded with the free Piper voice (files in `audio/`, made by the *Make audio* workflow). The device's own voice is a fallback. Nothing is sent to any speech service when listening.
 - Backups are files the learner downloads and keeps. With a password they are encrypted with AES-GCM 256 (PBKDF2-SHA256, 250,000 iterations).
 - *Me → Delete all my data* wipes everything from the device.
 
@@ -115,6 +115,7 @@ assets/fonts/           filled by scripts/get-fonts.sh
 assets/icons/           app icons
 data/deck.txt           all flashcards
 data/guide.html         grammar lessons
+audio/                  recorded German audio (made automatically, do not edit)
 sw.js                   offline support
 manifest.webmanifest    install as app
 wordpress-plugin/       WordPress shortcode plugin

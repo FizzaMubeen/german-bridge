@@ -3,6 +3,14 @@
 The version shown in the app (Me → bottom of the page) matches the tags in this repository.
 Phones that installed the app update themselves; learners keep all their progress.
 
+## 1.7.0 — 2026-10-27
+- **Natural recorded voice:** every card, story line and grammar example now plays a real recording (free Piper voice, made automatically on GitHub by *Make audio*). The phone's own voice is only a fallback. Tap 🔊 twice for slow
+- Recordings are saved on the device as you play them; *Me → Settings → Save all audio for offline* stores all of them at once
+- Better fallback voice: picks the best German voice on the device and fixes Chrome dropping words
+- **New notifications:** at the top of the screen, never over the buttons, with an icon and **Undo** for "moved to I learned" and "added to I want to learn"
+- **New look:** one set of line icons instead of emoji on buttons, calmer colours, dark primary buttons, softer cards, clearer tab bar
+- Unit page: one big Practise button, then All · Write · Speak; practice settings folded away; "Next unit" at the bottom
+
 ## 1.6.0 — 2026-10-27
 - **✍️ Write:** see the picture and your own language, type the German. Wortzi is forgiving but teaches: missing article, missing ä/ö/ü/ß, wrong capital letter and small typos count as "almost", with a hint. Wrong article is explained with the colour code. Buttons type ä ö ü ß Ä Ö Ü for you
 - **🗣️ Speak:** say the German out loud. Where the browser supports speech recognition, Wortzi shows what it heard, colours each word and gives a score (70% and up counts as right). Where it doesn't, Wortzi records you so you can play your voice next to the correct pronunciation. No audio is saved
