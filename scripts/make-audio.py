@@ -13,7 +13,7 @@ import json, os, re, subprocess, sys, tempfile, unicodedata, wave, pathlib
 ROOT = pathlib.Path(__file__).resolve().parent.parent
 OUT = ROOT / "audio"
 VOICE = os.environ.get("VOICE", "de_DE-thorsten-medium")
-LENGTH = float(os.environ.get("LENGTH_SCALE", "1.12"))   # >1 = a little slower, clearer for learners
+LENGTH = float(os.environ.get("LENGTH_SCALE", "1.28"))   # >1 = slower and clearer for learners
 
 
 def norm(t):
@@ -105,6 +105,15 @@ def synth(voice, text, wav_path):
 
 def main():
     OUT.mkdir(exist_ok=True)
+    # if the voice or speed changed, record everything again
+    sig = {"voice": VOICE, "length": LENGTH, "v": 1}
+    sig_file = OUT / "settings.json"
+    old = json.loads(sig_file.read_text()) if sig_file.exists() else None
+    if old != sig:
+        for p in OUT.glob("*.mp3"):
+            p.unlink()
+        print("voice settings changed: recording everything again")
+    sig_file.write_text(json.dumps(sig))
     want = collect()
     have = {p.stem for p in OUT.glob("*.mp3")}
     todo = [k for k in want if k not in have]
