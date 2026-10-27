@@ -21,7 +21,9 @@ import argparse, csv, datetime as dt, html, json, os, pathlib, random, shutil, s
 ROOT = pathlib.Path(__file__).resolve().parents[2]
 OUT = ROOT / "out" / "shorts"
 WORK = ROOT / "out" / "shorts-work"
-SITE = "germanbridge.fizzamubeen.com"
+APP_NAME = os.environ.get("APP_NAME", "German Bridge")
+SITE = os.environ.get("SITE", "germanbridge.fizzamubeen.com")
+SPEED = float(os.environ.get("VOICE_SPEED", "0.82"))   # 1.0 = normal, lower = slower and clearer
 VOICE_DE = os.environ.get("VOICE_DE", "de_DE-thorsten-medium")
 VOICE_EN = os.environ.get("VOICE_EN", "en_US-lessac-medium")
 W, H, FPS = 1080, 1920, 30
@@ -120,11 +122,12 @@ body{width:1080px;height:1920px;background:#f5f6f2;color:#1c2220;font-family:'At
 .cta{font-family:'Young Serif',serif;font-size:96px;line-height:1.15}
 .pill{font-size:44px;font-weight:700;padding:22px 44px;border-radius:999px;background:#b8860b;color:#1d1606}
 .list{display:flex;flex-direction:column;gap:22px;font-size:46px;text-align:left}
+.turn{margin-top:20px;font-size:50px;font-weight:700;color:#a17306;background:#f5ecd6;padding:18px 34px;border-radius:999px}
 """
 
 def brand():
     return ('<div class="brand"><div class="bars"><i style="height:20px;background:#7fa6ee"></i>'
-            '<i style="height:32px;background:#f08598"></i><i style="height:44px;background:#6fd09c"></i></div>German Bridge</div>')
+            '<i style="height:32px;background:#f08598"></i><i style="height:44px;background:#6fd09c"></i></div>' + html.escape(APP_NAME) + '</div>')
 
 def de_html(de):
     first = de.split(" ")[0]
@@ -150,12 +153,16 @@ def slide_hook(p):
                 f'<div class="hook">{html.escape(p["hook"])}</div>'
                 f'<div class="sub">German · اردو · English</div></div><div class="site">{SITE}</div>')
 
-def slide_card(p, idx, reveal):
+def slide_card(p, idx, reveal, turn=False):
     c = p["cards"][idx]
     is_txt = all(ord(ch) < 128 or ch == "½" for ch in c["v"])
-    back = (f'<div class="line"></div><div class="ur">{html.escape(c["ur"])}</div>'
-            f'<div class="rom">{html.escape(c["rom"])}</div><div class="en">{html.escape(c["en"])}</div>') if reveal else \
-           '<div class="sub" style="margin-top:20px">Do you know it?</div>'
+    if reveal:
+        back = (f'<div class="line"></div><div class="ur">{html.escape(c["ur"])}</div>'
+                f'<div class="rom">{html.escape(c["rom"])}</div><div class="en">{html.escape(c["en"])}</div>')
+    elif turn:
+        back = '<div class="turn">🗣️ Your turn. Say it out loud!</div>'
+    else:
+        back = '<div class="sub" style="margin-top:20px">Listen…</div>'
     return page(f'{brand()}<div class="main"><div class="card" style="border-top:18px solid {border(c["de"])}">'
                 f'<div class="vis{" txt" if is_txt else ""}">{html.escape(c["v"])}</div>'
                 f'<div class="de">{de_html(c["de"])}</div>{back}</div>{dots(len(p["cards"]), idx)}</div>'
@@ -192,12 +199,18 @@ class Voice:
         if not self.enabled:
             return None
         model = next(self.data.glob(f"{voice}*.onnx"))
-        text = text.split(" / ")[0]
-        r = subprocess.run([sys.executable, "-m", "piper", "-m", str(model), "-f", str(out), "--", text], capture_output=True, text=True)
-        if r.returncode != 0 or not out.exists():   # older piper: text on stdin
-            run_in = subprocess.run([sys.executable, "-m", "piper", "--model", str(model), "--output_file", str(out)], input=text, capture_output=True, text=True)
-            if run_in.returncode != 0 or not out.exists():
+        text = text.split(" / ")[0].replace("…", ".").replace("...", ".")
+        raw = out.with_suffix(".raw.wav")
+        r = subprocess.run([sys.executable, "-m", "piper", "-m", str(model), "-f", str(raw), "--", text], capture_output=True, text=True)
+        if r.returncode != 0 or not raw.exists():   # older piper: text on stdin
+            run_in = subprocess.run([sys.executable, "-m", "piper", "--model", str(model), "--output_file", str(raw)], input=text, capture_output=True, text=True)
+            if run_in.returncode != 0 or not raw.exists():
                 sys.exit(f"Piper failed for '{text}':\n{r.stderr[-800:]}\n{run_in.stderr[-800:]}")
+        # slower, warmer, a little room: slow down without changing pitch, soften highs, add a tiny echo
+        run(["ffmpeg", "-y", "-loglevel", "error", "-i", str(raw), "-af",
+             f"atempo={SPEED},lowpass=f=7500,aecho=0.8:0.5:40:0.12,loudnorm=I=-16:TP=-1.5:LRA=11,"
+             "aresample=44100,aformat=channel_layouts=mono", str(out)])
+        raw.unlink(missing_ok=True)
         return out
 
 def wav_len(p):
@@ -211,19 +224,36 @@ def run(cmd):
     return r
 
 # ---------------------------------------------------------------- video
-def segment(png, audio, dur, out, lead=0.35):
-    """One still slide, with optional speech starting after a short lead-in."""
-    vf = f"scale={W}:{H},format=yuv420p,fade=t=in:st=0:d=0.25"
+BG = "0xf5f6f2"
+def segment(png, audio, dur, out, lead=0.6, zoom=True):
+    """One slide: a slow, gentle zoom, soft fade in/out to the background colour, and speech after a short breath."""
+    frames = max(1, int(dur * FPS))
+    move = (f"scale={W*2}:{H*2},zoompan=z='min(1+0.00035*on,1.035)':x='iw/2-(iw/zoom/2)':y='ih/2-(ih/zoom/2)':d={frames}:s={W}x{H}:fps={FPS},"
+            if zoom else f"scale={W}:{H},")
+    vf = (f"{move}format=yuv420p,fade=t=in:st=0:d=0.35:c={BG},fade=t=out:st={max(0, dur-0.35):.2f}:d=0.35:c={BG}")
+    v_in = ["-i", str(png)] if zoom else ["-loop", "1", "-framerate", str(FPS), "-i", str(png)]
     if audio:
-        cmd = ["ffmpeg", "-y", "-loglevel", "error", "-loop", "1", "-framerate", str(FPS), "-i", str(png), "-i", str(audio),
-               "-filter_complex", f"[1:a]adelay={int(lead*1000)}|{int(lead*1000)},apad,aresample=44100,aformat=channel_layouts=stereo[a]",
-               "-map", "0:v", "-map", "[a]", "-vf", vf, "-t", f"{dur:.2f}", "-r", str(FPS),
-               "-c:v", "libx264", "-preset", "veryfast", "-crf", "20", "-tune", "stillimage", "-c:a", "aac", "-b:a", "160k", str(out)]
+        a = f"[1:a]adelay={int(lead*1000)}|{int(lead*1000)},apad,aresample=44100,aformat=channel_layouts=stereo[a]"
+        cmd = ["ffmpeg", "-y", "-loglevel", "error", *v_in, "-i", str(audio), "-filter_complex", f"[0:v]{vf}[v];{a}",
+               "-map", "[v]", "-map", "[a]", "-t", f"{dur:.2f}", "-r", str(FPS)]
     else:
-        cmd = ["ffmpeg", "-y", "-loglevel", "error", "-loop", "1", "-framerate", str(FPS), "-i", str(png),
-               "-f", "lavfi", "-i", "anullsrc=r=44100:cl=stereo", "-vf", vf, "-t", f"{dur:.2f}", "-r", str(FPS),
-               "-c:v", "libx264", "-preset", "veryfast", "-crf", "20", "-tune", "stillimage", "-c:a", "aac", "-b:a", "160k", "-shortest", str(out)]
+        cmd = ["ffmpeg", "-y", "-loglevel", "error", *v_in, "-f", "lavfi", "-i", "anullsrc=r=44100:cl=stereo",
+               "-filter_complex", f"[0:v]{vf}[v]", "-map", "[v]", "-map", "1:a", "-t", f"{dur:.2f}", "-r", str(FPS)]
+    cmd += ["-c:v", "libx264", "-preset", "veryfast", "-crf", "20", "-pix_fmt", "yuv420p", "-c:a", "aac", "-b:a", "160k", str(out)]
     run(cmd)
+
+def join_wavs(parts, out):
+    """Join speech clips with pauses: parts = [path | seconds_of_silence, ...]."""
+    ins, labels = [], []
+    for i, x in enumerate(parts):
+        if isinstance(x, (int, float)):
+            ins += ["-f", "lavfi", "-t", f"{x:.2f}", "-i", "anullsrc=r=44100:cl=mono"]
+        else:
+            ins += ["-i", str(x)]
+        labels.append(f"[{i}:a]aresample=44100,aformat=channel_layouts=mono[s{i}]")
+    fc = ";".join(labels) + ";" + "".join(f"[s{i}]" for i in range(len(parts))) + f"concat=n={len(parts)}:v=0:a=1[a]"
+    run(["ffmpeg", "-y", "-loglevel", "error", *ins, "-filter_complex", fc, "-map", "[a]", str(out)])
+    return out
 
 def concat(parts, out):
     lst = out.with_suffix(".txt")
@@ -240,22 +270,30 @@ def make(p, browser, voice):
         pg.evaluate("document.fonts.ready")
         f = d / f"{name}.png"; pg.screenshot(path=str(f)); return f
     parts = []
-    seg = lambda png, audio, dur, name: (segment(png, audio, dur, d / f"{name}.mp4"), parts.append(d / f"{name}.mp4"))
-    seg(shot(slide_hook(p), "0-hook"), None, 2.2, "0-hook")
+    seg = lambda png, audio, dur, name, zoom=True: (segment(png, audio, dur, d / f"{name}.mp4", zoom=zoom), parts.append(d / f"{name}.mp4"))
+    # 1. hook, spoken like a person would say it
+    h = voice.say(p["hook"].replace("→", "to") + ".", VOICE_EN, d / "hook.wav")
+    seg(shot(slide_hook(p), "0-hook"), h, (wav_len(h) + 1.6) if h else 3.0, "0-hook")
     for i, c in enumerate(p["cards"]):
-        a1 = voice.say(c["de"], VOICE_DE, d / f"{i}-de.wav")
-        seg(shot(slide_card(p, i, False), f"{i+1}a"), a1, (wav_len(a1) + 0.9) if a1 else 2.0, f"{i+1}a")
-        a2 = voice.say(c["en"], VOICE_EN, d / f"{i}-en.wav")
-        a3 = voice.say(c["de"], VOICE_DE, d / f"{i}-de2.wav")
-        if a2 and a3:  # meaning, then German again
-            both = d / f"{i}-both.wav"
-            run(["ffmpeg", "-y", "-loglevel", "error", "-i", str(a2), "-f", "lavfi", "-t", "0.45", "-i", "anullsrc=r=22050:cl=mono", "-i", str(a3),
-                 "-filter_complex", "[0:a]aresample=22050,aformat=channel_layouts=mono[x];[2:a]aresample=22050,aformat=channel_layouts=mono[z];[x][1:a][z]concat=n=3:v=0:a=1", str(both)])
-            dur = wav_len(both) + 1.1
+        # 2. listen: German, slowly, twice with a breath in between
+        de = voice.say(c["de"], VOICE_DE, d / f"{i}-de.wav")
+        if de:
+            twice = join_wavs([de, 1.1, de], d / f"{i}-de2x.wav")
+            seg(shot(slide_card(p, i, False), f"{i+1}a"), twice, wav_len(twice) + 1.4, f"{i+1}a")
         else:
-            both, dur = None, 2.6
-        seg(shot(slide_card(p, i, True), f"{i+1}b"), both, dur, f"{i+1}b")
-    seg(shot(slide_cta(p), "9-cta"), None, 3.2, "9-cta")
+            seg(shot(slide_card(p, i, False), f"{i+1}a"), None, 3.0, f"{i+1}a")
+        # 3. your turn: silence to repeat it out loud
+        seg(shot(slide_card(p, i, False, turn=True), f"{i+1}t"), None, 2.8, f"{i+1}t", zoom=False)
+        # 4. reveal: the meaning, then German one more time
+        en = voice.say(c["en"], VOICE_EN, d / f"{i}-en.wav")
+        if en and de:
+            both = join_wavs([en, 0.9, de], d / f"{i}-both.wav")
+            seg(shot(slide_card(p, i, True), f"{i+1}b"), both, wav_len(both) + 2.0, f"{i+1}b")
+        else:
+            seg(shot(slide_card(p, i, True), f"{i+1}b"), None, 3.5, f"{i+1}b")
+    # 5. ending
+    e = voice.say(f"Practise these and a thousand more, for free, with {APP_NAME}. See you tomorrow!", VOICE_EN, d / "end.wav")
+    seg(shot(slide_cta(p), "9-cta"), e, (wav_len(e) + 2.0) if e else 4.0, "9-cta")
     pg.close()
     out = OUT / f"day-{p['day']:02d}.mp4"
     concat(parts, out)
@@ -291,7 +329,7 @@ def main():
             w.writerow([p["day"], p["date"], "18:30", f"day-{p['day']:02d}.mp4", f"day-{p['day']:02d}-cover.png",
                         p["hook"], " | ".join(c["de"] for c in p["cards"]), caption(p)])
     with open(OUT / "captions.md", "w", encoding="utf-8") as fh:
-        fh.write("# German Bridge — 30 days of shorts\n\nPost each video on Instagram Reels, TikTok and YouTube Shorts.\n\n")
+        fh.write(f"# {APP_NAME} — 30 days of shorts\n\nPost each video on Instagram Reels, TikTok and YouTube Shorts.\n\n")
         for p in days:
             fh.write(f"## Day {p['day']} · {p['date']} · 18:30\n\n**Video:** day-{p['day']:02d}.mp4\n\n```\n{caption(p)}\n```\n\n")
     print(f"Done: {OUT}")
