@@ -539,3 +539,18 @@ body.in-session .updatebar{top:calc(12px + env(safe-area-inset-top,0px))}
   .lvltile b{font-size:13px}
 }
 .lvl.B1{color:var(--der)}
+
+/* ---------- write & speak practice ---------- */
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.writebox{display:grid;gap:8px}
+.writebox .input{font-size:20px;font-weight:700;min-height:54px;text-align:center}
+.umls{display:flex;gap:6px;justify-content:center;flex-wrap:wrap}
+.umls .chip{min-width:42px;min-height:40px;font-size:17px;color:var(--ink);padding:4px 10px}
+.yours{display:grid;gap:2px;justify-items:center;font-size:18px}
+.yours .strike{text-decoration:line-through;text-decoration-color:var(--bad);color:var(--muted)}
+.heard .hit{color:var(--ok);font-weight:700}
+.heard .miss{color:var(--bad);text-decoration:underline dotted}
+.session .micwrap{padding:0}
+.session .micbtn{width:84px;height:84px}
+.myrec{width:100%;max-width:300px;height:40px}
+@media (max-height:700px){ .card.write .visual{font-size:40px} .card.write .hint{display:none} }

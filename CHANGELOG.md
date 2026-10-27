@@ -3,6 +3,12 @@
 The version shown in the app (Me → bottom of the page) matches the tags in this repository.
 Phones that installed the app update themselves; learners keep all their progress.
 
+## 1.6.0 — 2026-10-27
+- **✍️ Write:** see the picture and your own language, type the German. Wortzi is forgiving but teaches: missing article, missing ä/ö/ü/ß, wrong capital letter and small typos count as "almost", with a hint. Wrong article is explained with the colour code. Buttons type ä ö ü ß Ä Ö Ü for you
+- **🗣️ Speak:** say the German out loud. Where the browser supports speech recognition, Wortzi shows what it heard, colours each word and gives a score (70% and up counts as right). Where it doesn't, Wortzi records you so you can play your voice next to the correct pronunciation. No audio is saved
+- Start them from My words → I learned (**Write them**, **Say them**), from any unit, or from Today → Keep going
+- New badges: Schreiber (write 20 words) and Sprecher (say 20 words)
+
 ## 1.5.0 — 2026-10-27
 - **Choose your level:** A1, A2 or B1 at the top of Learn. Tap a level and only its units, stories and grammar show, in three tabs
 - **New B1 level:** 12 units, 180 cards for working life: job interviews, meetings, renting, offices and forms, health insurance, bank and contracts, giving opinions, linking ideas, feelings, news and society, phone calls and formal emails, polite wishes

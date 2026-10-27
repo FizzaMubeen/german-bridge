@@ -5,7 +5,7 @@
  */
 (() => {
 "use strict";
-const APP_VERSION = "1.5.0";
+const APP_VERSION = "1.6.0";
 const KEY = "gb-v1";
 
 /* =====================================================================
@@ -95,7 +95,7 @@ function parseDeck(txt){
 const DEFAULTS = () => ({
   format:1, created: Date.now(),
   cards:{}, known:{}, want:{}, custom:[], storiesRead:{}, listenSessions:[],
-  xp:0, days:{}, badges:{}, sessions:0, perfect:0, quizzes:0, listens:0, reports:0,
+  xp:0, days:{}, badges:{}, sessions:0, perfect:0, quizzes:0, listens:0, reports:0, written:0, spoken:0,
   settings:{level:"A1", name:"", base:"ur", front:"de", mode:"flip", goal:20, theme:"system", autoplay:false, hideInstall:0, extra:{rom:true, en:true, ur:false, hi:false}}
 });
 let S = null;
@@ -108,7 +108,7 @@ function sanitize(raw){
   for(const key of ["known","want"]) for(const [k,v] of Object.entries(raw[key]||{})) if(typeof k==="string" && k.length<300) out[key][k] = num(v, Date.now());
   out.custom = (Array.isArray(raw.custom)?raw.custom:[]).filter(c => c && /^my-[a-z0-9]{4,24}$/.test(c.id) && c.de).slice(0,5000).map(c => ({
     id:c.id, v:clip(c.v,8)||"📝", de:clip(c.de,200), my:clip(c.my,200), en:clip(c.en,200), note:clip(c.note,300), created:num(c.created,Date.now())}));
-  for(const k of ["xp","sessions","perfect","quizzes","listens","reports"]) out[k] = Math.max(0, num(raw[k],0));
+  for(const k of ["xp","sessions","perfect","quizzes","listens","reports","written","spoken"]) out[k] = Math.max(0, num(raw[k],0));
   out.listenSessions = (Array.isArray(raw.listenSessions)?raw.listenSessions:[]).slice(0,40).map(x => ({at:num(x&&x.at,0), w:Math.max(0,num(x&&x.w,0)), k:Math.max(0,num(x&&x.k,0)), src: (x&&x.src)==="text"?"text":"mic"})).filter(x => x.w > 0);
   for(const [k,v] of Object.entries(raw.storiesRead||{})) if(/^[a-z0-9-]{1,40}$/.test(k)) out.storiesRead[k] = num(v, Date.now());
   for(const [k,v] of Object.entries(raw.days||{})) if(/^\d{4}-\d{2}-\d{2}$/.test(k)) out.days[k] = Math.max(0, num(v,0));
@@ -214,6 +214,8 @@ const BADGES = [
   {id:"a1", e:"🥉", t:"A1 complete", d:"Learn every A1 card", ok:()=>DECK.filter(c=>c.level==="A1").every(isLearned)},
   {id:"a2", e:"🥈", t:"A2 complete", d:"Learn every A2 card", ok:()=>DECK.filter(c=>c.level==="A2").every(isLearned)},
   {id:"b1", e:"🥇", t:"B1 complete", d:"Learn every B1 card", ok:()=>DECK.some(c=>c.level==="B1") && DECK.filter(c=>c.level==="B1").every(isLearned)},
+  {id:"write20", e:"✍️", t:"Schreiber", d:"Write 20 words correctly", ok:()=>S.written>=20},
+  {id:"speak20", e:"🗣️", t:"Sprecher", d:"Say 20 words correctly", ok:()=>S.spoken>=20},
   {id:"listen1", e:"👂", t:"Good ears", d:"Finish a listening session", ok:()=>S.listenSessions.some(x=>x.src==="mic" && x.w>=10)},
   {id:"listen50", e:"🎯", t:"Half way there", d:"Understand 50% in a listening session", ok:()=>S.listenSessions.some(x=>x.w>=10 && x.k/x.w>=0.5)},
   {id:"stories3", e:"📖", t:"Storyteller", d:"Read 3 stories", ok:()=>Object.keys(S.storiesRead).length>=3},
@@ -313,7 +315,7 @@ let session = null;
 let words = {q:"", sort:"new"};
 function setNav(nav){ $$("[data-nav]").forEach(a => a.dataset.nav===nav ? a.setAttribute("aria-current","page") : a.removeAttribute("aria-current")); }
 function route(){
-  stopConfetti();
+  stopConfetti(); speakStop();
   if(typeof stopListening === "function") stopListening(true);
   session = null; document.body.classList.remove("in-session");
   const h = (location.hash||"#today").slice(1);
@@ -355,7 +357,7 @@ app.addEventListener("click", e => {
   const ww = t.closest("[data-want]");
   if(ww){ const c = BYID.get(ww.dataset.want); if(!c) return; const on = toggleWant(c);
     toast(on ? `☆ “${c.de}” added to I want to learn` : `“${c.de}” removed from I want to learn`); checkBadges(); return refresh(); }
-  const st = t.closest("[data-start]"); if(st && !st.disabled) return startSession(st.dataset.start, st.dataset.id);
+  const st = t.closest("[data-start]"); if(st && !st.disabled) return startSession(st.dataset.start, st.dataset.id, st.dataset.mode);
   if(!session) return;
   if(t.closest("[data-exit]")) return finishSession(true);
   if(t.closest("[data-flip]") || (session.mode==="flip" && session.state==="front" && t.closest(".card") && !t.closest("button"))){ session.state="back"; return drawSession(); }
@@ -363,6 +365,12 @@ app.addEventListener("click", e => {
   const o = t.closest("[data-opt]"); if(o && session.state==="front") return choose(+o.dataset.opt);
   if(t.closest("[data-continue]")) return grade(session.picked===session.queue[0]);
   if(t.closest("[data-sknow]")) return sessionKnow();
+  const um = t.closest("[data-uml]"); if(um){ const i = $("#wIn"); if(i){ const a = i.selectionStart ?? i.value.length, b = i.selectionEnd ?? a; i.value = i.value.slice(0,a) + um.dataset.uml + i.value.slice(b); i.focus(); i.setSelectionRange(a+1,a+1); } return; }
+  if(t.closest("[data-wshow]")){ session.result = {res:"wrong", given:"", note:"No problem. Look at it, then type it next time."}; session.state = "back"; return drawSession(); }
+  if(t.closest("[data-next]")) return grade(!!session.lastOk);
+  if(t.closest("[data-smic]")) return speakStart();
+  if(t.closest("[data-sstop]")) return speakStop();
+  if(t.closest("[data-sself]")){ session.result = null; session.state = "back"; return drawSession(); }
   if(t.closest("[data-swant]")){ const c = session.queue[0]; const on = toggleWant(c); toast(on?"☆ Added to I want to learn":"Removed from I want to learn"); return drawSession(); }
 });
 function refresh(){ if(session) drawSession(); else { const y = window.scrollY; route(); window.scrollTo(0,y); } }
@@ -452,6 +460,8 @@ function viewToday(){
     <div class="row">
       <a class="btn" href="#unit-${p.nu.id}">${esc(p.nu.emoji)} Unit ${p.nu.n}: ${esc(p.nu.title)}</a>
       <button class="btn" data-start="weak" ${allCards().some(c=>seen(c)&&!isLearned(c))?"":"disabled"}>🔁 Weak cards</button>
+      <button class="btn" data-start="learned" data-mode="write" ${learnedList().length?"":"disabled"}>✍️ Write what I learned</button>
+      <button class="btn" data-start="learned" data-mode="speak" ${learnedList().length?"":"disabled"}>🗣️ Speak what I learned</button>
       <a class="btn" href="#guide-method">How this app teaches</a>
     </div>`;
   wireInstallCard();
@@ -530,6 +540,8 @@ function viewUnit(u){
     <div class="row">
       <button class="btn primary big" data-start="unit" data-id="${u.id}">▶ Practise 10 cards</button>
       <button class="btn" data-start="unitall" data-id="${u.id}">All ${st.total}</button>
+      <button class="btn" data-start="unit" data-id="${u.id}" data-mode="write">✍️ Write</button>
+      <button class="btn" data-start="unit" data-id="${u.id}" data-mode="speak">🗣️ Speak</button>
       ${next?`<a class="btn ghost" href="#unit-${next.id}">Next: ${esc(next.title)} →</a>`:""}
     </div>
     ${practiceChips()}
@@ -571,7 +583,8 @@ function viewWords(tab){
       </div>
     </div>
     <div class="row" style="margin-bottom:12px">
-      <button class="btn ${tab==="want"?"want":"good"}" data-start="${tab}">${tab==="want"?"▶ Practise my wish list":"🔁 Review what I learned"}</button>
+      <button class="btn ${tab==="want"?"want":"good"}" data-start="${tab}">${tab==="want"?"▶ Practise my wish list":"🔁 Review"}</button>
+      ${tab==="learned" ? `<button class="btn" data-start="learned" data-mode="write">✍️ Write them</button><button class="btn" data-start="learned" data-mode="speak">🗣️ Say them</button>` : ""}
       ${S.custom.length?`<button class="btn sm" data-start="mine">✍️ Only my own words (${S.custom.length})</button>`:""}
       <a class="btn sm ghost" href="#report" id="toReport">🖨️ Make a PDF</a>
     </div>
@@ -674,10 +687,11 @@ function pickCards(kind, id){
   if(kind==="story"){ const st = storyById(id); return st ? shuffle(storyEntries(st).map(e=>e.card).filter(Boolean)) : []; }
   return [];
 }
-function startSession(kind, id){
-  const cards = pickCards(kind, id);
+function startSession(kind, id, mode){
+  let cards = pickCards(kind, id);
+  if(mode==="write" || mode==="speak") cards = cards.filter(c => c.de && c.de.replace(/\.\.\.|…/g,"").trim().length > 1);
   if(!cards.length){ toast("No cards to practise here yet."); return; }
-  session = {kind, storyId: kind==="story" ? id : null, unitId: (kind==="unit"||kind==="unitall") ? id : null, levelId: kind==="level" ? id : null, queue:[...cards], done:0, xp:0, right:0, wrong:0, retried:new Set(), moved:[], state:"front", picked:null, opts:null, mode:S.settings.mode,
+  session = {kind, storyId: kind==="story" ? id : null, unitId: (kind==="unit"||kind==="unitall") ? id : null, levelId: kind==="level" ? id : null, queue:[...cards], done:0, xp:0, right:0, wrong:0, retried:new Set(), moved:[], state:"front", picked:null, opts:null, mode: ["write","speak"].includes(mode) ? mode : S.settings.mode, result:null, lastOk:false,
     before: (kind==="unit"||kind==="unitall") ? unitStats(unitById(id)).stars : 0};
   document.body.classList.add("in-session"); setNav(""); window.scrollTo(0,0); drawSession();
 }
@@ -720,7 +734,9 @@ function drawSession(){
       <button class="btn sm" type="button" data-sknow>✓ I already know this</button></div>`;
   let body;
   const isBack = s.state==="back";
-  if(s.mode==="flip"){
+  if(s.mode==="write") body = writeBody(c, cat, dots, isBack);
+  else if(s.mode==="speak") body = speakBody(c, cat, dots, isBack);
+  else if(s.mode==="flip"){
     body = `<div class="card ${c.g}${isBack?" is-back":""}" role="button" tabindex="0" aria-label="Card. Tap to show the answer">
         <span class="cat">${esc(cat)}</span>${dots}
         ${visHTML(c)}
@@ -760,6 +776,162 @@ function drawSession(){
     ${body}
   </div>`;
   if(s.state==="back" && S.settings.autoplay) say(c.de, c.id);
+  if(s.mode==="write" && s.state==="front") wireWrite();
+}
+
+/* =====================================================================
+   WRITE & SPEAK — type the German, or say it out loud
+   ===================================================================== */
+const normDe = x => String(x||"").normalize("NFC").replace(/[.,!?¿¡;:"„“”‚‘'’()…]/g," ").replace(/\s+/g," ").trim();
+const foldDe = x => normDe(x).toLowerCase().replace(/ä/g,"ae").replace(/ö/g,"oe").replace(/ü/g,"ue").replace(/ß/g,"ss");
+function lev(a, b){
+  if(a===b) return 0; if(!a.length) return b.length; if(!b.length) return a.length;
+  let prev = Array.from({length:b.length+1}, (_,i)=>i);
+  for(let i=1;i<=a.length;i++){ const cur=[i]; for(let j=1;j<=b.length;j++) cur[j] = Math.min(prev[j]+1, cur[j-1]+1, prev[j-1]+(a[i-1]===b[j-1]?0:1)); prev = cur; }
+  return prev[b.length];
+}
+/* every acceptable German answer for a card: "morgen / gestern" accepts either, "..." placeholders are dropped */
+function targetsOf(c){
+  return String(c.de).split(/\s+\/\s+/).map(t => t.replace(/\.\.\.|…/g,"").replace(/\s*\([^)]*\)/g,"").replace(/,\s*$/,"").trim()).filter(Boolean);
+}
+const ART = /^(der|die|das)\s+/i;
+const plainU = x => foldDe(x).replace(/ae/g,"a").replace(/oe/g,"o").replace(/ue/g,"u").replace(/ss/g,"s");
+const UML_NOTE = "Use ä, ö, ü and ß. The buttons under the box type them for you.";
+function compareDe(g, t){
+  if(g===t) return {res:"right", note:"", d:0};
+  if(g.toLowerCase()===t.toLowerCase()) return {res:"almost", note:"Watch the capital letters: German nouns always start with a capital.", d:0};
+  if(foldDe(g)===foldDe(t) || (/[äöüß]/i.test(t) && plainU(g)===plainU(t))) return {res:"almost", note:UML_NOTE, d:0};
+  const d = lev(foldDe(g), foldDe(t)), allow = Math.max(1, Math.floor(foldDe(t).length*0.12));
+  if(d <= allow) return {res:"almost", note: d===1 ? "One letter off. Compare carefully:" : "A small typo. Compare carefully:", d};
+  return {res:"wrong", note:"", d};
+}
+function checkWrite(given, c){
+  const g = normDe(given);
+  if(!g) return {res:"wrong", note:"Type the German, then tap Check."};
+  let best = {res:"wrong", note:"", d:1e9};
+  const better = r => { const rank = x => x.res==="right"?0:x.res==="almost"?1:2; if(rank(r)<rank(best) || (rank(r)===rank(best) && r.d<best.d)) best = r; };
+  for(const t0 of targetsOf(c)){
+    const t = normDe(t0), tm = ART.exec(t), gm = ART.exec(g);
+    const r = compareDe(g, t); if(r.res==="right") return r; better(r);
+    if(tm && !gm){ const r2 = compareDe(g, t.replace(ART,""));
+      if(r2.res!=="wrong") better({res:"almost", note:`Don't forget the article: <b>${esc(tm[1])}</b> ${esc(t.replace(ART,""))}.${r2.res==="almost"?" "+r2.note.replace(/ Compare carefully:$/,""):""}`, d:r2.d+1}); }
+    if(tm && gm && tm[1].toLowerCase()!==gm[1].toLowerCase() && compareDe(g.replace(ART,""), t.replace(ART,"")).res!=="wrong")
+      better({res:"wrong", note:`Right word, wrong article. It's <b>${esc(tm[1])}</b>. The colour helps: ${tm[1]==="der"?"blue = der":tm[1]==="die"?"red = die":"green = das"}.`, d:1});
+  }
+  return best;
+}
+const UMLAUTS = ["ä","ö","ü","ß","Ä","Ö","Ü"];
+function writeBody(c, cat, dots, isBack){
+  const s = session, prompt = `<div class="face">${sideHTML("my",c)}</div>`;
+  if(!isBack) return `<div class="card ${c.g} write" style="cursor:default">
+      <span class="cat">${esc(cat)}</span>${dots}
+      ${visHTML(c)}${prompt}
+      <div class="hint">Write it in German${ART.test(c.de) ? ", with der / die / das" : ""}</div>
+    </div>
+    <form class="writebox" id="wForm" autocomplete="off">
+      <label class="sr" for="wIn">Your answer in German</label>
+      <input class="input" id="wIn" lang="de" autocomplete="off" autocorrect="off" spellcheck="false" enterkeyhint="done" placeholder="Auf Deutsch …">
+      <div class="umls" aria-label="Special letters">${UMLAUTS.map(u=>`<button type="button" class="chip" data-uml="${u}">${u}</button>`).join("")}</div>
+      <div class="sactions"><button type="button" class="btn ghost big" data-wshow>Show me</button><button type="submit" class="btn primary big">Check</button></div>
+    </form>`;
+  const r = s.result || {res:"wrong"}, ok = r.res !== "wrong";
+  s.lastOk = ok;
+  const head = r.res==="right" ? "✓ Richtig! Perfectly written." : r.res==="almost" ? "✓ Almost! Counted as right." : r.given ? "✗ Not yet" : "Here it is";
+  return `<div class="card ${c.g} is-back" style="cursor:default">
+      <span class="cat">${esc(cat)}</span>${dots}
+      ${visHTML(c)}${prompt}
+      <div class="flash ${ok?"ok":"no"}">${head}</div>
+      ${r.given && r.res!=="right" ? `<div class="yours"><span class="label">You wrote</span><span class="${ok?"":"strike"}">${esc(r.given)}</span></div>` : ""}
+      <div class="answer"><div class="dd">${colorDe(c.de)}</div>${r.note?`<div class="note">${r.note}</div>`:""}${spk(c.de,c.id)}</div>
+    </div>
+    <div class="sactions"><button class="btn ${ok?"good":"primary"} big full" data-next>${ok?"Continue":"Got it, continue"}</button></div>`;
+}
+function wireWrite(){
+  const f = $("#wForm"), i = $("#wIn"); if(!f) return;
+  setTimeout(() => { try{ i.focus({preventScroll:true}); }catch(e){} }, 60);
+  f.addEventListener("submit", e => { e.preventDefault(); const s = session; if(!s) return;
+    const r = checkWrite(i.value, s.queue[0]); if(!normDe(i.value)){ toast(r.note); return; }
+    s.result = {...r, given: i.value.trim()}; s.state = "back"; drawSession(); });
+}
+
+/* ---------- speak ---------- */
+let SPK = {rec:null, on:false, media:null, chunks:[], url:""};
+const wordsOf = x => foldDe(x).split(" ").filter(Boolean);
+function lcs(a, b){ const m = Array.from({length:a.length+1},()=>new Array(b.length+1).fill(0));
+  for(let i=1;i<=a.length;i++) for(let j=1;j<=b.length;j++) m[i][j] = a[i-1]===b[j-1] ? m[i-1][j-1]+1 : Math.max(m[i-1][j], m[i][j-1]);
+  return m[a.length][b.length]; }
+function scoreSpeech(heard, c){
+  let best = 0;
+  for(const t of targetsOf(c)){ const tw = wordsOf(t); if(!tw.length) continue;
+    for(const h of heard){ const hw = wordsOf(h);
+      // allow near-misses on single words (recogniser spelling), then count words in the right order
+      const fixed = hw.map(w => tw.find(x => x===w || (x.length>3 && lev(x,w)<=1)) || w);
+      best = Math.max(best, lcs(tw, fixed) / tw.length); } }
+  return Math.round(best*100);
+}
+function heardHTML(text, c){
+  const tw = new Set(targetsOf(c).flatMap(wordsOf));
+  return normDe(text).split(" ").map(w => `<span class="${tw.has(foldDe(w)) || [...tw].some(x=>x.length>3 && lev(x,foldDe(w))<=1) ? "hit" : "miss"}">${esc(w)}</span>`).join(" ");
+}
+function speakStart(){
+  const s = session; if(!s) return;
+  s.speakErr = "";
+  if(SR){
+    S.settings.listenOk = true; save();
+    const rec = new SR(); SPK.rec = rec; SPK.on = true;
+    rec.lang = "de-DE"; rec.continuous = false; rec.interimResults = false; rec.maxAlternatives = 5;
+    rec.onresult = e => { const alts = [...e.results[0]].map(a => a.transcript); SPK.on = false;
+      const sc = scoreSpeech(alts, s.queue[0]); s.result = {heard: alts[0]||"", score: sc}; s.state = "back"; drawSession(); };
+    rec.onerror = e => { SPK.on = false; s.speakErr = e.error==="no-speech" ? "I didn't hear anything. Tap the mic and speak clearly." : (e.error==="not-allowed"||e.error==="service-not-allowed") ? "The microphone is blocked. Allow it for this site in your browser settings." : e.error==="network" ? "Speech checking needs internet in this browser. You can still say it and check yourself." : "Couldn't hear that. Try again."; drawSession(); };
+    rec.onend = () => { if(SPK.on){ SPK.on = false; drawSession(); } };
+    try{ rec.start(); }catch(err){ SPK.on = false; }
+    return drawSession();
+  }
+  // no speech recognition (e.g. some iPhones): record yourself and compare by ear
+  if(!navigator.mediaDevices || !window.MediaRecorder){ s.result = null; s.state = "back"; return drawSession(); }
+  navigator.mediaDevices.getUserMedia({audio:true}).then(stream => {
+    SPK.chunks = []; const mr = new MediaRecorder(stream); SPK.media = mr; SPK.on = true;
+    mr.ondataavailable = e => { if(e.data.size) SPK.chunks.push(e.data); };
+    mr.onstop = () => { stream.getTracks().forEach(t=>t.stop()); SPK.on = false; if(SPK.url) URL.revokeObjectURL(SPK.url);
+      SPK.url = URL.createObjectURL(new Blob(SPK.chunks, {type: mr.mimeType || "audio/mp4"})); s.result = {recorded:true}; s.state = "back"; drawSession(); };
+    mr.start(); setTimeout(() => { if(mr.state==="recording") mr.stop(); }, 6000); drawSession();
+  }).catch(() => { s.speakErr = "The microphone is blocked. Allow it for this site in your browser settings."; drawSession(); });
+}
+function speakStop(){ try{ if(SPK.rec) SPK.rec.stop(); }catch(e){} try{ if(SPK.media && SPK.media.state==="recording") SPK.media.stop(); }catch(e){} }
+function speakBody(c, cat, dots, isBack){
+  const s = session, prompt = `<div class="face">${sideHTML("my",c)}</div>`;
+  if(!isBack){
+    const how = SR ? "Say it in German. I'll check your pronunciation." : window.MediaRecorder ? "Say it in German. I'll record you so you can compare." : "Say it out loud in German, then check.";
+    return `<div class="card ${c.g} speak" style="cursor:default">
+        <span class="cat">${esc(cat)}</span>${dots}
+        ${visHTML(c)}${prompt}
+        <div class="hint">${how}</div>
+        ${s.speakErr ? `<div class="flash no">${esc(s.speakErr)}</div>` : ""}
+      </div>
+      <div class="micwrap">
+        <button class="micbtn${SPK.on?" on":""}" type="button" ${SPK.on?"data-sstop":"data-smic"} aria-label="${SPK.on?"Stop":"Speak"}"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3M9 21h6"/></svg></button>
+        <span class="small muted">${SPK.on ? "Listening… tap to stop" : "Tap and speak"}</span>
+      </div>
+      <div class="sactions"><button class="btn ghost big full" data-sself>Show the answer instead</button></div>
+      ${SR && !S.settings.listenOk ? `<p class="small muted" style="margin:0;text-align:center">Your browser turns your voice into text (Google in Chrome, Apple in Safari). Wortzi saves no audio.</p>` : ""}`;
+  }
+  const r = s.result;
+  let verdict = "", self = false;
+  if(r && r.score !== undefined){
+    s.lastOk = r.score >= 70;
+    verdict = `<div class="flash ${s.lastOk?"ok":"no"}">${r.score>=90?"✓ Sehr gut! Clear and correct.":r.score>=70?"✓ Gut! Nearly perfect.":r.score>=40?"Almost. Listen and try once more next time.":"Not yet. Listen to it, then say it again."} <b>${r.score}%</b></div>
+      <div class="yours"><span class="label">I heard</span><span class="heard">${heardHTML(r.heard, c)}</span></div>`;
+  } else self = true;
+  return `<div class="card ${c.g} is-back" style="cursor:default">
+      <span class="cat">${esc(cat)}</span>${dots}
+      ${visHTML(c)}${prompt}
+      ${verdict}
+      <div class="answer"><div class="dd">${colorDe(c.de)}</div>${spk(c.de,c.id)}
+        ${r && r.recorded && SPK.url ? `<audio controls src="${SPK.url}" class="myrec"></audio><span class="small muted">Your voice. Play both and compare.</span>` : ""}</div>
+    </div>
+    <div class="sactions">${self
+      ? `<button class="btn bad big" data-ans="0">✗ Not yet</button><button class="btn good big" data-ans="1">✓ I said it right</button>`
+      : `<button class="btn ${s.lastOk?"good":"primary"} big full" data-next>Continue</button>`}</div>`;
 }
 function choose(i){ const s = session; s.picked = s.opts.opts[i]; s.state = "back"; drawSession(); }
 function tick(){ S.days[today()] = (S.days[today()]||0) + 1; }
@@ -767,6 +939,9 @@ function grade(ok){
   const s = session, c = s.queue.shift();
   const r = S.cards[c.id] || (S.cards[c.id] = {b:-1});
   const wasLearned = isLearned(c), wasWanted = !!S.want[c.id];
+  if(ok && s.mode==="write") S.written++;
+  if(ok && s.mode==="speak") S.spoken++;
+  s.result = null; s.lastOk = false; s.speakErr = "";
   if(ok){ r.b = Math.min(INTERVALS.length-1, Math.max(0, r.b) + 1); r.due = Date.now() + INTERVALS[r.b]*DAY - 3600000; s.xp += 10; S.xp += 10; s.right++; }
   else { r.b = Math.max(0, r.b - 2); r.due = Date.now(); s.xp += 2; S.xp += 2; s.wrong++;
     if(!s.retried.has(c.id)){ s.retried.add(c.id); s.queue.splice(Math.min(3, s.queue.length), 0, c); } }
@@ -785,6 +960,10 @@ function sessionKnow(){
 document.addEventListener("keydown", e => {
   const s = session; if(!s || e.target.closest("input,textarea,select")) return;
   if(e.key==="Escape") return finishSession(true);
+  if(s.mode==="write" || s.mode==="speak"){
+    if(s.state==="back" && s.result && (e.key==="Enter"||e.key===" ")){ e.preventDefault(); grade(!!s.lastOk); }
+    return;
+  }
   if(s.mode==="flip"){
     if(s.state==="front" && (e.key===" "||e.key==="Enter")){ e.preventDefault(); s.state="back"; drawSession(); }
     else if(s.state==="back" && (e.key==="1"||e.key==="ArrowLeft")) grade(false);
@@ -826,7 +1005,7 @@ function finishSession(early){
     ${goalNow?`<div class="newbadge"><span class="e">🎯</span><div><b>Daily goal reached!</b><div class="small muted">Streak: ${streak()} day${streak()===1?"":"s"}</div></div></div>`:""}
     ${fresh.map(b=>`<div class="newbadge"><span class="e">${b.e}</span><div><b>New badge: ${esc(b.t)}</b><div class="small muted">${esc(b.d)}</div></div></div>`).join("")}
     <div class="row" style="justify-content:center">
-      <button class="btn primary big" data-start="${s.kind}" ${s.unitId||s.levelId?`data-id="${s.unitId||s.levelId}"`:""}>Another round</button>
+      <button class="btn primary big" data-start="${s.kind}" ${s.unitId||s.levelId?`data-id="${s.unitId||s.levelId}"`:""} ${s.mode==="write"||s.mode==="speak"?`data-mode="${s.mode}"`:""}>Another round</button>
       <a class="btn ghost big" href="${backHash}">Done</a>
     </div></div>`;
   if(acc>=70 || fresh.length || goalNow) confetti();

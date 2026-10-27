@@ -1,6 +1,6 @@
 /* Wortzi offline support.
    After you change any file, raise VERSION so phones fetch the new files. */
-const VERSION = "wortzi-1.5.0";
+const VERSION = "wortzi-1.6.0";
 const CORE = [
   "./", "index.html", "manifest.webmanifest",
   "assets/css/app.css", "assets/css/fonts.css", "assets/js/app.js",
