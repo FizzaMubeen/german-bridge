@@ -688,3 +688,22 @@ h2{font-family:var(--f-body);font-weight:700;font-size:19px;letter-spacing:-.005
 .lvlchange{display:inline-flex;align-items:center;gap:4px;margin-left:6px;font-size:12px;font-weight:700;padding:2px 8px;border-radius:999px;background:var(--sunk);border:1px solid var(--line);color:var(--muted);text-decoration:none;vertical-align:2px;white-space:nowrap}
 .lvlchange:hover{color:var(--ink)}
 .plan .steps .complete .n{color:#fff}
+
+/* ---------- PDFs: always a white page with dark, readable text (also when the phone is in dark mode) ---------- */
+.paper{color-scheme:light;--bg:#ffffff;--surface:#ffffff;--sunk:#f1f3ef;--ink:#111816;--muted:#3f4845;--line:#cfd6cf;--ok:#1d7a52;--ok-soft:#dff1e7;--want:#6a4aa6;--want-soft:#ece6f7;--accent:#9a6f00;--accent-soft:#f6edd3;--a1:#1d7a52;--a2:#9a6f00;--locked:#b9c1b8;color:#111816}
+.paper .rhead .meta,.paper .rgrid span,.paper .rtable th,.paper .rsec small,.paper .cutnote,.paper .cut .en,.paper .cut .corner{color:#3f4845}
+.paper .rgrid div,.paper .rtable th,.paper .rtable td{border-color:#cfd6cf}
+.paper .bar{background:#e6eae4}
+@media print{
+  :root,:root:not([data-theme="light"]),:root[data-theme="dark"]{color-scheme:light!important;--bg:#fff;--surface:#fff;--ink:#111816;--muted:#3f4845;--line:#cfd6cf}
+  html,body,main,.inner,.paper-wrap,.paper{background:#fff!important;color:#111816!important}
+  body::before{display:none!important}
+}
+
+/* ---------- listen: engine, download, encouragement ---------- */
+#sttBox{display:grid;gap:12px}
+.engine{justify-content:center}
+.engine .chip{font-size:13px}
+.sttget{display:grid;gap:8px;justify-items:start;padding:14px;border:1px dashed var(--line);border-radius:14px;background:var(--sunk)}
+.sttget .bar{width:100%;height:8px}
+.cheer{margin:0;text-align:center;font-weight:650;color:var(--ok);min-height:1.4em}

@@ -185,7 +185,7 @@ function sanitize(raw){
   out.settings = {
     level: ["A1","A2","B1"].includes(s.level)?s.level:"A1", name: clip(s.name,60), base: ["ur","hi","en"].includes(s.base)?s.base:"ur", front: s.front==="base"?"base":"de",
     mode: s.mode==="quiz"?"quiz":"flip", goal: [10,20,40].includes(+s.goal)?+s.goal:20, theme: ["light","dark"].includes(s.theme)?s.theme:"system",
-    autoplay: !!s.autoplay, listenOk: !!s.listenOk, hideInstall: Math.max(0, num(s.hideInstall,0)), extra: {rom: s.extra?.rom!==false, en: s.extra?.en!==false, ur: !!s.extra?.ur, hi: !!s.extra?.hi}
+    autoplay: !!s.autoplay, listenOk: !!s.listenOk, stt: ["offline","device"].includes(s.stt) ? s.stt : "", sttReady: !!s.sttReady, hideInstall: Math.max(0, num(s.hideInstall,0)), extra: {rom: s.extra?.rom!==false, en: s.extra?.en!==false, ur: !!s.extra?.ur, hi: !!s.extra?.hi}
   };
   return out;
 }
@@ -1699,8 +1699,15 @@ function analyse(text){
   return {parts: out, total, known, pct: total ? Math.round(known/total*100) : 0};
 }
 const LST = {listening:false, rec:null, lines:[], interim:"", err:"", startedAt:0, text:""};
+/* speech engines may write everything in lower case: show nouns with their capital letter, as on the cards */
+function dispWord(x){
+  if(!x.cards || !x.cards.length || /[A-ZÄÖÜ]/.test(x.w[0])) return x.w;
+  const lw = x.w.toLowerCase();
+  for(const c of x.cards){ const hit = (c.de.match(/[\p{L}ß]+/gu) || []).find(t => t.toLowerCase() === lw); if(hit) return hit; }
+  return x.w;
+}
 function renderTokens(a){
-  return a.parts.map(x => x.txt !== undefined ? esc(x.txt) : `<button type="button" class="lw ${x.st}" data-lw="${esc(x.w)}">${esc(x.w)}</button>`).join("");
+  return a.parts.map(x => x.txt !== undefined ? esc(x.txt) : `<button type="button" class="lw ${x.st}" data-lw="${esc(x.w)}">${esc(dispWord(x))}</button>`).join("");
 }
 function sessionTotals(){ let w = 0, k = 0; LST.lines.forEach(l => { const a = analyse(l); w += a.total; k += a.known; }); return {w, k, pct: w ? Math.round(k/w*100) : 0}; }
 function ringBig(pct){
@@ -1711,12 +1718,14 @@ function renderLive(){
   const box = $("#liveBox"); if(!box) return;
   const t = sessionTotals();
   $("#liveScore").innerHTML = `${ringBig(t.pct)}<div class="bigpct"><b>${t.pct}%</b><span>${t.k} of ${t.w} words you know</span></div>`;
+  const cheer = $("#cheer"); if(cheer) cheer.textContent = cheerText(t);
+  const sb = $("#sttBox"); if(sb){ const sig = sttSig(); if(sb.dataset.sig !== sig){ sb.dataset.sig = sig; sb.innerHTML = sttBoxHTML(); } }
   box.innerHTML = (LST.lines.length || LST.interim) ? LST.lines.slice(-30).map(l => { const a = analyse(l); return `<p class="lline"><span class="lpct ${a.pct>=60?"hi":a.pct>=30?"mid":"lo"}">${a.pct}%</span><span lang="de">${renderTokens(a)}</span></p>`; }).join("") + (LST.interim ? `<p class="lline interim"><span class="lpct">…</span><span lang="de">${esc(LST.interim)}</span></p>` : "")
     : `<p class="muted small" style="margin:0">${LST.listening ? "Listening… play a German video or speak German near your phone." : "Your words will appear here."}</p>`;
   box.scrollTop = box.scrollHeight;
   const nw = newWordsFrom(LST.lines.join(" ")); const b = $("#addNew");
   if(b){ b.hidden = !nw.length; b.textContent = `☆ Add ${nw.length} new word${nw.length===1?"":"s"} to I want to learn`; }
-  const m = $("#micBtn"); if(m){ m.classList.toggle("on", LST.listening); m.setAttribute("aria-pressed", LST.listening); $("#micLabel").textContent = LST.listening ? "Listening… tap to stop" : "Tap to start listening"; }
+  const m = $("#micBtn"); if(m){ m.classList.toggle("on", LST.listening); m.setAttribute("aria-pressed", LST.listening); $("#micLabel").textContent = LST.starting ? "Starting… (the first time takes a few seconds)" : LST.listening ? "Listening… tap to stop" : "Tap to start listening"; }
   const e = $("#micErr"); if(e){ e.hidden = !LST.err; e.textContent = LST.err; }
 }
 function newWordsFrom(text){
@@ -1724,7 +1733,65 @@ function newWordsFrom(text){
   for(const p of analyse(text).parts){ if(p.st === "new" || p.st === "unknown"){ const c = p.cards && p.cards.find(x => !isLearned(x) && !isWanted(x) && x.de.replace(/^(der|die|das)\s+/i, "").split(/\s+/).length === 1); if(c && !seenIds.has(c.id)){ seenIds.add(c.id); out.push(c); } } }
   return out;
 }
+/* ---------- offline speech-to-text: Vosk (free, open source) running inside the app.
+   The German model (about 45 MB) is downloaded once, then everything happens on the phone: no audio leaves it. ---------- */
+const STT = {model:null, loading:false, progress:0, ctx:null, stream:null, src:null, node:null, rec:null};
+const offlineSTT = () => !!(window.WebAssembly && navigator.mediaDevices && navigator.mediaDevices.getUserMedia && (window.AudioContext || window.webkitAudioContext)) && !SANDBOX && location.protocol !== "file:";
+const sttEngine = () => { const want = S.settings.stt; if(want==="device" && SR) return "device"; if(want==="offline" && offlineSTT()) return "offline"; if(S.settings.sttReady && offlineSTT()) return "offline"; return SR ? "device" : offlineSTT() ? "offline" : ""; };
+const STT_URL = () => new URL("stt/de.tar.gz", location.href).href;
+function loadScript(src){ return new Promise((res, rej) => { if(document.querySelector(`script[data-src="${src}"]`)) return res(); const sc = document.createElement("script"); sc.src = src; sc.dataset.src = src; sc.onload = res; sc.onerror = () => rej(new Error("Could not load the listening engine")); document.head.appendChild(sc); }); }
+async function sttDownload(){
+  if(STT.loading) return; STT.loading = true; STT.progress = 0; LST.err = ""; renderLive();
+  try{
+    const r = await fetch("stt/de.tar.gz");
+    if(!r.ok) throw new Error("The listening model is not on the server yet (" + r.status + ")");
+    const total = +r.headers.get("content-length") || 46e6, reader = r.body.getReader(); let got = 0;
+    for(;;){ const {done, value} = await reader.read(); if(done) break; got += value.length; const p = Math.min(99, Math.round(got/total*100)); if(p !== STT.progress){ STT.progress = p; renderLive(); } }
+    await loadScript("stt/vosk.js");
+    S.settings.sttReady = true; S.settings.stt = "offline"; save();
+    try{ if(navigator.storage && navigator.storage.persist) navigator.storage.persist(); }catch(e){}
+    STT.progress = 100; toast("German listening is ready, also offline", {kind:"ok"});
+  }catch(e){ LST.err = (e && e.message) || "Download failed. Try again on Wi-Fi."; }
+  STT.loading = false; renderLive();
+}
+async function sttModel(){
+  if(STT.model) return STT.model;
+  await loadScript("stt/vosk.js");
+  if(!window.Vosk || !window.Vosk.createModel) throw new Error("The listening engine did not start");
+  STT.model = await window.Vosk.createModel(STT_URL());
+  return STT.model;
+}
+const capFirst = t => t ? t[0].toUpperCase() + t.slice(1) : t;
+async function startOffline(){
+  // the audio context must be made inside the tap (iPhone)
+  const AC = window.AudioContext || window.webkitAudioContext;
+  const ctx = new AC(); STT.ctx = ctx; try{ ctx.resume(); }catch(e){}
+  LST.err = ""; LST.lines = []; LST.interim = ""; LST.startedAt = Date.now(); LST.listening = true; LST.starting = true; renderLive();
+  try{
+    const [model, stream] = await Promise.all([sttModel(), navigator.mediaDevices.getUserMedia({audio:{echoCancellation:true, noiseSuppression:true, channelCount:1}})]);
+    if(!LST.listening){ stream.getTracks().forEach(t => t.stop()); return; }
+    const rec = new model.KaldiRecognizer(ctx.sampleRate);
+    rec.on("result", m => { const t = ((m && m.result && m.result.text) || "").trim(); if(t) LST.lines.push(capFirst(t)); LST.interim = ""; renderLive(); });
+    rec.on("partialresult", m => { const t = ((m && m.result && m.result.partial) || "").trim(); if(t !== LST.interim){ LST.interim = t; renderLive(); } });
+    const src = ctx.createMediaStreamSource(stream), node = ctx.createScriptProcessor(4096, 1, 1);
+    node.onaudioprocess = e => { try{ rec.acceptWaveform(e.inputBuffer); }catch(err){} };
+    src.connect(node); node.connect(ctx.destination);
+    Object.assign(STT, {stream, src, node, rec});
+  }catch(e){
+    LST.listening = false;
+    LST.err = e && (e.name === "NotAllowedError" || e.name === "SecurityError") ? "The microphone is blocked. Allow microphone access for this site in your browser settings, then try again." : (e && e.message) || "Could not start listening.";
+    stopOffline();
+  }
+  LST.starting = false; renderLive();
+}
+function stopOffline(){
+  try{ STT.node && STT.node.disconnect(); }catch(e){} try{ STT.src && STT.src.disconnect(); }catch(e){}
+  try{ STT.stream && STT.stream.getTracks().forEach(t => t.stop()); }catch(e){}
+  try{ STT.rec && STT.rec.remove(); }catch(e){} try{ STT.ctx && STT.ctx.close(); }catch(e){}
+  Object.assign(STT, {ctx:null, stream:null, src:null, node:null, rec:null});
+}
 function startListening(){
+  if(sttEngine() === "offline"){ if(!S.settings.sttReady) return sttDownload(); return startOffline(); }
   if(!SR) return;
   LST.err = ""; LST.lines = []; LST.interim = ""; LST.startedAt = Date.now();
   const rec = new SR(); LST.rec = rec;
@@ -1748,9 +1815,10 @@ function startListening(){
   renderLive();
 }
 function stopListening(silent){
-  if(!LST.rec) return;
+  if(!LST.rec && !STT.ctx) return;
   const was = LST.listening; LST.listening = false;
-  try{ LST.rec.stop(); }catch(e){}
+  if(STT.ctx) stopOffline();
+  try{ LST.rec && LST.rec.stop(); }catch(e){}
   LST.rec = null;
   if(LST.interim){ LST.lines.push(LST.interim); LST.interim = ""; }
   const t = sessionTotals();
@@ -1766,6 +1834,43 @@ function historyHTML(){
   if(!hs.length) return `<p class="muted small" style="margin:0">Your listening sessions will show here, so you can watch your percentage grow.</p>`;
   return `<div class="lhist">${hs.map(x => { const pc = Math.round(x.k/x.w*100); return `<div class="lh"><span class="small muted">${fmtDate(x.at)} · ${x.src==="mic"?"🎤":"📄"}</span><div class="bar"><i style="width:${pc}%"></i></div><b>${pc}%</b><span class="small muted">${x.k}/${x.w}</span></div>`; }).join("")}</div>`;
 }
+function cheerText(t){
+  if(t.w < 3) return "";
+  const p = t.pct;
+  if(p < 10) return "Every word counts. Keep listening, it grows fast.";
+  if(p < 25) return `You already catch ${p}% of the words. That's how understanding starts!`;
+  if(p < 50) return `You understand about 1 in ${Math.max(2, Math.round(100/p))} words. Real progress!`;
+  if(p < 75) return "You understand most of it. Fantastisch!";
+  return "You understand almost everything. Sehr gut!";
+}
+const sttSig = () => [sttEngine(), S.settings.sttReady, STT.loading, STT.progress, S.settings.listenOk, !!SR, offlineSTT()].join("|");
+function sttBoxHTML(){
+  const eng = sttEngine(), st = S.settings;
+  const both = SR && offlineSTT();
+  const pick = both ? `<div class="chips engine" role="group" aria-label="Listening engine">
+      <button class="chip" type="button" data-stt="offline" aria-pressed="${eng==="offline"}">${ic("phone")}Wortzi offline · private</button>
+      <button class="chip" type="button" data-stt="device" aria-pressed="${eng==="device"}">${ic("mic")}Phone's speech service</button></div>` : "";
+  if(!eng) return `<div class="small"><b>Live listening isn't available in this browser.</b> You can still paste German text below.</div>`;
+  if(eng==="offline" && !st.sttReady) return `${pick}
+    <div class="sttget">
+      <b>Download German listening</b>
+      <span class="small muted">About 45 MB, once. Then it works without internet, and nothing you hear ever leaves your phone. Wi-Fi recommended.</span>
+      ${STT.loading ? `<div class="bar gold" role="progressbar" aria-valuenow="${STT.progress}" aria-valuemin="0" aria-valuemax="100"><i style="width:${STT.progress}%"></i></div><span class="small">Downloading… ${STT.progress}%</span>`
+        : `<button class="btn primary" type="button" id="sttGet" ${st.listenOk?"":"disabled"}>${ic("download")}Download (45 MB)</button>`}
+    </div>
+    <p id="micErr" class="small" style="color:var(--bad);margin:0" hidden></p>`;
+  return `${pick}<div class="micwrap">
+      <button class="micbtn" type="button" id="micBtn" aria-pressed="false" ${st.listenOk?"":"disabled"} aria-label="Start or stop listening">${ic("mic")}</button>
+      <span id="micLabel" class="small" style="font-weight:700">Tap to start listening</span>
+      <span class="small muted">${eng==="offline" ? "Wortzi offline: works without internet, nothing leaves your phone" : "Uses your phone's speech service (needs internet)"}</span>
+      <p id="micErr" class="small" style="color:var(--bad);margin:0;text-align:center" hidden></p></div>`;
+}
+app.addEventListener("click", e => {
+  const t = e.target;
+  const pk = t.closest("[data-stt]"); if(pk){ if(LST.listening) stopListening(true); S.settings.stt = pk.dataset.stt; save(); return renderLive(); }
+  if(t.closest("#sttGet")) return sttDownload();
+  if(t.closest("#micBtn")){ if(LST.listening) stopListening(false); else startListening(); }
+});
 function viewListen(){
   const st = S.settings;
   const intro = `<h1>Listen &amp; understand</h1>
@@ -1774,21 +1879,17 @@ function viewListen(){
       <b>Before you start</b>
       <ul class="small" style="margin:0;padding-left:18px;display:grid;gap:4px">
         <li>Wortzi does <b>not record or save audio</b>. Only your score and the words you choose are kept on this phone.</li>
-        <li>Your browser turns speech into text. In Chrome and Edge this is done by Google's or Microsoft's speech service, in Safari by Apple.</li>
+        <li>With <b>Wortzi offline</b>, speech is turned into text on your phone. With the <b>phone's speech service</b>, Google (Chrome), Microsoft (Edge) or Apple (Safari) does it.</li>
         <li>Use it for TV, videos, podcasts, announcements and conversations you're part of. Recording other people's private conversations is not allowed in Germany.</li>
       </ul>
       <div><button class="btn primary" type="button" id="lOk">I understand, let's start</button></div></div>` : "";
-  const mic = SR ? `<div class="micwrap">
-      <button class="micbtn" type="button" id="micBtn" aria-pressed="false" ${st.listenOk?"":"disabled"} aria-label="Start or stop listening">
-        <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3M9 21h6"/></svg></button>
-      <span id="micLabel" class="small" style="font-weight:700">Tap to start listening</span>
-      <p id="micErr" class="small" style="color:var(--bad);margin:0;text-align:center" hidden></p></div>`
-    : `<div class="panel small"><b>Live listening isn't available in this browser.</b> It works in Chrome, Edge and Safari. You can still paste German text below.</div>`;
+  const mic = `<div id="sttBox"></div>`;
   app.innerHTML = `${intro}${consent}
     <div class="listengrid">
       <div class="panel stack">
         ${mic}
         <div class="lscore" id="liveScore"></div>
+        <p class="cheer" id="cheer" aria-live="polite"></p>
         <div class="legend small" style="margin:0"><div><span class="lw known demo">green</span> you know it</div><div><span class="lw learning demo">yellow</span> learning</div><div><span class="lw new demo">grey</span> new</div></div>
       </div>
       <div class="panel stack">
@@ -1807,7 +1908,6 @@ function viewListen(){
     <div class="section-title"><h2>My listening progress</h2></div>
     <div class="panel">${historyHTML()}</div>`;
   if($("#lOk")) $("#lOk").onclick = () => { S.settings.listenOk = true; save(); viewListen(); };
-  if($("#micBtn")) $("#micBtn").onclick = () => { if(LST.listening) stopListening(false); else startListening(); };
   $("#lClear").onclick = () => { LST.lines = []; LST.interim = ""; renderLive(); };
   $("#addNew").onclick = () => {
     const nw = newWordsFrom(LST.lines.join(" ")); nw.forEach(c => { if(!isWanted(c)) toggleWant(c); });

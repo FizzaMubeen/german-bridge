@@ -1,0 +1,48 @@
+name: Test offline listening
+# Plays a German sentence (made with the Piper voice) into a virtual microphone and checks that
+# Wortzi's offline engine writes it down and colours the known words. Run it from the Actions tab.
+on:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - uses: actions/cache@v4
+        with:
+          path: stt
+          key: stt-vosk-browser-0.0.8-small-de-0.15
+      - name: Tools
+        env:
+          DEBIAN_FRONTEND: noninteractive
+        run: |
+          sudo apt-get update -qq && sudo apt-get install -y -qq --no-install-recommends ffmpeg
+          pip install -q "piper-tts==1.3.0" playwright
+          python -m playwright install --with-deps chromium
+      - run: bash scripts/get-stt.sh
+      - name: Make a German test recording
+        run: |
+          mkdir -p out/voices && cd out/voices
+          python -m piper.download_voices --data-dir . de_DE-thorsten-medium || python -m piper.download_voices de_DE-thorsten-medium
+          cd ../..
+          printf 'Guten Morgen. Ich möchte ein Brot und einen Kaffee, bitte. Wo ist der Bahnhof?' > out/t.txt
+          python -m piper -m out/voices/de_DE-thorsten-medium.onnx -f out/raw.wav -- "$(cat out/t.txt)" || python -m piper --model out/voices/de_DE-thorsten-medium.onnx --output_file out/raw.wav < out/t.txt
+          ffmpeg -loglevel error -y -f lavfi -i anullsrc=r=48000:cl=mono -t 1.5 out/sil.wav
+          ffmpeg -loglevel error -y -i out/sil.wav -i out/raw.wav -i out/sil.wav -i out/sil.wav -filter_complex "[0][1][2][3]concat=n=4:v=0:a=1,aresample=48000,aformat=sample_fmts=s16:channel_layouts=mono" out/test.wav
+          ffprobe -v error -show_entries format=duration -of csv=p=0 out/test.wav
+      - name: Listen with the offline engine
+        run: |
+          python -m http.server 8765 >/dev/null 2>&1 &
+          sleep 1
+          node scripts/test-listen.js
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: listen-test
+          path: out/listen-*.png
