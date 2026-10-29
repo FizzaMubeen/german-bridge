@@ -125,7 +125,7 @@
 🏠|گھر|ghar|घर|the house|das Haus
 🏢|فلیٹ|flat|फ़्लैट|the flat|die Wohnung
 🛋️|کمرہ|kamra|कमरा|the room|das Zimmer
-🔪|باورچی خانہ|bawarchi khaana|रसोई|the kitchen|die Küche
+🍳|باورچی خانہ|bawarchi khaana|रसोई|the kitchen|die Küche
 🛁|غسل خانہ|ghusal khaana|बाथरूम|the bathroom|das Bad
 🛏️|بستر|bistar|बिस्तर|the bed|das Bett
 🍽️|میز|mez|मेज़|the table|der Tisch

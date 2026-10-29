@@ -17,7 +17,7 @@ jobs:
       - uses: actions/cache@v4
         with:
           path: stt
-          key: stt-vosk-browser-0.0.8-small-de-0.15
+          key: stt-vosk-browser-0.0.8-small-de-0.15-en-0.15
       - name: Tools
         env:
           DEBIAN_FRONTEND: noninteractive

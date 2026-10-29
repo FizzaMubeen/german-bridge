@@ -64,6 +64,19 @@ with sync_playwright() as pw:
             note("warning", "SPEAK: no result; label=" + (p.text_content("#spkLabel") or "") + " err=" + " ".join((p.text_content(".card") or "").split())[:300])
             ok = False
         p.screenshot(path="out/listen-5-speak-result.png")
+        # English speak mode: download the English engine and check it answers
+        p.goto("http://localhost:8765/#words-learned"); p.wait_for_timeout(800)
+        p.click('[data-mode="speak"]'); p.wait_for_timeout(500)
+        p.click('[data-splang="en"]'); p.wait_for_timeout(300)
+        p.click('[data-sttget="en"]')
+        p.wait_for_selector("[data-smic]", timeout=180000)
+        p.click("[data-smic]")
+        try:
+            p.wait_for_selector("[data-next], [data-ans]", timeout=25000)
+            note("notice", "SPEAK EN -> " + " ".join((p.text_content(".card") or "").split())[:300])
+        except Exception:
+            note("warning", "SPEAK EN: no result " + " ".join((p.text_content(".card") or "").split())[:300]); ok = False
+        p.screenshot(path="out/listen-6-speak-en.png")
     except Exception:
         note("error", traceback.format_exc()[-1500:])
         try: p.screenshot(path="out/listen-error.png")

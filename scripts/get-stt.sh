@@ -14,9 +14,16 @@ if [ ! -s stt/de.tar.gz ]; then
   mv "$tmp/de.tar.gz" stt/de.tar.gz
   rm -rf "$tmp"
 fi
+if [ ! -s stt/en.tar.gz ]; then
+  tmp=$(mktemp -d)
+  curl -fsSL --retry 3 --max-time 600 -o "$tmp/m.zip" "https://alphacephei.com/vosk/models/vosk-model-small-en-us-0.15.zip"
+  (cd "$tmp" && unzip -q m.zip && tar -czf en.tar.gz vosk-model-small-en-us-0.15)
+  mv "$tmp/en.tar.gz" stt/en.tar.gz
+  rm -rf "$tmp"
+fi
 cat > stt/LICENSE.txt <<TXT
 Offline listening in Wortzi uses:
 - vosk-browser ${VOSK_BROWSER} (Apache License 2.0) https://github.com/ccoreilly/vosk-browser
-- Vosk ${MODEL} (Apache License 2.0) https://alphacephei.com/vosk/models
+- Vosk ${MODEL} and vosk-model-small-en-us-0.15 (Apache License 2.0) https://alphacephei.com/vosk/models
 TXT
 ls -la stt

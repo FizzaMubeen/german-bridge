@@ -6,7 +6,7 @@
  */
 (() => {
 "use strict";
-const APP_VERSION = "1.11.0";
+const APP_VERSION = "1.12.0";
 const KEY = "gb-v1";
 
 /* =====================================================================
@@ -64,6 +64,9 @@ const ICONS = {
   info:'<circle cx="12" cy="12" r="9"/><path d="M12 16v-4M12 8h.01"/>',
   phone:'<rect x="6" y="2" width="12" height="20" rx="3"/><path d="M11 18h2"/>',
   book:'<path d="M4 4.5A2.5 2.5 0 0 1 6.5 2H20v17H6.5A2.5 2.5 0 0 0 4 21.5z"/><path d="M4 21.5A2.5 2.5 0 0 1 6.5 19H20v3H6.5"/>',
+  chart:'<path d="M3 3v18h18"/><path d="M7 15l4-4 3 3 5-6"/>',
+  bell:'<path d="M6 8a6 6 0 0 1 12 0c0 7 3 8 3 8H3s3-1 3-8"/><path d="M10.3 21a1.9 1.9 0 0 0 3.4 0"/>',
+  lock:'<rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/>',
   sun:'<circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/>',
   moon:'<path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/>',
   gear:'<circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/>',
@@ -150,6 +153,7 @@ async function loadAudioIndex(){
   try{ const r = await fetch("audio/index.json", {cache:"no-cache"}); if(r.ok){ const a = await r.json(); if(Array.isArray(a)) AUDIO = new Set(a); } }catch(e){}
 }
 const spk = (t, id) => canSpeak ? `<button class="speak" type="button" data-say="${esc(t)}" ${id?`data-sid="${esc(id)}"`:""} aria-label="Listen to the German">${ic("volume")}Listen</button>` : "";
+document.addEventListener("click", e => { const b = e.target.closest("[data-sayen]"); if(b){ e.preventDefault(); e.stopPropagation(); playParts([{lang:"en", text: b.dataset.sayen}], false); } }, true);
 document.addEventListener("click", e => { const b = e.target.closest("[data-say]"); if(b){ e.preventDefault(); e.stopPropagation(); say(b.dataset.say, b.dataset.sid); } }, true);
 
 /* =====================================================================
@@ -210,7 +214,7 @@ function sanitize(raw){
   out.settings = {
     level: ["A1","A2","B1"].includes(s.level)?s.level:"A1", name: clip(s.name,60), base: ["ur","hi","en"].includes(s.base)?s.base:"ur", front: s.front==="base"?"base":"de",
     mode: s.mode==="quiz"?"quiz":"flip", goal: [10,20,40].includes(+s.goal)?+s.goal:20, theme: ["light","white","dark"].includes(s.theme)?s.theme:"system",
-    autoplay: !!s.autoplay, voice: ["de","en","both"].includes(s.voice) ? s.voice : "de", listenOk: !!s.listenOk, stt: ["offline","device"].includes(s.stt) ? s.stt : "", sttReady: !!s.sttReady, remind: /^\d{2}:\d{2}$/.test(s.remind||"") ? s.remind : "", hideInstall: Math.max(0, num(s.hideInstall,0)), extra: {rom: s.extra?.rom!==false, en: s.extra?.en!==false, ur: !!s.extra?.ur, hi: !!s.extra?.hi}
+    autoplay: !!s.autoplay, voice: ["de","en","both"].includes(s.voice) ? s.voice : "de", listenOk: !!s.listenOk, stt: ["offline","device"].includes(s.stt) ? s.stt : "", sttReady: !!s.sttReady, sttReadyEn: !!s.sttReadyEn, speakLang: s.speakLang==="en" ? "en" : "de", remind: /^\d{2}:\d{2}$/.test(s.remind||"") ? s.remind : "", hideInstall: Math.max(0, num(s.hideInstall,0)), extra: {rom: s.extra?.rom!==false, en: s.extra?.en!==false, ur: !!s.extra?.ur, hi: !!s.extra?.hi}
   };
   return out;
 }
@@ -443,6 +447,7 @@ function route(){
   if(h==="guide") return viewGuide();
   if(h.startsWith("guide-")) return viewLesson(h.slice(6));
   if(h==="me") return viewMe();
+  if(h.startsWith("me-")) return viewMe(h.slice(3));
   if(h==="report") return viewReport();
   return viewToday();
 }
@@ -481,6 +486,8 @@ app.addEventListener("click", e => {
   if(t.closest("[data-sstop]")) return speakStop();
   if(t.closest("[data-sself]")){ speakCleanup(false); SPK.on = false; session.result = null; session.state = "back"; return drawSession(); }
   if(t.closest("[data-sreconly]")){ session.recordOnly = true; return drawSession(); }
+  const spl = t.closest("[data-splang]"); if(spl){ speakCleanup(false); SPK.on = false; session.spLang = spl.dataset.splang; S.settings.speakLang = session.spLang; save(); session.speakErr = ""; return drawSession(); }
+  const sg = t.closest("[data-sttget]"); if(sg) return sttDownload(sg.dataset.sttget);
   if(t.closest("[data-myrec]")){ if(SPK.url && player){ player.pause(); player.src = SPK.url; player.playbackRate = 1; player.play().catch(()=>{}); } return; }
   if(t.closest("[data-swant]")){ const c = session.queue[0]; const on = toggleWant(c); toast(on?`<b>${esc(c.de)}</b> added to I want to learn`:"Removed from I want to learn", {html:true, kind: on?"want":"info"}); return drawSession(); }
 });
@@ -644,7 +651,10 @@ function viewLearn(lv, tab){
 }
 function viewUnit(u){
   const st = unitStats(u), next = UNITS[UNITS.indexOf(u)+1], pct = Math.round(st.mastered/st.total*100);
-  app.innerHTML = `<a class="back" href="#learn-${esc(u.level)}">${ic("left")}${esc(u.level)} units</a>
+  const prev = UNITS[UNITS.indexOf(u)-1];
+  app.innerHTML = `<div class="unitnav"><a class="back" href="#learn-${esc(u.level)}">${ic("left")}${esc(u.level)} units</a>
+      <span class="unitnav-r">${prev?`<a class="iconbtn" href="#unit-${prev.id}" aria-label="Previous unit: ${esc(prev.title)}" title="${esc(prev.title)}">${ic("left")}</a>`:""}
+      ${next?`<a class="btn sm" href="#unit-${next.id}" title="${esc(next.title)}">Next unit ${ic("right")}</a>`:""}</span></div>
     <div class="unithead"><div class="ico">${esc(u.emoji)}</div>
       <div class="stack" style="gap:4px;flex:1;min-width:0"><span class="label">Unit ${u.n} · <span class="lvl ${esc(u.level)}">${esc(u.level)}</span></span><h1>${esc(u.title)}</h1>
       <div class="unitprog"><div class="bar"><i style="width:${pct}%"></i></div><span class="small muted">${st.mastered}/${st.total} learned</span>${starsHTML(st.stars)}</div></div></div>
@@ -804,7 +814,7 @@ function startSession(kind, id, mode){
   let cards = pickCards(kind, id);
   if(mode==="write" || mode==="speak") cards = cards.filter(c => c.de && c.de.replace(/\.\.\.|…/g,"").trim().length > 1);
   if(!cards.length){ toast("No cards to practise here yet."); return; }
-  session = {kind, storyId: kind==="story" ? id : null, unitId: (kind==="unit"||kind==="unitall") ? id : null, levelId: kind==="level" ? id : null, queue:[...cards], done:0, xp:0, right:0, wrong:0, retried:new Set(), moved:[], state:"front", picked:null, opts:null, mode: ["write","speak"].includes(mode) ? mode : S.settings.mode, result:null, lastOk:false,
+  session = {kind, storyId: kind==="story" ? id : null, unitId: (kind==="unit"||kind==="unitall") ? id : null, levelId: kind==="level" ? id : null, queue:[...cards], done:0, xp:0, right:0, wrong:0, retried:new Set(), moved:[], state:"front", picked:null, opts:null, mode: ["write","speak"].includes(mode) ? mode : S.settings.mode, result:null, lastOk:false, spLang: S.settings.speakLang,
     before: (kind==="unit"||kind==="unitall") ? unitStats(unitById(id)).stars : 0};
   document.body.classList.add("in-session"); setNav(""); window.scrollTo(0,0); drawSession();
 }
@@ -975,7 +985,7 @@ function lcs(a, b){ const m = Array.from({length:a.length+1},()=>new Array(b.len
   return m[a.length][b.length]; }
 function scoreSpeech(heard, c){
   let best = 0;
-  for(const t of targetsOf(c)){ const tw = wordsOf(t); if(!tw.length) continue;
+  for(const t of (session && session.mode === "speak" ? speakTargets(c) : targetsOf(c))){ const tw = wordsOf(t); if(!tw.length) continue;
     for(const h of heard){ const hw = wordsOf(h);
       // allow near-misses on single words (recogniser spelling), then count words in the right order
       const fixed = hw.map(w => tw.find(x => x===w || (x.length>3 && lev(x,w)<=1)) || w);
@@ -983,31 +993,36 @@ function scoreSpeech(heard, c){
   return Math.round(best*100);
 }
 function heardHTML(text, c){
-  const tw = new Set(targetsOf(c).flatMap(wordsOf));
+  const tw = new Set((session && session.mode === "speak" ? speakTargets(c) : targetsOf(c)).flatMap(wordsOf));
   return normDe(text).split(" ").map(w => `<span class="${tw.has(foldDe(w)) || [...tw].some(x=>x.length>3 && lev(x,foldDe(w))<=1) ? "hit" : "miss"}">${esc(w)}</span>`).join(" ");
 }
 /* Speak practice. Best: the offline engine (Vosk) limited to the words in Wortzi, which makes it accurate for learners.
    Also: the phone's speech service, or just recording yourself to compare by ear. Your recording stays on the phone. */
+const spLang = () => (session && session.spLang) || "de";
+const enText = c => String(c.en || "").replace(/\s*\([^)]*\)/g, "").replace(/\.\.\.|…/g, "").trim();
+const speakTargets = c => spLang() === "en" ? enText(c).split(/\s+\/\s+/).filter(Boolean) : targetsOf(c);
 const speakEngine = () => {
   if(session && session.recordOnly) return "record";
   if(S.settings.stt === "device" && SR) return "device";
-  if(S.settings.sttReady && offlineSTT()) return "offline";
+  if(sttReadyFor(spLang()) && offlineSTT()) return "offline";
   if(offlineSTT()) return "need";
   return SR ? "device" : "record";
 };
-let SPK_GRAMMAR = "";
-function speakGrammar(){
-  if(SPK_GRAMMAR) return SPK_GRAMMAR;
+const SPK_GRAMMAR = {};
+function speakGrammar(lang="de"){
+  if(SPK_GRAMMAR[lang]) return SPK_GRAMMAR[lang];
   const w = new Set();
-  for(const c of allCards()) for(const t of (String(c.de).toLowerCase().match(/[a-zäöüß]+/g) || [])) if(t.length > 0) w.add(t);
-  SPK_GRAMMAR = JSON.stringify([...w, "[unk]"]);
-  return SPK_GRAMMAR;
+  for(const c of allCards()) for(const t of (String(lang === "en" ? c.en : c.de).toLowerCase().match(lang === "en" ? /[a-z']+/g : /[a-zäöüß]+/g) || [])) if(t.length > 0) w.add(t);
+  SPK_GRAMMAR[lang] = JSON.stringify([...w, "[unk]"]);
+  return SPK_GRAMMAR[lang];
 }
-async function speakRecognizer(rate){
-  if(SPK.vrec && SPK.vrate === rate) return SPK.vrec;
-  const model = await sttModel();
+async function speakRecognizer(rate, lang="de"){
+  if(SPK.vrec && SPK.vrate === rate && SPK.vlang === lang) return SPK.vrec;
+  try{ SPK.vrec && SPK.vrec.remove(); }catch(e){}
+  const model = await sttModel(lang);
   let rec;
-  try{ rec = new model.KaldiRecognizer(rate, speakGrammar()); }catch(e){ rec = new model.KaldiRecognizer(rate); }
+  try{ rec = new model.KaldiRecognizer(rate, speakGrammar(lang)); }catch(e){ rec = new model.KaldiRecognizer(rate); }
+  SPK.vlang = lang;
   rec.on("result", m => { const t = ((m && m.result && m.result.text) || "").replace(/\[unk\]/g, "").trim(); if(t) SPK.final = (SPK.final ? SPK.final + " " : "") + t; if(SPK.waitFinal) SPK.waitFinal(); });
   rec.on("partialresult", m => { const t = ((m && m.result && m.result.partial) || "").replace(/\[unk\]/g, "").trim(); SPK.partial = t; const el = $("#spkPartial"); if(el) el.textContent = t; });
   SPK.vrec = rec; SPK.vrate = rate;
@@ -1043,7 +1058,7 @@ async function speakStart(){
     Object.assign(SPK, {stream, src, an, heard:false, t0: Date.now(), lastVoice: Date.now(), buf:null});
     if(window.MediaRecorder){ try{ SPK.chunks = []; const mr = new MediaRecorder(stream); mr.ondataavailable = e => { if(e.data.size) SPK.chunks.push(e.data); }; mr.start(); SPK.media = mr; }catch(e){ SPK.media = null; } }
     if(eng === "offline"){
-      const rec = await speakRecognizer(ctx.sampleRate);
+      const rec = await speakRecognizer(ctx.sampleRate, spLang());
       const node = ctx.createScriptProcessor(4096, 1, 1);
       node.onaudioprocess = e => { if(SPK.on) try{ rec.acceptWaveform(e.inputBuffer); }catch(err){} };
       src.connect(node); node.connect(ctx.destination); SPK.node = node;
@@ -1091,7 +1106,7 @@ function speakDevice(){
   const s = session;
   S.settings.listenOk = true; save();
   const rec = new SR(); SPK.rec = rec; SPK.on = true; SPK.t0 = Date.now();
-  rec.lang = "de-DE"; rec.continuous = false; rec.interimResults = true; rec.maxAlternatives = 5;
+  rec.lang = spLang() === "en" ? "en-US" : "de-DE"; rec.continuous = false; rec.interimResults = true; rec.maxAlternatives = 5;
   rec.onresult = e => { const r = e.results[e.results.length-1]; const el = $("#spkPartial"); if(el) el.textContent = r[0].transcript;
     if(!r.isFinal) return; const alts = [...r].map(a => a.transcript); SPK.on = false;
     s.result = {heard: alts[0]||"", score: scoreSpeech(alts, s.queue[0])}; s.state = "back"; drawSession(); };
@@ -1102,21 +1117,24 @@ function speakDevice(){
 }
 function speakStop(){ if(SPK.on && !SPK.rec) speakFinish(); else { try{ if(SPK.rec) SPK.rec.stop(); }catch(e){} } }
 function speakBody(c, cat, dots, isBack){
-  const s = session, prompt = `<div class="face">${sideHTML("my",c)}</div>`, eng = speakEngine();
+  const s = session, L = spLang(), eng = speakEngine();
+  const hear = enText(c) ? `<button class="speak" type="button" data-sayen="${esc(enText(c))}">${ic("volume")}${L==="en" ? "Hear it" : "Hear the meaning"}</button>` : "";
+  const prompt = L === "en" ? `<div class="face"><div class="en speak-en" lang="en">${esc(enText(c) || c.de)}</div></div>${hear}` : `<div class="face">${sideHTML("my",c)}</div>${hear}`;
+  const langPick = `<div class="seg seg2 splang" role="group" aria-label="Say it in"><button type="button" data-splang="de" aria-pressed="${L==="de"}">Say it in Deutsch</button><button type="button" data-splang="en" aria-pressed="${L==="en"}">Say it in English</button></div>`;
   if(!isBack){
-    const card = `<div class="card ${c.g} speakcard" style="cursor:default">
+    const card = `${langPick}<div class="card ${c.g} speakcard" style="cursor:default">
         <span class="cat">${esc(cat)}</span>${dots}
         ${visHTML(c)}${prompt}
-        <div class="hint">${eng==="record" ? "Say it in German. I'll record you so you can compare." : "Say it in German. I'll check how well you said it."}</div>
+        <div class="hint">${L==="en" ? (eng==="record" ? "Read it aloud in English. I'll record you so you can compare." : "Read it aloud in English. I'll check how well you said it.") : (eng==="record" ? "Say it in German. I'll record you so you can compare." : "Say it in German. I'll check how well you said it.")}</div>
         <div class="partial" id="spkPartial" lang="de" aria-live="polite">${esc(SPK.partial||"")}</div>
         ${s.speakErr ? `<div class="flash no">${esc(s.speakErr)}</div>` : ""}
       </div>`;
     if(eng === "need") return `${card}
       <div class="sttget">
-        <b>Turn on pronunciation checking</b>
-        <span class="small muted">Download German listening once (about 45 MB). It runs on your phone, works offline and is also used by the Listen tab.</span>
+        <b>Turn on pronunciation checking${L==="en" ? " for English" : ""}</b>
+        <span class="small muted">${L==="en" ? "Download English listening once (about 40 MB). It runs on your phone and works offline." : "Download German listening once (about 45 MB). It runs on your phone, works offline and is also used by the Listen tab."}</span>
         ${STT.loading ? `<div class="bar gold"><i style="width:${STT.progress}%"></i></div><span class="small">Downloading… ${STT.progress}%</span>`
-          : `<div class="row"><button class="btn primary" type="button" id="sttGet">${ic("download")}Download (45 MB)</button>${SR?`<button class="btn" type="button" data-stt="device">Use the phone's service</button>`:""}<button class="btn ghost" type="button" data-sreconly>Just record me</button></div>`}
+          : `<div class="row"><button class="btn primary" type="button" data-sttget="${L}">${ic("download")}Download (${L==="en"?"40":"45"} MB)</button>${SR?`<button class="btn" type="button" data-stt="device">Use the phone's service</button>`:""}<button class="btn ghost" type="button" data-sreconly>Just record me</button></div>`}
         ${LST.err ? `<span class="small" style="color:var(--bad)">${esc(LST.err)}</span>` : ""}
       </div>`;
     return `${card}
@@ -1139,8 +1157,8 @@ function speakBody(c, cat, dots, isBack){
       <span class="cat">${esc(cat)}</span>${dots}
       ${visHTML(c)}${prompt}
       ${verdict}
-      <div class="answer"><div class="dd">${colorDe(c.de)}</div>
-        <div class="row" style="justify-content:center">${spk(c.de,c.id)}${r && r.recorded && SPK.url ? `<button class="speak" type="button" data-myrec>${ic("play")}My voice</button>` : ""}</div></div>
+      <div class="answer">${L==="en" ? `<div class="dd" lang="en">${esc(enText(c))}</div><div class="muted">${colorDe(c.de)}</div>` : `<div class="dd">${colorDe(c.de)}</div>`}
+        <div class="row" style="justify-content:center">${L==="en" ? `<button class="speak" type="button" data-sayen="${esc(enText(c))}">${ic("volume")}Listen</button>` : spk(c.de,c.id)}${r && r.recorded && SPK.url ? `<button class="speak" type="button" data-myrec>${ic("play")}My voice</button>` : ""}</div></div>
     </div>
     <div class="sactions">${self
       ? `<button class="btn bad big" data-ans="0">${ic("x")}Not yet</button><button class="btn good big" data-ans="1">${ic("check")}I said it right</button>`
@@ -1268,7 +1286,7 @@ function forecast(){
     out.push({lab: i===0 ? "Today" : ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"][new Date(a).getDay()], n}); }
   return out;
 }
-function meInsights(){
+function meParts(){
   const w = weekStats(), f = forecast(), fmax = Math.max(1, ...f.map(x => x.n));
   const ls = S.listenSessions.filter(x => x.w >= 5), best = ls.length ? Math.max(...ls.map(x => Math.round(x.k/x.w*100))) : 0, last = ls.length ? Math.round(ls[0].k/ls[0].w*100) : 0;
   const lv = [...new Set(UNITS.map(u => u.level))].map(l => { const x = levelStats(l); return {l, pct: x.cards.length ? Math.round(x.learned/x.cards.length*100) : 0, learned: x.learned, total: x.cards.length, done: x.done, units: x.units.length}; });
@@ -1276,20 +1294,20 @@ function meInsights(){
     : `No practice yet this week. Ten minutes today is a great start.`;
   const sk = [["cards","Cards practised", Object.values(S.days).reduce((a,b)=>a+b,0)],["pen","Written right", S.written||0],["mic","Said right", S.spoken||0],
     ["volume","Listening best", best ? best+"%" : "–", ls.length ? `last ${last}%` : "try the Listen tab"],["book","Stories read", Object.keys(S.storiesRead).length, `of ${STORIES.length}`]];
-  return `<div class="panel weekly" style="margin-top:12px"><span class="label">This week</span><p style="margin:4px 0 0">${sum}</p></div>
-    <div class="section-title"><h2>My skills</h2></div>
-    <div class="skills">${sk.map(([i,t,v,sub]) => `<div class="skill"><span class="si">${ic(i)}</span><b>${v}</b><span>${t}</span>${sub?`<small>${esc(sub)}</small>`:""}</div>`).join("")}</div>
-    <div class="section-title"><h2>My levels</h2><a class="small muted" href="#learn">Open Learn</a></div>
-    <div class="panel stack">${lv.map(x => `<a class="lvlrow" href="#learn-${esc(x.l)}"><span class="lvl ${esc(x.l)}">${esc(x.l)}</span><div class="bar ${x.l==="A2"?"gold":""} ${x.l==="B1"?"blue":""}"><i style="width:${x.pct}%"></i></div><span class="small"><b>${x.pct}%</b> · ${x.learned}/${x.total} words · ${x.done}/${x.units} units</span></a>`).join("")}</div>
-    <div class="section-title"><h2>Coming up for review</h2><span class="small muted">so you never forget</span></div>
+  return {
+    week: `<div class="panel weekly" style="margin-top:12px"><span class="label">This week</span><p style="margin:4px 0 0">${sum}</p></div>`,
+    skills: `<div class="skills">${sk.map(([i,t,v,sub]) => `<div class="skill"><span class="si">${ic(i)}</span><b>${v}</b><span>${t}</span>${sub?`<small>${esc(sub)}</small>`:""}</div>`).join("")}</div>`,
+    levels: `<div class="section-title"><h2>My levels</h2><a class="small muted" href="#learn">Open Learn</a></div>
+    <div class="panel stack">${lv.map(x => `<a class="lvlrow" href="#learn-${esc(x.l)}"><span class="lvl ${esc(x.l)}">${esc(x.l)}</span><div class="bar ${x.l==="A2"?"gold":""} ${x.l==="B1"?"blue":""}"><i style="width:${x.pct}%"></i></div><span class="small"><b>${x.pct}%</b> · ${x.learned}/${x.total} words · ${x.done}/${x.units} units</span></a>`).join("")}</div>`,
+    forecast: `<div class="section-title"><h2>Coming up for review</h2><span class="small muted">so you never forget</span></div>
     <div class="panel"><div class="fc">${f.map(x => `<div><b>${x.n}</b><i style="height:${Math.max(3, Math.round(x.n/fmax*60))}px" class="${x.n?"":"zero"}"></i><small>${x.lab}</small></div>`).join("")}</div>
-      <p class="small muted" style="margin:8px 0 0">${f[0].n ? `${f[0].n} card${f[0].n===1?" is":"s are"} ready today. Start from Today → Start today's practice.` : "Nothing due today. Learn something new!"}</p></div>
-    <div class="section-title"><h2>Daily reminder</h2></div>
-    <div class="panel stack">
+      <p class="small muted" style="margin:8px 0 0">${f[0].n ? `${f[0].n} card${f[0].n===1?" is":"s are"} ready today. Start from Today → Start today's practice.` : "Nothing due today. Learn something new!"}</p></div>`,
+    reminder: `<div class="panel stack">
       <span class="small muted">Wortzi has no account and sends no notifications. Instead, add a repeating reminder to your phone's calendar. It opens Wortzi when you tap it.</span>
       <div class="row"><label class="small" for="remT" style="font-weight:700">Every day at</label><input class="input" id="remT" type="time" value="${esc(S.settings.remind || "19:00")}" style="max-width:130px">
         <button class="btn" type="button" id="remBtn">${ic("download")}Add to my calendar</button></div>
-    </div>`;
+    </div>`,
+  };
 }
 function reminderICS(time){
   const [h, m] = String(time||"19:00").split(":").map(x => +x || 0), d = new Date(); d.setHours(h, m, 0, 0); if(d < new Date()) d.setDate(d.getDate()+1);
@@ -1299,39 +1317,34 @@ function reminderICS(time){
     `DTSTART:${loc(d)}`,`DTEND:${loc(end)}`,"RRULE:FREQ=DAILY","SUMMARY:Wortzi: 10 minutes of German",`DESCRIPTION:Your daily German practice. ${url}`,`URL:${url}`,
     "BEGIN:VALARM","TRIGGER:PT0M","ACTION:DISPLAY","DESCRIPTION:Time for German with Wortzi","END:VALARM","END:VEVENT","END:VCALENDAR"].join("\r\n");
 }
-function viewMe(){
+function viewMe(sec){
   const L = levelInfo(), st = S.settings;
   const days = []; const d = new Date(); d.setDate(d.getDate()-13);
   for(let i=0;i<14;i++){ days.push({k:dayKey(d), lab:"SMTWTFS"[d.getDay()], n:S.days[dayKey(d)]||0}); d.setDate(d.getDate()+1); }
   const max = Math.max(st.goal, ...days.map(x=>x.n));
   const extraChip = (k,label,cls="") => k===st.base ? "" : `<button class="chip ${cls}" data-extra="${k}" aria-pressed="${!!st.extra[k]}">${label}</button>`;
   const activeDays = Object.keys(S.days).length;
-  app.innerHTML = `<h1 style="margin-bottom:16px">Me</h1>
-    <div class="ptiles">
-      <div class="ptile"><span>Level</span><b>⭐ ${L.lvl}</b><div class="bar gold"><i style="width:${Math.round(L.into/L.per*100)}%"></i></div><span>${L.per-L.into} XP to level ${L.lvl+1}</span></div>
-      <div class="ptile"><span>Streak</span><b>🔥 ${streak()}</b><span>${activeDays} active day${activeDays===1?"":"s"} in total</span></div>
-      <div class="ptile"><span>✓ I learned</span><b style="color:var(--ok)">${learnedList().length}</b><span>of ${DECK.length} app cards + ${S.custom.length} own</span></div>
-      <div class="ptile"><span>☆ I want to learn</span><b style="color:var(--want)">${wantList().length}</b><span>🎧 ${S.listens||0} listens</span></div>
-    </div>
-    <div class="panel" style="margin-top:12px">
+  const P = meParts();
+  const parts = {
+    progress: [`Progress`, `<div class="panel" style="margin-top:12px">
       <div class="row between"><h3>Last 14 days</h3><span class="small muted">cards per day · gold = goal met</span></div>
       <div class="week">${days.map(x=>`<div><i class="${x.n===0?"zero":x.n>=st.goal?"goal":""}" style="height:${Math.max(3,Math.round(x.n/max*88))}px" title="${x.k}: ${x.n}"></i><small>${x.lab}</small></div>`).join("")}</div>
     </div>
 
-    ${meInsights()}
-    <div class="section-title"><h2>PDF reports and printouts</h2><span class="small muted">Your learning, on paper</span></div>
-    <div class="reports">
+${P.week}${P.levels}${P.forecast}`],
+    skills: [`My skills`, P.skills],
+    badges: [`Badges`, `<div class="badges">${BADGES.map(b=>`<div class="badge ${S.badges[b.id]?"":"locked"}"><span class="e">${b.e}</span><b>${esc(b.t)}</b><span>${S.badges[b.id]?"Earned "+esc(S.badges[b.id]):esc(b.d)}</span></div>`).join("")}</div>
+
+    `],
+    reports: [`PDFs & printouts`, `<p class="muted" style="margin:0 0 12px">Your learning, on paper.</p><div class="reports">
       <div class="report"><span class="e">📈</span><b>Progress report</b><p>Level, streak, every unit, your two lists and badges. Good for your German course teacher or for yourself.</p><a class="btn" href="#report" data-rep="progress">Open</a></div>
       <div class="report"><span class="e">📒</span><b>My word book</b><p>Your I learned and I want to learn lists as a pocket phrasebook in your languages.</p><a class="btn" href="#report" data-rep="wordbook">Open</a></div>
       <div class="report"><span class="e">✂️</span><b>Cut-out flashcards</b><p>Print your wish list as real cards with pictures. Cut, fold, carry them in your bag.</p><a class="btn" href="#report" data-rep="cards">Open</a></div>
       <div class="report"><span class="e">📘</span><b>Course book</b><p>Every unit of A1, A2 or B1 with your status next to each word.</p><a class="btn" href="#report" data-rep="unitbook">Open</a></div>
     </div>
 
-    <div class="section-title"><h2>Badges</h2><span class="small muted">${Object.keys(S.badges).length} of ${BADGES.length}</span></div>
-    <div class="badges">${BADGES.map(b=>`<div class="badge ${S.badges[b.id]?"":"locked"}"><span class="e">${b.e}</span><b>${esc(b.t)}</b><span>${S.badges[b.id]?"Earned "+esc(S.badges[b.id]):esc(b.d)}</span></div>`).join("")}</div>
-
-    <div class="section-title"><h2>Settings</h2></div>
-    <div class="panel stack">
+    `],
+    settings: [`Settings`, `<div class="panel stack">
       <div class="field"><label for="s-name">Your name <span class="muted small">(only shown on your PDFs, stays on this device)</span></label><input class="input" id="s-name" maxlength="60" value="${esc(st.name)}" autocomplete="off" style="max-width:340px"></div>
       <div class="setup">
         <div><span class="label">I speak</span><div class="chips" data-set="base">
@@ -1355,8 +1368,9 @@ function viewMe(){
       ${installEvt?`<div><button class="btn" id="install">${ic("phone")}Install as an app</button></div>`:`<p class="small muted" style="margin:0">📲 Use it like an app: in your phone's browser menu choose <b>Add to Home screen</b>. It then works offline too.</p>`}
     </div>
 
-    <div class="section-title"><h2>Your data is safe</h2></div>
-    <div class="panel stack">
+    `],
+    reminder: [`Daily reminder`, P.reminder],
+    data: [`Backup & privacy`, `<div class="panel stack">
       <ul class="privacy" style="margin:0;padding-left:18px">
         <li><b>No account, no sign-up.</b> Nobody can see your lists or progress.</li>
         <li><b>Everything stays on this device</b>, in this browser. Nothing is sent to any server.</li>
@@ -1383,11 +1397,36 @@ function viewMe(){
         ? `<span>Delete all progress, lists, own words and badges on this device?</span><button class="btn bad" id="r-yes">Yes, delete everything</button><button class="btn" id="r-no">Keep it</button>`
         : `<button class="btn ghost" id="r-ask">${ic("trash")}Delete all my data</button>`}</div>
     </div>
+    `],
+  };
+  const w = weekStats(), nb = Object.keys(S.badges).length, due = forecast()[0].n;
+  const tiles = [
+    ["progress","chart","Progress", w.cards ? `${w.cards} cards this week · ${due} due today` : `${due} due today`],
+    ["skills","pen","My skills", `${S.written||0} written · ${S.spoken||0} said · ${Object.keys(S.storiesRead).length} stories`],
+    ["badges","star","Badges", `${nb} of ${BADGES.length} earned`],
+    ["reports","printer","PDFs & printouts", "Progress report, word book, flashcards"],
+    ["settings","gear","Settings", `${LANG_NAME[st.base]} · ${({system:"Auto",light:"Light",white:"White",dark:"Dark"})[st.theme]} theme · goal ${st.goal}`],
+    ["reminder","bell","Daily reminder", st.remind ? `Every day at ${esc(st.remind)}` : "Add one to your calendar"],
+    ["data","lock","Backup & privacy", "Your data stays on this phone"],
+  ];
+  if(sec && parts[sec]){
+    app.innerHTML = `<a class="back" href="#me">${ic("left")}Me</a><h1 style="margin-bottom:14px">${parts[sec][0]}</h1>${parts[sec][1]}`;
+  } else {
+    app.innerHTML = `<h1 style="margin-bottom:12px">Me</h1>
+    <div class="ptiles mini">
+      <div class="ptile"><span>Level</span><b>⭐ ${L.lvl}</b><div class="bar gold"><i style="width:${Math.round(L.into/L.per*100)}%"></i></div><span>${L.per-L.into} XP to level ${L.lvl+1}</span></div>
+      <div class="ptile"><span>Streak</span><b>🔥 ${streak()}</b><span>${activeDays} active day${activeDays===1?"":"s"} in total</span></div>
+      <div class="ptile"><span>✓ I learned</span><b style="color:var(--ok)">${learnedList().length}</b><span>of ${DECK.length} app cards + ${S.custom.length} own</span></div>
+      <div class="ptile"><span>☆ I want to learn</span><b style="color:var(--want)">${wantList().length}</b><span>🎧 ${S.listens||0} listens</span></div>
+    </div>
+    <div class="metiles">${tiles.map(([k,i,t,d]) => `<a class="metile" href="#me-${k}"><span class="mi">${ic(i)}</span><span class="mt"><b>${t}</b><small>${d}</small></span>${ic("right","chev")}</a>`).join("")}</div>
     <p class="small muted" style="margin-top:20px">Wortzi ${APP_VERSION} · © 2026 Fizza Mubeen · All rights reserved · works offline once loaded.</p>`;
+  }
+
 
   $$("[data-rep]").forEach(a => a.addEventListener("click", () => { reportOpts.type = a.dataset.rep; }));
-  $("#s-name").addEventListener("change", e => { S.settings.name = clip(e.target.value,60); save(); toast("Saved"); });
-  $("#autoplay").onclick = () => { st.autoplay = !st.autoplay; save(); route(); };
+  if($("#s-name")) $("#s-name").addEventListener("change", e => { S.settings.name = clip(e.target.value,60); save(); toast("Saved"); });
+  if($("#autoplay")) $("#autoplay").onclick = () => { st.autoplay = !st.autoplay; save(); route(); };
   const rb = $("#remBtn"); if(rb) rb.onclick = () => { const t = $("#remT").value || "19:00"; S.settings.remind = t; save();
     const a = document.createElement("a"); a.href = URL.createObjectURL(new Blob([reminderICS(t)], {type:"text/calendar"})); a.download = "wortzi-daily-reminder.ics"; document.body.appendChild(a); a.click(); a.remove();
     toast("Open the file to add the daily reminder to your calendar", {kind:"ok"}); };
@@ -1396,10 +1435,10 @@ function viewMe(){
   if($("#r-ask")) $("#r-ask").onclick = () => { confirmReset = true; route(); };
   if($("#r-no")) $("#r-no").onclick = () => { confirmReset = false; route(); };
   if($("#r-yes")) $("#r-yes").onclick = () => { S = DEFAULTS(); save(); rebuildIndex(); confirmReset = false; backupMsg = ""; toast("All data deleted"); route(); };
-  $("#b-export").onclick = () => doExport(false);
-  $("#b-copy").onclick = () => doExport(true);
-  $("#i-file").addEventListener("change", async e => { const f = e.target.files[0]; if(!f) return; if(f.size > 5e6){ importState.err = "That file is too big to be a backup."; return route(); } $("#i-text").value = await f.text(); });
-  $("#i-go").onclick = () => doImport($("#i-text").value, $("#i-pw").value);
+  if($("#b-export")) $("#b-export").onclick = () => doExport(false);
+  if($("#b-copy")) $("#b-copy").onclick = () => doExport(true);
+  if($("#i-file")) $("#i-file").addEventListener("change", async e => { const f = e.target.files[0]; if(!f) return; if(f.size > 5e6){ importState.err = "That file is too big to be a backup."; return route(); } $("#i-text").value = await f.text(); });
+  if($("#i-go")) $("#i-go").onclick = () => doImport($("#i-text").value, $("#i-pw").value);
 }
 
 /* ---------- backup (optionally encrypted with AES-GCM + PBKDF2) ---------- */
@@ -1458,7 +1497,7 @@ function viewReport(){
   const o = reportOpts;
   const chips = (key, arr) => `<div class="chips" data-rset="${key}">${arr.map(([v,l])=>`<button class="chip" data-rv="${v}" aria-pressed="${o[key]===v}">${l}</button>`).join("")}</div>`;
   const levels = [...new Set(UNITS.map(u=>u.level))];
-  app.innerHTML = `<a class="back" href="#me">${ic("left")}Me</a>
+  app.innerHTML = `<a class="back" href="#me-reports">${ic("left")}PDFs &amp; printouts</a>
     <div class="report-bar">
       ${chips("type", [["progress","📈 Progress"],["wordbook","📒 Word book"],["cards","✂️ Flashcards"],["unitbook","📘 Course book"]])}
       ${o.type==="wordbook"||o.type==="cards" ? chips("source", [["want","☆ I want to learn"],["learned","✓ I learned"],["both","Both lists"],["mine","✍️ My own words"]]) : ""}
@@ -2033,32 +2072,34 @@ function newWordsFrom(text){
 }
 /* ---------- offline speech-to-text: Vosk (free, open source) running inside the app.
    The German model (about 45 MB) is downloaded once, then everything happens on the phone: no audio leaves it. ---------- */
-const STT = {model:null, loading:false, progress:0, ctx:null, stream:null, src:null, node:null, rec:null};
+const STT = {models:{}, model:null, loading:false, progress:0, ctx:null, stream:null, src:null, node:null, rec:null};
 const offlineSTT = () => !!(window.WebAssembly && navigator.mediaDevices && navigator.mediaDevices.getUserMedia && (window.AudioContext || window.webkitAudioContext)) && !SANDBOX && location.protocol !== "file:";
 const sttEngine = () => { const want = S.settings.stt; if(want==="device" && SR) return "device"; if(want==="offline" && offlineSTT()) return "offline"; return offlineSTT() ? "offline" : SR ? "device" : ""; };
-const STT_URL = () => new URL("stt/de.tar.gz", location.href).href;
+const STT_URL = (lang="de") => new URL(`stt/${lang}.tar.gz`, location.href).href;
+const sttReadyFor = lang => lang === "en" ? S.settings.sttReadyEn : S.settings.sttReady;
 function loadScript(src){ return new Promise((res, rej) => { if(document.querySelector(`script[data-src="${src}"]`)) return res(); const sc = document.createElement("script"); sc.src = src; sc.dataset.src = src; sc.onload = res; sc.onerror = () => rej(new Error("Could not load the listening engine")); document.head.appendChild(sc); }); }
 const sttChanged = () => { renderLive(); if(session && session.mode === "speak" && session.state === "front") drawSession(); };
-async function sttDownload(){
+async function sttDownload(lang="de"){
   if(STT.loading) return; STT.loading = true; STT.progress = 0; LST.err = ""; sttChanged();
   try{
-    const r = await fetch("stt/de.tar.gz");
+    const r = await fetch(`stt/${lang}.tar.gz`);
     if(!r.ok) throw new Error("The listening model is not on the server yet (" + r.status + ")");
     const total = +r.headers.get("content-length") || 46e6, reader = r.body.getReader(); let got = 0;
     for(;;){ const {done, value} = await reader.read(); if(done) break; got += value.length; const p = Math.min(99, Math.round(got/total*100)); if(p !== STT.progress){ STT.progress = p; sttChanged(); } }
     await loadScript("stt/vosk.js");
-    S.settings.sttReady = true; S.settings.stt = "offline"; save();
+    if(lang === "en") S.settings.sttReadyEn = true; else { S.settings.sttReady = true; S.settings.stt = "offline"; } save();
     try{ if(navigator.storage && navigator.storage.persist) navigator.storage.persist(); }catch(e){}
-    STT.progress = 100; toast("German listening is ready, also offline", {kind:"ok"});
+    STT.progress = 100; toast(lang === "en" ? "English listening is ready, also offline" : "German listening is ready, also offline", {kind:"ok"});
   }catch(e){ LST.err = (e && e.message) || "Download failed. Try again on Wi-Fi."; }
   STT.loading = false; sttChanged();
 }
-async function sttModel(){
-  if(STT.model) return STT.model;
+async function sttModel(lang="de"){
+  if(STT.models[lang]) return STT.models[lang];
   await loadScript("stt/vosk.js");
   if(!window.Vosk || !window.Vosk.createModel) throw new Error("The listening engine did not start");
-  STT.model = await window.Vosk.createModel(STT_URL());
-  return STT.model;
+  STT.models[lang] = await window.Vosk.createModel(STT_URL(lang));
+  if(lang === "de") STT.model = STT.models.de;
+  return STT.models[lang];
 }
 const capFirst = t => t ? t[0].toUpperCase() + t.slice(1) : t;
 async function startOffline(){

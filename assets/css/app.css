@@ -806,3 +806,31 @@ h2{font-family:var(--f-body);font-weight:700;font-size:19px;letter-spacing:-.005
 .bwords{width:100%;text-align:left}
 .bwords summary{cursor:pointer;font-weight:700;padding:8px 0}
 @media (max-height:680px){ .bpic{height:30vh} .rhint{display:none} }
+
+/* ---------- Me hub: compact numbers, then tap a tile to open a section ---------- */
+.ptiles.mini{grid-template-columns:repeat(4,1fr);gap:8px}
+.ptiles.mini .ptile{padding:10px 8px;gap:2px;text-align:center;justify-items:center}
+.ptiles.mini .ptile b{font-size:22px}
+.ptiles.mini .ptile span{font-size:11px;line-height:1.3}
+.ptiles.mini .ptile .bar{width:100%}
+.metiles{display:grid;gap:8px;margin-top:14px}
+@media (min-width:760px){ .metiles{grid-template-columns:1fr 1fr} }
+.metile{display:grid;grid-template-columns:40px 1fr auto;gap:12px;align-items:center;padding:12px 14px;background:var(--surface);border:1px solid var(--line);border-radius:14px;box-shadow:var(--shadow-sm);text-decoration:none;min-height:60px}
+.metile:hover{box-shadow:var(--shadow-md)}
+.metile .mi{width:40px;height:40px;border-radius:12px;display:grid;place-items:center;background:var(--sunk);color:var(--ink)}
+.metile .mi .ic{width:20px;height:20px}
+.metile .mt{display:grid;gap:1px;min-width:0}
+.metile .mt b{font-size:15.5px}
+.metile .mt small{font-size:13px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.metile .chev{width:18px;height:18px;color:var(--muted)}
+.unitnav{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:6px}
+.unitnav .back{margin-bottom:0}
+.unitnav-r{display:flex;gap:6px;align-items:center}
+.unitnav-r .iconbtn{width:36px;height:36px}
+.seg2{grid-template-columns:1fr 1fr}
+.splang{padding:4px;border-radius:12px}
+.splang button{border:0;background:transparent;font:inherit;font-weight:650;font-size:13.5px;padding:8px 6px;border-radius:9px;color:var(--muted);cursor:pointer;min-height:36px}
+.splang button[aria-pressed="true"]{background:var(--surface);color:var(--ink);box-shadow:var(--shadow-sm)}
+.speak-en{font-size:26px;font-weight:700;line-height:1.35}
+.ptiles.mini .ptile > span:last-child{display:none}
+.ptiles.mini .ptile > span:first-child{font-weight:650}

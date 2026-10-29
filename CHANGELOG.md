@@ -3,6 +3,12 @@
 The version shown in the app (Me → bottom of the page) matches the tags in this repository.
 Phones that installed the app update themselves; learners keep all their progress.
 
+## 1.12.0 — 2026-10-29
+- **Me is a short hub now:** your numbers at the top, then tap Progress, My skills, Badges, PDFs, Settings, Daily reminder or Backup & privacy to open just that part. No more long scrolling
+- **Units:** previous and **Next unit** buttons at the top (and still at the bottom)
+- **Speak:** hear the prompt (🔊 Hear the meaning), and a new **Say it in English** mode: Wortzi shows the English text, you read it aloud, and it checks your pronunciation (offline English engine, about 40 MB, downloaded only if you use it)
+- Kitchen card shows a pan instead of a knife
+
 ## 1.11.0 — 2026-10-28
 - **Speaker voice setting** (Me → Settings): the speaker buttons can say the **German**, the **English** meaning, or **German, then English**. Works everywhere: cards, practice, stories, grammar
 - Every card and story line is now also recorded in English (free Piper voice en_US-lessac), so English sounds natural too; the phone's English voice is only a fallback
