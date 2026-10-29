@@ -65,6 +65,7 @@ with sync_playwright() as pw:
             ok = False
         p.screenshot(path="out/listen-5-speak-result.png")
         # English speak mode: download the English engine and check it answers
+        p.goto("http://localhost:8765/#today"); p.wait_for_timeout(500)
         p.goto("http://localhost:8765/#words-learned"); p.wait_for_timeout(800)
         p.click('[data-mode="speak"]'); p.wait_for_timeout(500)
         p.click('[data-splang="en"]'); p.wait_for_timeout(300)
